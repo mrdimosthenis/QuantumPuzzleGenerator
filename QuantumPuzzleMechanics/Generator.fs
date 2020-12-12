@@ -2,6 +2,8 @@
 
 open System
 
+open FSharpx.Collections
+
 open QuantumPuzzleMechanics
 
 // types
@@ -21,3 +23,11 @@ let nextComplex (random: Random) (): Complex.Complex =
     Complex.ofNumbers
         (nextNumber random ())
         (nextNumber random ())
+
+let nextVector (random: Random) (n: int) (): Vector.Vector =
+    n
+    |> Vector.zero
+    |> LazyList.map
+        (fun _ ->
+            nextComplex (random) ()
+        )

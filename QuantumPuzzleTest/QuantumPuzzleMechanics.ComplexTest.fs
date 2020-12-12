@@ -62,13 +62,15 @@ let ``To polar`` () =
 let ``Addition`` () =
     ofNumbers 5.0 2.0
     |> plus (ofNumbers -4.0 7.0)
-    |> should equal (ofNumbers 1.0 9.0)
+    |> toString
+    |> should equal "1 + 9*i"
 
 [<Fact>]
 let ``Multiplication`` () =
     ofNumbers 5.0 2.0
     |> times (ofNumbers -4.0 3.0)
-    |> should equal (ofNumbers -26.0 7.0)
+    |> toString
+    |> should equal "-26 + 7*i"
 
 
 [<Fact>]

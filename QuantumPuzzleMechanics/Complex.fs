@@ -14,7 +14,7 @@ let ofNumbers (re: Number.Number) (im: Number.Number): Complex =
 let ofNum (x: Number.Number): Complex =
     ofNumbers x 0.0
 
-let toString(c: Complex): string =
+let toString (c: Complex): string =
     sprintf
         "%s %s %s*i"
         (string c.Re)
@@ -27,6 +27,9 @@ let zero: Complex =
     ofNumbers 0.0 0.0
 
 // methods
+
+let timesNumber (x: Number.Number) (c: Complex): Complex =
+    ofNumbers (x * c.Re) (x * c.Im)
 
 let conjugate (c: Complex): Complex =
     ofNumbers c.Re -c.Im
@@ -73,11 +76,6 @@ let times (c: Complex) (z: Complex): Complex =
     let re = c.Re * z.Re - c.Im * z.Im
     let im = c.Re * z.Im + c.Im * z.Re
     ofNumbers re im
-
-let timesNumber (x: Number.Number) (c: Complex): Complex =
-    x
-    |> ofNum
-    |> times c
 
 let divide (c: Complex) (z: Complex): Complex option =
     z

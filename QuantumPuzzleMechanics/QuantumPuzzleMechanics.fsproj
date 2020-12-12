@@ -7,8 +7,13 @@
   <ItemGroup>
     <Compile Include="Number.fs" />
     <Compile Include="Complex.fs" />
+    <Compile Include="Vector.fs" />
     <Compile Include="Generator.fs" />
     <Compile Include="Library.fs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="FSharpx.Collections" Version="2.1.3" />
   </ItemGroup>
 
 </Project>
