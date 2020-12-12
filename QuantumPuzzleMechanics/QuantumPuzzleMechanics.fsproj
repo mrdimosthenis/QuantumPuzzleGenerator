@@ -1,0 +1,13 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="Number.fs" />
+    <Compile Include="Complex.fs" />
+    <Compile Include="Library.fs" />
+  </ItemGroup>
+
+</Project>
