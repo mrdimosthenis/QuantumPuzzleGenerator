@@ -86,3 +86,17 @@ let ``Division of complex numbers`` () =
     |> Option.get
     |> almostEq (ofNumbers 1.0 (-3.0 / 2.0))
     |> should equal true
+
+let random = System.Random()
+let z1 = Generator.nextComplex random ()
+let z2 = Generator.nextComplex random ()
+
+[<Fact>]
+let ``Commutativity of addition property`` () =
+    plus z1 z2
+    |> should equal (plus z2 z1)
+
+[<Fact>]
+let ``Commutativity of multiplication property`` () =
+    times z1 z2
+    |> should equal (times z2 z1)
