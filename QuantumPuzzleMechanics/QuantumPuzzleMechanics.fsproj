@@ -8,6 +8,7 @@
     <Compile Include="Number.fs" />
     <Compile Include="Complex.fs" />
     <Compile Include="Vector.fs" />
+    <Compile Include="Matrix.fs" />
     <Compile Include="Generator.fs" />
     <Compile Include="Library.fs" />
   </ItemGroup>

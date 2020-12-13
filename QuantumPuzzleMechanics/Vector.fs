@@ -11,11 +11,11 @@ type Vector = Complex.Complex LazyList
 
 // exceptions
 
-exception DifferentDimensions
+exception DifferentDimension
 
 let maybeThrowException (v1: Vector) (v2: Vector): unit =
     if LazyList.length v1 <> LazyList.length v2
-        then raise DifferentDimensions
+        then raise DifferentDimension
         else ()
 
 // basic converters
