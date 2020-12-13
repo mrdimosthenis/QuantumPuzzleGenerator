@@ -31,3 +31,10 @@ let nextVector (random: Random) (n: int) (): Vector.Vector =
         (fun _ ->
             nextComplex (random) ()
         )
+
+let nextMatrix (random: Random) (m: int) (n: int) (): Matrix.Matrix =
+    Matrix.zero m n
+    |> LazyList.map
+        (fun _ ->
+            nextVector random m ()
+        )

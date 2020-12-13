@@ -143,10 +143,10 @@ let tensorProduct (a: Matrix) (b: Matrix): Matrix =
     let resultArray = Array2D.zeroCreate
                         (n1 * n2)
                         (m1 * m2)
-    for i = 0 to n1 do
-        for j = 0 to m1 do
-            for k = 0 to n2 do
-                for l = 0 to m2 do
+    for i in 0 .. n1 - 1 do
+        for j in 0 .. m1 - 1 do
+            for k in 0 .. n2 - 1 do
+                for l in 0 .. m2 - 1 do
                     resultArray.[n2 * i + k, m2 * j + l] <-
                         Complex.times
                             arrayA.[i].[j]

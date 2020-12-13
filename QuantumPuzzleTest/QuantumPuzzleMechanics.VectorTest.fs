@@ -9,8 +9,6 @@ open FSharpx.Collections
 
 open QuantumPuzzleMechanics.Vector
 
-let error = 0.001
-
 [<Fact>]
 let ``Norm of v1`` () =
     [ Complex.ofNumbers 2.0 1.0
