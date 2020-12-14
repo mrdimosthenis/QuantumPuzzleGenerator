@@ -39,7 +39,7 @@ let timesNumber (x: Number.Number) (v: Vector): Vector =
     LazyList.map (Complex.timesNumber x) v
 
 let timesComplex (c: Complex.Complex) (v: Vector): Vector =
-    LazyList.map (Complex.times c) v
+    LazyList.map (Complex.product c) v
 
 let dim (v: Vector): int =
     LazyList.length v
@@ -65,26 +65,26 @@ let unary (v: Vector): Vector option =
 
 // operators
 
-let plus (v1: Vector) (v2: Vector): Vector =
+let sum (v1: Vector) (v2: Vector): Vector =
     maybeThrowException v1 v2
-    LazyList.map2 Complex.plus v1 v2
+    LazyList.map2 Complex.sum v1 v2
 
-let minus (v1: Vector) (v2: Vector): Vector =
+let difference (v1: Vector) (v2: Vector): Vector =
     maybeThrowException v1 v2
     v2
     |> opposite
-    |> plus v1
+    |> sum v1
 
-let times (v1: Vector) (v2: Vector): Complex.Complex =
+let innerProduct (v1: Vector) (v2: Vector): Complex.Complex =
     maybeThrowException v1 v2
     LazyList.zip v1 v2
     |> LazyList.map
         ( fun (c, z) ->
             z
             |> Complex.conjugate
-            |> Complex.times c
+            |> Complex.product c
         )
-    |> LazyList.fold Complex.plus Complex.zero
+    |> LazyList.fold Complex.sum Complex.zero
 
 // comparison
 

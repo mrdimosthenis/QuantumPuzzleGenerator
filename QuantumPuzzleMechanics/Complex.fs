@@ -64,23 +64,23 @@ let ofPolar (r: Number.Number, theta: Number.Number): Complex =
 
 // operators
 
-let plus (c: Complex) (z: Complex): Complex =
+let sum (c: Complex) (z: Complex): Complex =
     ofNumbers (c.Re + z.Re) (c.Im + z.Im)
 
-let minus (c: Complex) (z: Complex): Complex =
+let difference (c: Complex) (z: Complex): Complex =
     z
     |> opposite
-    |> plus c
+    |> sum c
 
-let times (c: Complex) (z: Complex): Complex =
+let product (c: Complex) (z: Complex): Complex =
     let re = c.Re * z.Re - c.Im * z.Im
     let im = c.Re * z.Im + c.Im * z.Re
     ofNumbers re im
 
-let divide (c: Complex) (z: Complex): Complex option =
+let quotient (c: Complex) (z: Complex): Complex option =
     z
     |> inverse
-    |> Option.map (times c)
+    |> Option.map (product c)
 
 // comparison
 

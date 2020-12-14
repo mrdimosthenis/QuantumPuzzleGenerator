@@ -34,14 +34,14 @@ let ofVec (v: Vector.Vector): Matrix =
         )
         v
 
-let ofVectors (v1: Vector.Vector) (v2: Vector.Vector): Matrix =
+let outerProductOfVectors (v1: Vector.Vector) (v2: Vector.Vector): Matrix =
     LazyList.map
         ( fun c ->
             LazyList.map
                 ( fun z ->
                     z
                     |> Complex.conjugate
-                    |> Complex.times c
+                    |> Complex.product c
                 )
                 v2
         )
@@ -80,9 +80,6 @@ let timesNumber (x: Number.Number) (a: Matrix): Matrix =
 let timesComplex (c: Complex.Complex) (a: Matrix): Matrix =
     LazyList.map (Vector.timesComplex c) a
 
-let vectorExpansion (a: Matrix): Vector.Vector =
-    LazyList.concat a
-
 let dims (a: Matrix): int * int =
     let m = a
             |> LazyList.head
@@ -109,15 +106,15 @@ let transjugate (a: Matrix): Matrix =
 
 // operators
 
-let plus (a: Matrix) (b: Matrix): Matrix =
+let sum (a: Matrix) (b: Matrix): Matrix =
     maybeThrowException a b
-    LazyList.map2 Vector.plus a b
+    LazyList.map2 Vector.sum a b
 
-let minus (a: Matrix) (b: Matrix): Matrix =
+let difference (a: Matrix) (b: Matrix): Matrix =
     maybeThrowException a b
-    LazyList.map2 Vector.minus a b
+    LazyList.map2 Vector.difference a b
 
-let times (a: Matrix) (b: Matrix): Matrix =
+let standardProduct (a: Matrix) (b: Matrix): Matrix =
     let (m1, _) = dims a
     let (_, n2) = dims b
     if m1 <> n2
@@ -127,39 +124,22 @@ let times (a: Matrix) (b: Matrix): Matrix =
             ( fun v1 ->
                 b
                 |> transjugate
-                |> LazyList.map (Vector.times v1)
+                |> LazyList.map (Vector.innerProduct v1)
             )
             a
 
 let tensorProduct (a: Matrix) (b: Matrix): Matrix =
-    let (m1, n1) = dims a
-    let (m2, n2) = dims b
-    let toNestedArray matrix =
-        matrix
-        |> LazyList.map LazyList.toArray
-        |> LazyList.toArray
-    let arrayA = toNestedArray a
-    let arrayB = toNestedArray b
-    let resultArray = Array2D.zeroCreate
-                        (n1 * n2)
-                        (m1 * m2)
-    for i in 0 .. n1 - 1 do
-        for j in 0 .. m1 - 1 do
-            for k in 0 .. n2 - 1 do
-                for l in 0 .. m2 - 1 do
-                    resultArray.[n2 * i + k, m2 * j + l] <-
-                        Complex.times
-                            arrayA.[i].[j]
-                            arrayB.[k].[l]
-    seq {
-        for x in 0 .. Array2D.length1 resultArray - 1 do
-            yield seq {
-                for y in 0 .. Array2D.length2 resultArray - 1 ->
-                    resultArray.[x, y] 
-            }
-    }
-    |> LazyList.ofSeq
-    |> LazyList.map LazyList.ofSeq
+    a
+    |> LazyList.map
+        (fun v ->
+            v
+            |> LazyList.map (fun c -> timesComplex c b)
+            |> Seq.transpose
+            |> LazyList.ofSeq
+            |> LazyList.map LazyList.ofSeq
+            |> LazyList.map LazyList.concat
+        )
+    |> LazyList.concat
 
 // comparison
 

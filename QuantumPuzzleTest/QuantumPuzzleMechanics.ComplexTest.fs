@@ -1,7 +1,5 @@
 ﻿module QuantumPuzzleMechanics.ComplexTest
 
-open System
-
 open Xunit
 open FsUnit.Xunit
 
@@ -12,34 +10,10 @@ let almostEqNum = Number.almostEqual error
 let almostEq = almostEqual error
 
 [<Fact>]
-let ``(0.0, 0.0) To string`` () =
-    ofNumbers 0.0 0.0
-    |> toString
-    |> should equal "0 + 0*i"
-
-[<Fact>]
-let ``(0.5, 0.0) To string`` () =
-    ofNumbers 0.5 0.0
-    |> toString
-    |> should equal "0.5 + 0*i"
-
-[<Fact>]
-let ``(0.0, -0.2) To string`` () =
-    ofNumbers 0.0 -0.2
-    |> toString
-    |> should equal "0 - 0.2*i"
-
-[<Fact>]
-let ``(0.5, -0.2) To string`` () =
+let ``To string`` () =
     ofNumbers 0.5 -0.2
     |> toString
     |> should equal "0.5 - 0.2*i"
-
-[<Fact>]
-let ``(-0.5, 0.2) To string`` () =
-    ofNumbers -0.5 0.2
-    |> toString
-    |> should equal "-0.5 + 0.2*i"
 
 [<Fact>]
 let ``Of polar`` () =
@@ -59,16 +33,16 @@ let ``To polar`` () =
     |> should equal true
 
 [<Fact>]
-let ``Addition`` () =
+let ``Sum`` () =
     ofNumbers 5.0 2.0
-    |> plus (ofNumbers -4.0 7.0)
+    |> sum (ofNumbers -4.0 7.0)
     |> toString
     |> should equal "1 + 9*i"
 
 [<Fact>]
-let ``Multiplication`` () =
+let ``Product`` () =
     ofNumbers 5.0 2.0
-    |> times (ofNumbers -4.0 3.0)
+    |> product (ofNumbers -4.0 3.0)
     |> toString
     |> should equal "-26 + 7*i"
 
@@ -82,9 +56,9 @@ let ``Rationalisation`` () =
     |> should equal true
 
 [<Fact>]
-let ``Division of complex numbers`` () =
+let ``Quotient of complex numbers`` () =
     ofNumbers 0.0 2.0
-    |> divide (ofNumbers 3.0 2.0)
+    |> quotient (ofNumbers 3.0 2.0)
     |> Option.get
     |> almostEq (ofNumbers 1.0 (-3.0 / 2.0))
     |> should equal true
@@ -94,11 +68,11 @@ let z1 = Generator.nextComplex random ()
 let z2 = Generator.nextComplex random ()
 
 [<Fact>]
-let ``Commutativity of addition property`` () =
-    plus z1 z2
-    |> should equal (plus z2 z1)
+let ``Commutativity of sum property`` () =
+    sum z1 z2
+    |> should equal (sum z2 z1)
 
 [<Fact>]
-let ``Commutativity of multiplication property`` () =
-    times z1 z2
-    |> should equal (times z2 z1)
+let ``Commutativity of product property`` () =
+    product z1 z2
+    |> should equal (product z2 z1)

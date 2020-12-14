@@ -12,6 +12,12 @@ type Generator = Random
 
 // functions
 
+let nextPosInt (random: Random) (maxVal: int) (): int =
+    random.NextDouble()
+    |> (*) (float maxVal)
+    |> ceil
+    |> int
+
 let nextNumber (random: Random) (): Number.Number =
     if random.NextDouble() < 0.5
         then 1.0
