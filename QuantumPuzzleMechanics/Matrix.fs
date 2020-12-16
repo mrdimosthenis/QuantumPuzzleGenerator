@@ -93,8 +93,7 @@ let opposite (a: Matrix): Matrix =
 let transposed (a: Matrix): Matrix =
     a
     |> Seq.transpose
-    |> LazyList.ofSeq
-    |> LazyList.map LazyList.ofSeq
+    |> Utils.ofSeqOfSeqs
 
 let transjugate (a: Matrix): Matrix =
     a
@@ -135,8 +134,7 @@ let tensorProduct (a: Matrix) (b: Matrix): Matrix =
             v
             |> LazyList.map (fun c -> timesComplex c b)
             |> Seq.transpose
-            |> LazyList.ofSeq
-            |> LazyList.map LazyList.ofSeq
+            |> Utils.ofSeqOfSeqs
             |> LazyList.map LazyList.concat
         )
     |> LazyList.concat

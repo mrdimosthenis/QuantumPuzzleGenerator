@@ -5,6 +5,7 @@ open FsUnit.Xunit
 
 open FSharpx.Collections
 
+open QuantumPuzzleMechanics
 open QuantumPuzzleMechanics.Matrix
 
 let error = 0.001
@@ -23,75 +24,63 @@ let ``Outer product of vectors`` () =
                 [ Complex.ofNum 8.0; Complex.ofNum 10.0 ]
                 [ Complex.ofNum 12.0; Complex.ofNum 15.0 ] ]
     outerProductOfVectors v1 v2
-    |> LazyList.map LazyList.toList
-    |> LazyList.toList
+    |> Utils.toListOfLists
     |> should equal res
 
 [<Fact>]
 let ``Conjugate transpose`` () =
     let a = [ [ Complex.ofNumbers 3.0 7.0; Complex.zero ]
               [ Complex.ofNumbers 0.0 2.0; Complex.ofNumbers 4.0 -1.0 ] ]
-             |> LazyList.ofList
-             |> LazyList.map LazyList.ofList
+             |> Utils.ofListOfLists
     let res = [ [ Complex.ofNumbers 3.0 -7.0; Complex.ofNumbers 0.0 -2.0 ]
                 [ Complex.zero; Complex.ofNumbers 4.0 1.0 ] ]
     a
     |> transjugate
-    |> LazyList.map LazyList.toList
-    |> LazyList.toList
+    |> Utils.toListOfLists
     |> should equal res
 
 [<Fact>]
 let ``Sum`` () =
     let a = [ [ Complex.ofNumbers 0.0 1.0; Complex.ofNumbers 1.0 1.0 ]
               [ Complex.ofNumbers 2.0 -3.0; Complex.ofNum 4.0 ] ]
-             |> LazyList.ofList
-             |> LazyList.map LazyList.ofList
+             |> Utils.ofListOfLists
     let b = [ [ Complex.ofNumbers 0.0 2.0; Complex.zero ]
               [ Complex.ofNumbers 0.0 1.0; Complex.ofNumbers 1.0 2.0 ] ]
-             |> LazyList.ofList
-             |> LazyList.map LazyList.ofList
+             |> Utils.ofListOfLists
     let res = [ [ Complex.ofNumbers 0.0 3.0; Complex.ofNumbers 1.0 1.0 ]
                 [ Complex.ofNumbers 2.0 -2.0; Complex.ofNumbers 5.0 2.0 ] ]
     sum a b
-    |> LazyList.map LazyList.toList
-    |> LazyList.toList
+    |> Utils.toListOfLists
     |> should equal res
 
 [<Fact>]
 let ``Standard product`` () =
     let a = [ [ Complex.ofNumbers 0.0 2.0; Complex.zero ]
               [ Complex.ofNumbers 0.0 1.0; Complex.ofNumbers 1.0 2.0 ] ]
-             |> LazyList.ofList
-             |> LazyList.map LazyList.ofList
+             |> Utils.ofListOfLists
     let b = [ [ Complex.ofNumbers 0.0 1.0; Complex.ofNumbers 1.0 1.0 ]
               [ Complex.ofNumbers 2.0 -3.0; Complex.ofNum 4.0 ] ]
-             |> LazyList.ofList
-             |> LazyList.map LazyList.ofList
+             |> Utils.ofListOfLists
     let res = [ [ Complex.ofNum -2.0; Complex.ofNumbers -2.0 2.0 ]
                 [ Complex.ofNumbers 7.0 1.0; Complex.ofNumbers 3.0 9.0 ] ]
     standardProduct a b
-    |> LazyList.map LazyList.toList
-    |> LazyList.toList
+    |> Utils.toListOfLists
     |> should equal res
 
 [<Fact>]
 let ``Tensor product`` () =
     let a = [ [ Complex.ofNum 1.0; Complex.ofNum 2.0 ]
               [ Complex.ofNum 3.0; Complex.ofNum 4.0 ] ]
-             |> LazyList.ofList
-             |> LazyList.map LazyList.ofList
+             |> Utils.ofListOfLists
     let b = [ [ Complex.zero; Complex.ofNum 5.0 ]
               [ Complex.ofNum 6.0; Complex.ofNum 7.0 ] ]
-             |> LazyList.ofList
-             |> LazyList.map LazyList.ofList
+             |> Utils.ofListOfLists
     let res = [ [ Complex.zero;       Complex.ofNum 5.0;  Complex.zero;       Complex.ofNum 10.0 ]
                 [ Complex.ofNum 6.0;  Complex.ofNum 7.0;  Complex.ofNum 12.0; Complex.ofNum 14.0 ]
                 [ Complex.zero;       Complex.ofNum 15.0; Complex.zero;       Complex.ofNum 20.0 ]
                 [ Complex.ofNum 18.0; Complex.ofNum 21.0; Complex.ofNum 24.0; Complex.ofNum 28.0 ] ]
     tensorProduct a b
-    |> LazyList.map LazyList.toList
-    |> LazyList.toList
+    |> Utils.toListOfLists
     |> should equal res
 
 let random = System.Random()
