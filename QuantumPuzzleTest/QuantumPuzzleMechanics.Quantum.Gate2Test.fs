@@ -101,6 +101,38 @@ let ``Sample QState of three qubits gets through SWAP with indexA = 0 and indexB
               [ Complex.ofNumbers -0.08383917706 0.1880713765 ] ]
 
 [<Fact>]
+let ``Sample QState of three qubits gets through CX with indexA = 1 and indexB = 0`` () =
+    let m = matrix 3 1 0 CX
+    sampleQState3
+    |> Matrix.standardProduct m
+    |> Utils.toListOfLists
+    |> should equal
+            [ [ Complex.ofNumbers 0.2759361607 -0.02947730478 ]
+              [ Complex.ofNumbers -0.03952082926 -0.08227234484 ]
+              [ Complex.ofNumbers -0.3554997165 -0.5563152553 ]
+              [ Complex.ofNumbers 0.2262718247 -0.1957497824 ]
+              [ Complex.ofNumbers 0.03515688061 0.006527585667 ]
+              [ Complex.ofNumbers -0.08383917706 0.1880713765 ]
+              [ Complex.ofNumbers -0.2184314665 0.09638925639 ]
+              [ Complex.ofNumbers 0.5277142989 -0.1005585398 ] ]
+
+[<Fact>]
+let ``Sample QState of three qubits gets through CX with indexA = 0 and indexB = 2`` () =
+    let m = matrix 3 0 2 CX
+    sampleQState3
+    |> Matrix.standardProduct m
+    |> Utils.toListOfLists
+    |> should equal
+            [ [ Complex.ofNumbers 0.2759361607 -0.02947730478 ]
+              [ Complex.ofNumbers -0.03952082926 -0.08227234484 ]
+              [ Complex.ofNumbers -0.2184314665 0.09638925639 ]
+              [ Complex.ofNumbers 0.5277142989 -0.1005585398 ]
+              [ Complex.ofNumbers 0.2262718247 -0.1957497824 ]
+              [ Complex.ofNumbers -0.3554997165 -0.5563152553 ]
+              [ Complex.ofNumbers -0.08383917706 0.1880713765 ]
+              [ Complex.ofNumbers 0.03515688061 0.006527585667 ] ]
+
+[<Fact>]
 let ``Sample QState of three qubits gets through CX with indexA = 2 and indexB = 0`` () =
     let m = matrix 3 2 0 CX
     sampleQState3
@@ -135,18 +167,40 @@ let ``Sample QState of three qubits gets through CZ with indexA = 2 and indexB =
 let random = System.Random()
 
 [<Fact>]
-let ``3xCNOT equals SWAP property`` () =
+let ``SWAP matrix does not depend on the order of indices`` () =
     let numOfQubits = Generator.nextInt random 4 ()
                       |> (+) 2
     let indexA = Generator.nextInt random numOfQubits ()
-    let indexB = Generator.nextDiffInt random numOfQubits indexA ()
-    let qState = Generator.nextQState random numOfQubits ()
-    let cx = matrix numOfQubits indexA indexB CX
-    let xc = matrix numOfQubits indexB indexA CX
-    let sw = matrix numOfQubits indexA indexB SWAP
-    qState
+    let indexB = Generator.nextDiffInt random numOfQubits [indexA] ()
+    matrix numOfQubits indexA indexB SWAP
+    |> almostEq (matrix numOfQubits indexB indexA SWAP)
+    |> should equal true
+
+//[<Fact>]
+//let ``3xCNOT equals SWAP property`` () =
+//    let numOfQubits = Generator.nextInt random 4 ()
+//                      |> (+) 2
+//    let indexA = Generator.nextInt random numOfQubits ()
+//    let indexB = Generator.nextDiffInt random numOfQubits [indexA] ()
+//    let qState = Generator.nextQState random numOfQubits ()
+//    let cx = matrix numOfQubits indexA indexB CX
+//    let xc = matrix numOfQubits indexB indexA CX
+//    let sw = matrix numOfQubits indexA indexB SWAP
+//    qState
+//    |> Matrix.standardProduct cx
+//    |> Matrix.standardProduct xc
+//    |> Matrix.standardProduct cx
+//    |> almostEq (Matrix.standardProduct sw qState)
+//    |> should equal true
+
+[<Fact>]
+let ``3xCNOT equals SWAP property`` () =
+    let cx = matrix 3 0 1 CX
+    let xc = matrix 3 1 0 CX
+    let sw = matrix 3 0 1 SWAP
+    sampleQState3
     |> Matrix.standardProduct cx
     |> Matrix.standardProduct xc
     |> Matrix.standardProduct cx
-    |> almostEq (Matrix.standardProduct sw qState)
-    |> should equal true
+    |> Utils.toListOfLists
+    |> should equal []

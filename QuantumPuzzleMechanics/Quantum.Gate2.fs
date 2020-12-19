@@ -59,13 +59,6 @@ let matrix (numOfQubits: int) (indexA: int) (indexB: int) (gate: Matrix.Matrix):
     let minIndex = min indexA indexB
     let maxIndex = max indexA indexB
     let distance = maxIndex - minIndex
-    let innerMatrix =
-            if minIndex = indexA
-                then identityMatrix numOfQubits
-                else matrixOfConsecutiveIndices numOfQubits minIndex SWAP
-            |> Matrix.standardProduct (matrixOfConsecutiveIndices numOfQubits minIndex gate)
-    if distance = 1
-        then innerMatrix
-        else matrixOfMovingApart numOfQubits minIndex distance
-             |> Matrix.standardProduct innerMatrix
-             |> Matrix.standardProduct (matrixOfGettingSideBySide numOfQubits minIndex distance)
+    matrixOfMovingApart numOfQubits minIndex distance
+    |> Matrix.standardProduct (matrixOfConsecutiveIndices numOfQubits minIndex gate)
+    |> Matrix.standardProduct (matrixOfGettingSideBySide numOfQubits minIndex distance)

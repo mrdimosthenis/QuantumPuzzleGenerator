@@ -18,11 +18,11 @@ let nextInt (random: Random) (maxVal: int) (): int =
     |> floor
     |> int
 
-let rec nextDiffInt (random: Random) (maxVal: int) (excludedVal: int) (): int =
+let rec nextDiffInt (random: Random) (maxVal: int) (excludedVals: int list) (): int =
     let n = nextInt random maxVal ()
-    if n <> excludedVal
+    if (Seq.forall ((<>) n) excludedVals)
         then n
-        else nextDiffInt random maxVal excludedVal ()
+        else nextDiffInt random maxVal excludedVals ()
 
 let nextPosInt (random: Random) (maxVal: int) (): int =
     nextInt random maxVal ()
@@ -55,13 +55,16 @@ let nextMatrix (random: Random) (m: int) (n: int) (): Matrix.Matrix =
             nextVector random m ()
         )
 
-let nextQState (random: Random) (numOfQubits: int) (): Matrix.Matrix =
+let rec nextQState (random: Random) (numOfQubits: int) (): Matrix.Matrix =
     let n = Math.Pow(2.0, float numOfQubits)
             |> Math.Round
             |> int
-    nextVector random n ()
-    |> Vector.unary
-    |> Option.get
-    |> Seq.singleton
-    |> Seq.transpose
-    |> Utils.ofSeqOfSeqs
+    let v = nextVector random n ()
+    if (Seq.exists ((<>) Complex.zero) v)
+        then v
+             |> Vector.unary
+             |> Option.get
+             |> Seq.singleton
+             |> Seq.transpose
+             |> Utils.ofSeqOfSeqs
+        else nextQState random numOfQubits ()
