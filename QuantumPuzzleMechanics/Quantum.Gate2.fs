@@ -55,10 +55,18 @@ let matrixOfMovingApart (numOfQubits: int) (baseIndex: int) (distance: int): Mat
     |> Seq.init (distance - 1)
     |> Seq.fold Matrix.standardProduct (identityMatrix numOfQubits)
 
+let matrixOfOrderedIndices (numOfQubits: int) (indexA: int) (indexB: int) (gate: Matrix.Matrix): Matrix.Matrix =
+    let distance = indexB - indexA
+    matrixOfMovingApart numOfQubits indexA distance
+    |> Matrix.standardProduct (matrixOfConsecutiveIndices numOfQubits indexA gate)
+    |> Matrix.standardProduct (matrixOfGettingSideBySide numOfQubits indexA distance)
+
 let matrix (numOfQubits: int) (indexA: int) (indexB: int) (gate: Matrix.Matrix): Matrix.Matrix =
     let minIndex = min indexA indexB
     let maxIndex = max indexA indexB
-    let distance = maxIndex - minIndex
-    matrixOfMovingApart numOfQubits minIndex distance
-    |> Matrix.standardProduct (matrixOfConsecutiveIndices numOfQubits minIndex gate)
-    |> Matrix.standardProduct (matrixOfGettingSideBySide numOfQubits minIndex distance)
+    if minIndex = indexA
+        then matrixOfOrderedIndices numOfQubits minIndex maxIndex gate
+        else Matrix.standardProduct
+                (matrixOfOrderedIndices numOfQubits minIndex maxIndex gate)
+                (matrixOfOrderedIndices numOfQubits minIndex maxIndex SWAP)
+             
