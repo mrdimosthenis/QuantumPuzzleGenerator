@@ -12,11 +12,21 @@ type Generator = Random
 
 // functions
 
-let nextPosInt (random: Random) (maxVal: int) (): int =
+let nextInt (random: Random) (maxVal: int) (): int =
     random.NextDouble()
     |> (*) (float maxVal)
-    |> ceil
+    |> floor
     |> int
+
+let rec nextDiffInt (random: Random) (maxVal: int) (excludedVal: int) (): int =
+    let n = nextInt random maxVal ()
+    if n <> excludedVal
+        then n
+        else nextDiffInt random maxVal excludedVal ()
+
+let nextPosInt (random: Random) (maxVal: int) (): int =
+    nextInt random maxVal ()
+    |> (+) 1
 
 let nextNumber (random: Random) (): Number.Number =
     if random.NextDouble() < 0.5
@@ -44,3 +54,14 @@ let nextMatrix (random: Random) (m: int) (n: int) (): Matrix.Matrix =
         (fun _ ->
             nextVector random m ()
         )
+
+let nextQState (random: Random) (numOfQubits: int) (): Matrix.Matrix =
+    let n = Math.Pow(2.0, float numOfQubits)
+            |> Math.Round
+            |> int
+    nextVector random n ()
+    |> Vector.unary
+    |> Option.get
+    |> Seq.singleton
+    |> Seq.transpose
+    |> Utils.ofSeqOfSeqs

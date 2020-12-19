@@ -11,6 +11,8 @@
     <Compile Include="QuantumPuzzleMechanics.ComplexTest.fs" />
     <Compile Include="QuantumPuzzleMechanics.VectorTest.fs" />
     <Compile Include="QuantumPuzzleMechanics.MatrixTest.fs" />
+    <Compile Include="QuantumPuzzleMechanics.Quantum.Gate1Test.fs" />
+    <Compile Include="QuantumPuzzleMechanics.Quantum.Gate2Test.fs" />
     <Compile Include="Program.fs" />
   </ItemGroup>
 

@@ -1,5 +1,6 @@
 ﻿module QuantumPuzzleMechanics.Quantum.Gate2
 
+open System
 open FSharpx.Collections
 
 open QuantumPuzzleMechanics
@@ -29,6 +30,12 @@ let CZ: Matrix.Matrix =
 
 // for states of more qubits
 
+let identityMatrix (numOfQubits: int): Matrix.Matrix =
+    Math.Pow(2.0, float numOfQubits)
+    |> Math.Round
+    |> int
+    |> Matrix.identity
+
 let matrixOfConsecutiveIndices(numOfQubits: int) (baseIndex: int) (gate: Matrix.Matrix): Matrix.Matrix =
     fun i -> match i - baseIndex with
              | 0 -> gate
@@ -40,13 +47,13 @@ let matrixOfConsecutiveIndices(numOfQubits: int) (baseIndex: int) (gate: Matrix.
 let matrixOfGettingSideBySide (numOfQubits: int) (baseIndex: int) (distance: int): Matrix.Matrix =
     fun i -> matrixOfConsecutiveIndices numOfQubits (baseIndex + i + 1) SWAP
     |> Seq.init (distance - 1)
-    |> Seq.fold Matrix.standardProduct (Matrix.identity numOfQubits)
+    |> Seq.rev
+    |> Seq.fold Matrix.standardProduct (identityMatrix numOfQubits)
 
 let matrixOfMovingApart (numOfQubits: int) (baseIndex: int) (distance: int): Matrix.Matrix =
     fun i -> matrixOfConsecutiveIndices numOfQubits (baseIndex + i + 1) SWAP
     |> Seq.init (distance - 1)
-    |> Seq.rev
-    |> Seq.fold Matrix.standardProduct (Matrix.identity numOfQubits)
+    |> Seq.fold Matrix.standardProduct (identityMatrix numOfQubits)
 
 let matrix (numOfQubits: int) (indexA: int) (indexB: int) (gate: Matrix.Matrix): Matrix.Matrix =
     let minIndex = min indexA indexB
@@ -54,9 +61,9 @@ let matrix (numOfQubits: int) (indexA: int) (indexB: int) (gate: Matrix.Matrix):
     let distance = maxIndex - minIndex
     let innerMatrix =
             if minIndex = indexA
-                then Matrix.identity numOfQubits
+                then identityMatrix numOfQubits
                 else matrixOfConsecutiveIndices numOfQubits minIndex SWAP
-            |> Matrix.standardProduct (matrixOfConsecutiveIndices numOfQubits indexA gate)
+            |> Matrix.standardProduct (matrixOfConsecutiveIndices numOfQubits minIndex gate)
     if distance = 1
         then innerMatrix
         else matrixOfMovingApart numOfQubits minIndex distance
