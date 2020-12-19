@@ -64,9 +64,8 @@ let matrixOfOrderedIndices (numOfQubits: int) (indexA: int) (indexB: int) (gate:
 let matrix (numOfQubits: int) (indexA: int) (indexB: int) (gate: Matrix.Matrix): Matrix.Matrix =
     let minIndex = min indexA indexB
     let maxIndex = max indexA indexB
-    if minIndex = indexA
+    if minIndex = indexA || gate = SWAP
         then matrixOfOrderedIndices numOfQubits minIndex maxIndex gate
-        else Matrix.standardProduct
-                (matrixOfOrderedIndices numOfQubits minIndex maxIndex gate)
-                (matrixOfOrderedIndices numOfQubits minIndex maxIndex SWAP)
-             
+        else SWAP
+             |> Matrix.standardProduct gate
+             |> matrixOfOrderedIndices numOfQubits minIndex maxIndex

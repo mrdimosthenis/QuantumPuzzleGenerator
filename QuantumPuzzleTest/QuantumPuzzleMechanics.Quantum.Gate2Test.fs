@@ -218,17 +218,19 @@ let random = System.Random()
 let ``3xCNOT equals SWAP property`` () =
     let numOfQubits = Generator.nextInt random 4 ()
                       |> (+) 2
-    let indexA = 0
-    let indexB = 1
-    let minIndex = min indexA indexB
-    let maxIndex = max indexA indexB
+    let indexA = Generator.nextInt random numOfQubits ()
+    let indexB = Generator.nextDiffInt random numOfQubits [indexA] ()
     let qState = Generator.nextQState random numOfQubits ()
-    let cx = matrix numOfQubits minIndex maxIndex CX
-    let xc = matrix numOfQubits maxIndex minIndex CX
-    let sw = matrix numOfQubits minIndex maxIndex SWAP
+    let cx = matrix numOfQubits indexA indexB CX
+    let xc = matrix numOfQubits indexB indexA CX
+    let sw = matrix numOfQubits indexA indexB SWAP
     qState
     |> Matrix.standardProduct cx
-    |> Matrix.standardProduct xc
+
+    |> Matrix.standardProduct sw
+    |> Matrix.standardProduct cx
+
+    |> Matrix.standardProduct sw
     |> Matrix.standardProduct cx
     |> almostEq (Matrix.standardProduct sw qState)
     |> should equal true
