@@ -57,8 +57,8 @@ let ``Sample QState of two qubits gets through inverted CX`` () =
     |> Utils.toListOfLists
     |> should equal
             [ [ Complex.ofNumbers 0.1109863929 0.03165216845 ]
-              [ Complex.ofNumbers 0.1615844534 0.1296435844 ]
               [ Complex.ofNumbers 0.5864646142 0.01865244057 ]
+              [ Complex.ofNumbers 0.1615844534 0.1296435844 ]
               [ Complex.ofNumbers 0.5620387438 0.5325288344 ] ]
 
 [<Fact>]
@@ -80,8 +80,8 @@ let ``Sample QState of two qubits gets through inverted CZ`` () =
     |> Utils.toListOfLists
     |> should equal
             [ [ Complex.ofNumbers 0.1109863929 0.03165216845 ]
-              [ Complex.ofNumbers 0.1615844534 0.1296435844 ]
               [ Complex.ofNumbers 0.5620387438 0.5325288344 ]
+              [ Complex.ofNumbers 0.1615844534 0.1296435844 ]
               [ Complex.ofNumbers -0.5864646142 -0.01865244057 ] ]
 
 [<Fact>]
@@ -141,10 +141,10 @@ let ``Sample QState of three qubits gets through CX with indexA = 1 and indexB =
     |> should equal
             [ [ Complex.ofNumbers 0.2759361607 -0.02947730478 ]
               [ Complex.ofNumbers -0.03952082926 -0.08227234484 ]
-              [ Complex.ofNumbers -0.3554997165 -0.5563152553 ]
-              [ Complex.ofNumbers 0.2262718247 -0.1957497824 ]
               [ Complex.ofNumbers 0.03515688061 0.006527585667 ]
               [ Complex.ofNumbers -0.08383917706 0.1880713765 ]
+              [ Complex.ofNumbers -0.3554997165 -0.5563152553 ]
+              [ Complex.ofNumbers 0.2262718247 -0.1957497824 ]
               [ Complex.ofNumbers -0.2184314665 0.09638925639 ]
               [ Complex.ofNumbers 0.5277142989 -0.1005585398 ] ]
 
@@ -172,12 +172,12 @@ let ``Sample QState of three qubits gets through CX with indexA = 2 and indexB =
     |> Utils.toListOfLists
     |> should equal
             [ [ Complex.ofNumbers 0.2759361607 -0.02947730478 ]
-              [ Complex.ofNumbers -0.3554997165 -0.5563152553 ]
-              [ Complex.ofNumbers -0.2184314665 0.09638925639 ]
-              [ Complex.ofNumbers 0.03515688061 0.006527585667 ]
               [ Complex.ofNumbers 0.2262718247 -0.1957497824 ]
-              [ Complex.ofNumbers -0.03952082926 -0.08227234484 ]
+              [ Complex.ofNumbers -0.2184314665 0.09638925639 ]
               [ Complex.ofNumbers -0.08383917706 0.1880713765 ]
+              [ Complex.ofNumbers -0.3554997165 -0.5563152553 ]
+              [ Complex.ofNumbers -0.03952082926 -0.08227234484 ]
+              [ Complex.ofNumbers 0.03515688061 0.006527585667 ]
               [ Complex.ofNumbers 0.5277142989 -0.1005585398 ] ]
 
 [<Fact>]
@@ -204,12 +204,12 @@ let ``Sample QState of three qubits gets through CZ with indexA = 2 and indexB =
     |> Utils.toListOfLists
     |> should equal
             [ [ Complex.ofNumbers 0.2759361607 -0.02947730478 ]
-              [ Complex.ofNumbers -0.2184314665 0.09638925639 ]
               [ Complex.ofNumbers -0.03952082926 -0.08227234484 ]
+              [ Complex.ofNumbers -0.2184314665 0.09638925639 ]
               [ Complex.ofNumbers -0.5277142989 0.1005585398 ]
               [ Complex.ofNumbers -0.3554997165 -0.5563152553 ]
-              [ Complex.ofNumbers 0.03515688061 0.006527585667 ]
               [ Complex.ofNumbers 0.2262718247 -0.1957497824 ]
+              [ Complex.ofNumbers 0.03515688061 0.006527585667 ]
               [ Complex.ofNumbers 0.08383917706 -0.1880713765 ] ]
 
 let random = System.Random()
@@ -226,11 +226,7 @@ let ``3xCNOT equals SWAP property`` () =
     let sw = matrix numOfQubits indexA indexB SWAP
     qState
     |> Matrix.standardProduct cx
-
-    |> Matrix.standardProduct sw
+    |> Matrix.standardProduct xc
     |> Matrix.standardProduct cx
-
-    |> Matrix.standardProduct sw
-    |> Matrix.standardProduct cx
-    |> almostEq (Matrix.standardProduct sw qState)
+    |> almostEq (Matrix.standardProduct qState sw)
     |> should equal true

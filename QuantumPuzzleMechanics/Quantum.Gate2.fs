@@ -47,25 +47,22 @@ let matrixOfConsecutiveIndices(numOfQubits: int) (baseIndex: int) (gate: Matrix.
 let matrixOfGettingSideBySide (numOfQubits: int) (baseIndex: int) (distance: int): Matrix.Matrix =
     fun i -> matrixOfConsecutiveIndices numOfQubits (baseIndex + i + 1) SWAP
     |> Seq.init (distance - 1)
-    |> Seq.rev
     |> Seq.fold Matrix.standardProduct (identityMatrix numOfQubits)
 
-let matrixOfMovingApart (numOfQubits: int) (baseIndex: int) (distance: int): Matrix.Matrix =
-    fun i -> matrixOfConsecutiveIndices numOfQubits (baseIndex + i + 1) SWAP
-    |> Seq.init (distance - 1)
-    |> Seq.fold Matrix.standardProduct (identityMatrix numOfQubits)
-
-let matrixOfOrderedIndices (numOfQubits: int) (indexA: int) (indexB: int) (gate: Matrix.Matrix): Matrix.Matrix =
-    let distance = indexB - indexA
-    matrixOfMovingApart numOfQubits indexA distance
-    |> Matrix.standardProduct (matrixOfConsecutiveIndices numOfQubits indexA gate)
-    |> Matrix.standardProduct (matrixOfGettingSideBySide numOfQubits indexA distance)
+let matrixOfOrderedIndices (numOfQubits: int) (minIndex: int) (maxIndex: int) (gate: Matrix.Matrix): Matrix.Matrix =
+    let distance = maxIndex - minIndex
+    let sideBySideMatrix = matrixOfGettingSideBySide numOfQubits minIndex distance
+    sideBySideMatrix
+    |> Matrix.standardProduct (matrixOfConsecutiveIndices numOfQubits minIndex gate)
+    |> Matrix.standardProduct (Matrix.transjugate sideBySideMatrix)
 
 let matrix (numOfQubits: int) (indexA: int) (indexB: int) (gate: Matrix.Matrix): Matrix.Matrix =
     let minIndex = min indexA indexB
     let maxIndex = max indexA indexB
-    if minIndex = indexA || gate = SWAP
-        then matrixOfOrderedIndices numOfQubits minIndex maxIndex gate
-        else SWAP
-             |> Matrix.standardProduct gate
-             |> matrixOfOrderedIndices numOfQubits minIndex maxIndex
+    let gateMatrix = matrixOfOrderedIndices numOfQubits minIndex maxIndex gate
+    if minIndex = indexA
+        then gateMatrix
+        else let swapMatrix = matrixOfOrderedIndices numOfQubits minIndex maxIndex SWAP
+             swapMatrix
+             |> Matrix.standardProduct gateMatrix
+             |> Matrix.standardProduct swapMatrix
