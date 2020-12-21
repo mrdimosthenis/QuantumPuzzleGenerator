@@ -100,7 +100,6 @@ let ``Sample QState of four qubits gets through CCX with indexA = 0, indexB = 1 
               [ Complex.ofNumbers 0.03056354898 0.1253263191 ]
               [ Complex.ofNumbers -0.3081663118 0.06972884607 ] ]
             
-            
 let random = System.Random()
 let numOfQubits = Generator.nextInt random 3 ()
                   |> (+) 3
