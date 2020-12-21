@@ -214,13 +214,16 @@ let ``Sample QState of three qubits gets through CZ with indexA = 2 and indexB =
 
 let random = System.Random()
 
+let numOfQubits = Generator.nextInt random 4 ()
+                  |> (+) 2
+
+let indexA = Generator.nextInt random numOfQubits ()
+let indexB = Generator.nextDiffInt random numOfQubits [indexA] ()
+
+let qState = Generator.nextQState random numOfQubits ()
+
 [<Fact>]
 let ``3xCNOT equals SWAP property`` () =
-    let numOfQubits = Generator.nextInt random 4 ()
-                      |> (+) 2
-    let indexA = Generator.nextInt random numOfQubits ()
-    let indexB = Generator.nextDiffInt random numOfQubits [indexA] ()
-    let qState = Generator.nextQState random numOfQubits ()
     let cx = matrix numOfQubits indexA indexB CX
     let xc = matrix numOfQubits indexB indexA CX
     let sw = matrix numOfQubits indexA indexB SWAP
@@ -229,4 +232,25 @@ let ``3xCNOT equals SWAP property`` () =
     |> Matrix.standardProduct xc
     |> Matrix.standardProduct cx
     |> almostEq (Matrix.standardProduct sw qState)
+    |> should equal true
+
+[<Fact>]
+let ``CZ equals ZC property`` () =
+    let cz = matrix numOfQubits indexA indexB CZ
+    let zc = matrix numOfQubits indexB indexA CZ
+    qState
+    |> Matrix.standardProduct cz
+    |> almostEq (Matrix.standardProduct zc qState)
+    |> should equal true
+
+[<Fact>]
+let ``CNOT equals H-CZ-H property`` () =
+    let h = Gate1.matrix numOfQubits indexB Gate1.H
+    let cz = matrix numOfQubits indexA indexB CZ
+    let cx = matrix numOfQubits indexA indexB CX
+    qState
+    |> Matrix.standardProduct h
+    |> Matrix.standardProduct cz
+    |> Matrix.standardProduct h
+    |> almostEq (Matrix.standardProduct cx qState)
     |> should equal true

@@ -216,12 +216,12 @@ let ``The third qubit out of three gets through Y`` () =
               [ Complex.ofNumbers -0.006527585667 0.03515688061 ] ]
 
 let random = System.Random()
+let numOfQubits = Generator.nextPosInt random 3 ()
+let index = Generator.nextPosInt random (numOfQubits - 1) ()
+let qState = Generator.nextQState random numOfQubits ()
 
 [<Fact>]
 let ``NOT is its own inverse property`` () =
-    let numOfQubits = Generator.nextPosInt random 3 ()
-    let index = Generator.nextPosInt random (numOfQubits - 1) ()
-    let qState = Generator.nextQState random numOfQubits ()
     let m = matrix numOfQubits index X
     qState
     |> Matrix.standardProduct m
@@ -231,10 +231,16 @@ let ``NOT is its own inverse property`` () =
 
 [<Fact>]
 let ``HAD is its own inverse property`` () =
-    let numOfQubits = Generator.nextPosInt random 3 ()
-    let index = Generator.nextPosInt random (numOfQubits - 1) ()
-    let qState = Generator.nextQState random numOfQubits ()
     let m = matrix numOfQubits index H
+    qState
+    |> Matrix.standardProduct m
+    |> Matrix.standardProduct m
+    |> almostEq qState
+    |> should equal true
+
+[<Fact>]
+let ``Z is its own inverse property`` () =
+    let m = matrix numOfQubits index Z
     qState
     |> Matrix.standardProduct m
     |> Matrix.standardProduct m
