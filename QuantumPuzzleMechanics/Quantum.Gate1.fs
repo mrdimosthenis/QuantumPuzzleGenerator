@@ -29,7 +29,7 @@ let H: Matrix.Matrix =
 
 // for states of multiple qubits
 
-let matrix (numOfQubits: int) (index: int) (gate: Matrix.Matrix): Matrix.Matrix =
-    fun i -> if i = index then gate else Matrix.identity 2
+let matrix (numOfQubits: int) (index: int) (q1Gate: Matrix.Matrix): Matrix.Matrix =
+    fun i -> if i = index then q1Gate else Matrix.identity 2
     |> Seq.init numOfQubits
     |> Seq.fold Matrix.tensorProduct (Matrix.identity 1)

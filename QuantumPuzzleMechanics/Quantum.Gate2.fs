@@ -36,9 +36,9 @@ let identityMatrix (numOfQubits: int): Matrix.Matrix =
     |> int
     |> Matrix.identity
 
-let matrixOfConsecutiveIndices(numOfQubits: int) (baseIndex: int) (gate: Matrix.Matrix): Matrix.Matrix =
+let matrixOfConsecutiveIndices(numOfQubits: int) (baseIndex: int) (q2Gate: Matrix.Matrix): Matrix.Matrix =
     fun i -> match i - baseIndex with
-             | 0 -> gate
+             | 0 -> q2Gate
              | 1 -> Matrix.identity 1
              | _ -> Matrix.identity 2
     |> Seq.init numOfQubits
@@ -49,17 +49,17 @@ let matrixOfGettingSideBySide (numOfQubits: int) (baseIndex: int) (distance: int
     |> Seq.init (distance - 1)
     |> Seq.fold Matrix.standardProduct (identityMatrix numOfQubits)
 
-let matrixOfOrderedIndices (numOfQubits: int) (minIndex: int) (maxIndex: int) (gate: Matrix.Matrix): Matrix.Matrix =
+let matrixOfOrderedIndices (numOfQubits: int) (minIndex: int) (maxIndex: int) (q2Gate: Matrix.Matrix): Matrix.Matrix =
     let distance = maxIndex - minIndex
     let sideBySideMatrix = matrixOfGettingSideBySide numOfQubits minIndex distance
     sideBySideMatrix
-    |> Matrix.standardProduct (matrixOfConsecutiveIndices numOfQubits minIndex gate)
+    |> Matrix.standardProduct (matrixOfConsecutiveIndices numOfQubits minIndex q2Gate)
     |> Matrix.standardProduct (Matrix.transjugate sideBySideMatrix)
 
-let matrix (numOfQubits: int) (indexA: int) (indexB: int) (gate: Matrix.Matrix): Matrix.Matrix =
+let matrix (numOfQubits: int) (indexA: int) (indexB: int) (q2Gate: Matrix.Matrix): Matrix.Matrix =
     let minIndex = min indexA indexB
     let maxIndex = max indexA indexB
-    let gateMatrix = matrixOfOrderedIndices numOfQubits minIndex maxIndex gate
+    let gateMatrix = matrixOfOrderedIndices numOfQubits minIndex maxIndex q2Gate
     if minIndex = indexA
         then gateMatrix
         else let swapMatrix = matrixOfOrderedIndices numOfQubits minIndex maxIndex SWAP

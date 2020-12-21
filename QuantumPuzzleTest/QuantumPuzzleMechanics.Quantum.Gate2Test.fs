@@ -228,5 +228,5 @@ let ``3xCNOT equals SWAP property`` () =
     |> Matrix.standardProduct cx
     |> Matrix.standardProduct xc
     |> Matrix.standardProduct cx
-    |> almostEq (Matrix.standardProduct qState sw)
+    |> almostEq (Matrix.standardProduct sw qState)
     |> should equal true
