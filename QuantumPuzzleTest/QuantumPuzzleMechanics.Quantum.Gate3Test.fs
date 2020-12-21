@@ -113,12 +113,12 @@ let qState = Generator.nextQState random numOfQubits ()
 
 [<Fact>]
 let ``3xCCNOT equals CSWAP property`` () =
+    let ccx = matrix numOfQubits indexA indexB indexC CCX
     let cxc = matrix numOfQubits indexA indexC indexB CCX
-    let xcc = matrix numOfQubits indexC indexA indexB CCX
-    let csw = matrix numOfQubits indexC indexA indexB CCX
+    let csw = matrix numOfQubits indexA indexB indexC CSWAP
     qState
+    |> Matrix.standardProduct ccx
     |> Matrix.standardProduct cxc
-    |> Matrix.standardProduct xcc
-    |> Matrix.standardProduct cxc
+    |> Matrix.standardProduct ccx
     |> almostEq (Matrix.standardProduct csw qState)
     |> should equal true

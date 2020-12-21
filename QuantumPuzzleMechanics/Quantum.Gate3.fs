@@ -75,6 +75,7 @@ let matrix (numOfQubits: int)
                            indexB
                            indexC ]
                          |> List.indexed
+                         |> List.sortBy snd
     match List.map snd indexedIndices with
     | [ minIndex; middleIndex; maxIndex ] ->
             let swapMatrix =
