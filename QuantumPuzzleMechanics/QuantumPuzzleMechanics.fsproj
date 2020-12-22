@@ -13,12 +13,15 @@
     <Compile Include="Quantum.Gate1.fs" />
     <Compile Include="Quantum.Gate2.fs" />
     <Compile Include="Quantum.Gate3.fs" />
+    <Compile Include="Graphics.Elems.fs" />
     <Compile Include="Generator.fs" />
     <Compile Include="Library.fs" />
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="FSharpx.Collections" Version="2.1.3" />
+    <PackageReference Include="Giraffe.ViewEngine" Version="1.2.0" />
+    <PackageReference Include="Xamarin.Forms" Version="4.8.0.1687" />
   </ItemGroup>
 
 </Project>
