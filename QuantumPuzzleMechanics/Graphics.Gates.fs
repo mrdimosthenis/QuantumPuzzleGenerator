@@ -3,6 +3,8 @@
 open Giraffe.ViewEngine
 open Xamarin.Forms
 
+open QuantumPuzzleMechanics
+
 // types
 
 type Place = Single
@@ -88,3 +90,143 @@ let gate1Graphics
         |> tag "g" [ attr "transform" transformVal ]
     |> List.init numOfQubits
     |> tag "g" []
+
+let gate2Graphics
+        (numOfQubits: int)
+        (indexA: int)
+        (indexB: int)
+        (symbolA: Symbol)
+        (symbolB: Symbol)
+        (strokeColor: Color)
+        (size: float)
+    : XmlNode =
+    let minIndex = min indexA indexB
+    let maxIndex = max indexA indexB
+    let (minSymbol, maxSymbol) =
+            if minIndex = indexA
+                then (symbolA, symbolB)
+                else (symbolB, symbolA)
+    fun i -> 
+        let transformVal = transform i size
+        match i with
+        | _ when i = minIndex ->
+            [ part Top minSymbol strokeColor size ]
+        | _ when i = maxIndex ->
+            [ part Bottom maxSymbol strokeColor size ]
+        | _ when i < minIndex || i > maxIndex ->
+            [ Elems.horizWire Color.Black size ]
+        | _ ->
+            [ Elems.horizWire Color.Black size
+              Elems.vertWire strokeColor size ]
+        |> tag "g" [ attr "transform" transformVal ]
+    |> List.init numOfQubits
+    |> tag "g" []
+
+let gate3Graphics
+        (numOfQubits: int)
+        (indexA: int)
+        (indexB: int)
+        (indexC: int)
+        (symbolA: Symbol)
+        (symbolB: Symbol)
+        (symbolZ: Symbol)
+        (strokeColor: Color)
+        (size: float)
+    : XmlNode =
+    let sortedIndexWithSymbols =
+            [ symbolA; symbolB; symbolZ ]
+            |> List.zip [ indexA; indexB; indexC ]
+            |> List.sortBy fst
+    match sortedIndexWithSymbols with
+    | [ (minIndex, minSymbol)
+        (middleIndex, middleSymbol)
+        (maxIndex, maxSymbol) ] ->
+            fun i -> 
+                let transformVal = transform i size
+                match i with
+                | _ when i = minIndex ->
+                    [ part Top minSymbol strokeColor size ]
+                | _ when i = middleIndex ->
+                    [ part Middle middleSymbol strokeColor size ]
+                | _ when i = maxIndex ->
+                    [ part Bottom maxSymbol strokeColor size ]
+                | _ when i < minIndex || i > maxIndex ->
+                    [ Elems.horizWire Color.Black size ]
+                | _ ->
+                    [ Elems.horizWire Color.Black size
+                      Elems.vertWire strokeColor size ]
+                |> tag "g" [ attr "transform" transformVal ]
+            |> List.init numOfQubits
+            |> tag "g" []
+    | _ -> raise Quantum.Gate3.InvalidIndexOrder
+
+let gateGraphics (numOfQubits: int) (gate: Gate) (strokeColor: Color) (size: float): XmlNode =
+    match gate with
+    | XGate index ->
+        gate1Graphics numOfQubits
+                      index
+                      NotSymbol
+                      strokeColor
+                      size
+    | YGate index ->
+        gate1Graphics numOfQubits
+                      index
+                      YSymbol
+                      strokeColor
+                      size
+    | ZGate index ->
+        gate1Graphics numOfQubits
+                      index
+                      ZSymbol
+                      strokeColor
+                      size
+    | HGate index ->
+        gate1Graphics numOfQubits
+                      index
+                      HSymbol
+                      strokeColor
+                      size
+    | SwapGate (indexA, indexB) ->
+        gate2Graphics numOfQubits
+                      indexA
+                      indexB
+                      SwapSymbol
+                      SwapSymbol
+                      strokeColor
+                      size
+    | CXGate (indexA, indexB) ->
+        gate2Graphics numOfQubits
+                      indexA
+                      indexB
+                      ControlSymbol
+                      NotSymbol
+                      strokeColor
+                      size
+    | CZGate (indexA, indexB) ->
+        gate2Graphics numOfQubits
+                      indexA
+                      indexB
+                      ControlSymbol
+                      ZSymbol
+                      strokeColor
+                      size
+    | CCXGate (indexA, indexB, indexC) ->
+        gate3Graphics numOfQubits
+                      indexA
+                      indexB
+                      indexC
+                      ControlSymbol
+                      ControlSymbol
+                      NotSymbol
+                      strokeColor
+                      size
+    | CSwapGate (indexA, indexB, indexC) ->
+        gate3Graphics numOfQubits
+                      indexA
+                      indexB
+                      indexC
+                      ControlSymbol
+                      SwapSymbol
+                      SwapSymbol
+                      strokeColor
+                      size
