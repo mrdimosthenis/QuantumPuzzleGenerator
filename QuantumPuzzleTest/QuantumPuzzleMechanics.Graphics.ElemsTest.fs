@@ -70,9 +70,9 @@ let ``Letter Y`` () =
     <| String.concat
                 ""
                 [| """<g>"""
-                   """<line stroke="rgb(83, 83, 83)" x1="35" y1="35" x2="50" y2="50" stroke-width="5"></line>"""
-                   """<line stroke="rgb(83, 83, 83)" x1="65" y1="35" x2="50" y2="50" stroke-width="5"></line>"""
-                   """<line stroke="rgb(83, 83, 83)" x1="50" y1="50" x2="50" y2="65" stroke-width="5"></line>"""
+                   """<line stroke="rgb(83, 83, 83)" x1="40" y1="40" x2="50" y2="50" stroke-width="5"></line>"""
+                   """<line stroke="rgb(83, 83, 83)" x1="60" y1="40" x2="50" y2="50" stroke-width="5"></line>"""
+                   """<line stroke="rgb(83, 83, 83)" x1="50" y1="50" x2="50" y2="60" stroke-width="5"></line>"""
                    """</g>""" |]
 
 [<Fact>]
@@ -83,9 +83,9 @@ let ``Letter Z`` () =
     <| String.concat
                 ""
                 [| """<g>"""
-                   """<line stroke="rgb(83, 83, 83)" x1="35" y1="35" x2="65" y2="35" stroke-width="5"></line>"""
-                   """<line stroke="rgb(83, 83, 83)" x1="65" y1="35" x2="35" y2="65" stroke-width="5"></line>"""
-                   """<line stroke="rgb(83, 83, 83)" x1="35" y1="65" x2="65" y2="65" stroke-width="5"></line>"""
+                   """<line stroke="rgb(83, 83, 83)" x1="40" y1="40" x2="60" y2="40" stroke-width="5"></line>"""
+                   """<line stroke="rgb(83, 83, 83)" x1="60" y1="40" x2="40" y2="60" stroke-width="5"></line>"""
+                   """<line stroke="rgb(83, 83, 83)" x1="40" y1="60" x2="60" y2="60" stroke-width="5"></line>"""
                    """</g>""" |]
 
 [<Fact>]
@@ -100,9 +100,9 @@ let ``Y symbol`` () =
                    """<rect fill="rgb(98, 92, 84)" stroke="rgb(0, 0, 100)" width="50" height="50" stroke-width="0.25"></rect>"""
                    """</g>"""
                    """<g>"""
-                   """<line stroke="rgb(0, 0, 100)" x1="35" y1="35" x2="50" y2="50" stroke-width="5"></line>"""
-                   """<line stroke="rgb(0, 0, 100)" x1="65" y1="35" x2="50" y2="50" stroke-width="5"></line>"""
-                   """<line stroke="rgb(0, 0, 100)" x1="50" y1="50" x2="50" y2="65" stroke-width="5"></line>"""
+                   """<line stroke="rgb(0, 0, 100)" x1="40" y1="40" x2="50" y2="50" stroke-width="5"></line>"""
+                   """<line stroke="rgb(0, 0, 100)" x1="60" y1="40" x2="50" y2="50" stroke-width="5"></line>"""
+                   """<line stroke="rgb(0, 0, 100)" x1="50" y1="50" x2="50" y2="60" stroke-width="5"></line>"""
                    """</g>"""
                    """</g>""" |]
 
@@ -118,8 +118,26 @@ let ``Z symbol`` () =
                    """<rect fill="rgb(0, 0, 100)" stroke="rgb(98, 92, 84)" width="50" height="50" stroke-width="0.25"></rect>"""
                    """</g>"""
                    """<g>"""
-                   """<line stroke="rgb(98, 92, 84)" x1="35" y1="35" x2="65" y2="35" stroke-width="5"></line>"""
-                   """<line stroke="rgb(98, 92, 84)" x1="65" y1="35" x2="35" y2="65" stroke-width="5"></line>"""
-                   """<line stroke="rgb(98, 92, 84)" x1="35" y1="65" x2="65" y2="65" stroke-width="5"></line>"""
+                   """<line stroke="rgb(98, 92, 84)" x1="40" y1="40" x2="60" y2="40" stroke-width="5"></line>"""
+                   """<line stroke="rgb(98, 92, 84)" x1="60" y1="40" x2="40" y2="60" stroke-width="5"></line>"""
+                   """<line stroke="rgb(98, 92, 84)" x1="40" y1="60" x2="60" y2="60" stroke-width="5"></line>"""
+                   """</g>"""
+                   """</g>""" |]
+
+[<Fact>]
+let ``H symbol`` () =
+    hSymbol Color.LightPink Color.Gold 100.0
+    |> RenderView.AsString.xmlNode
+    |> should equal
+    <| String.concat
+                ""
+                [| """<g>"""
+                   """<g transform="translate(25,25)">"""
+                   """<rect fill="rgb(100, 71, 76)" stroke="rgb(100, 84, 0)" width="50" height="50" stroke-width="0.25"></rect>"""
+                   """</g>"""
+                   """<g>"""
+                   """<line stroke="rgb(100, 84, 0)" x1="40" y1="40" x2="40" y2="60" stroke-width="5"></line>"""
+                   """<line stroke="rgb(100, 84, 0)" x1="60" y1="40" x2="60" y2="60" stroke-width="5"></line>"""
+                   """<line stroke="rgb(100, 84, 0)" x1="40" y1="50" x2="60" y2="50" stroke-width="5"></line>"""
                    """</g>"""
                    """</g>""" |]
