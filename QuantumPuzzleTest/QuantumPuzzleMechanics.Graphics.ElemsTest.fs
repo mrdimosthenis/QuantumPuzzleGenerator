@@ -12,19 +12,19 @@ open QuantumPuzzleMechanics.Graphics.Elems
 let ``Horizontal wire`` () =
     horizWire Color.Gray 100.0
     |> RenderView.AsString.xmlNode
-    |> should equal """<line stroke="rgb(50, 50, 50)" x1="0" y1="50" x2="100" y2="50" stroke-width="5"></line>"""
+    |> should equal """<line stroke="rgb(128, 128, 128)" x1="0" y1="50" x2="100" y2="50" stroke-width="5"></line>"""
 
 [<Fact>]
 let ``Vertical wire`` () =
     vertWire Color.Red 100.0
     |> RenderView.AsString.xmlNode
-    |> should equal """<line stroke="rgb(100, 0, 0)" x1="50" y1="0" x2="50" y2="100" stroke-width="5"></line>"""
+    |> should equal """<line stroke="rgb(255, 0, 0)" x1="50" y1="0" x2="50" y2="100" stroke-width="5"></line>"""
 
 [<Fact>]
 let ``Control symbol`` () =
     controlSymbol Color.Green 100.0
     |> RenderView.AsString.xmlNode
-    |> should equal """<circle fill="rgb(0, 50, 0)" cx="50" cy="50" r="15"></circle>"""
+    |> should equal """<circle fill="rgb(0, 128, 0)" cx="50" cy="50" r="15"></circle>"""
 
 [<Fact>]
 let ``Not symbol`` () =
@@ -34,9 +34,9 @@ let ``Not symbol`` () =
     <| String.concat
                 ""
                 [| """<g transform="translate(50,50)">"""
-                   """<line stroke="rgb(0, 50, 0)" x1="-20" y1="0" x2="20" y2="0" stroke-width="5"></line>"""
-                   """<line stroke="rgb(0, 50, 0)" x1="0" y1="-20" x2="0" y2="20" stroke-width="5"></line>"""
-                   """<circle stroke="rgb(0, 50, 0)" cx="0" cy="0" r="20" stroke-width="5" fill-opacity="0.0"></circle>"""
+                   """<line stroke="rgb(0, 128, 0)" x1="-20" y1="0" x2="20" y2="0" stroke-width="5"></line>"""
+                   """<line stroke="rgb(0, 128, 0)" x1="0" y1="-20" x2="0" y2="20" stroke-width="5"></line>"""
+                   """<circle stroke="rgb(0, 128, 0)" cx="0" cy="0" r="20" stroke-width="5" fill-opacity="0.0"></circle>"""
                    """</g>""" |]
 
 [<Fact>]
@@ -47,8 +47,8 @@ let ``Swap symbol`` () =
     <| String.concat
                 ""
                 [| """<g>"""
-                   """<line stroke="rgb(65, 16, 16)" x1="30" y1="30" x2="70" y2="70" stroke-width="5"></line>"""
-                   """<line stroke="rgb(65, 16, 16)" x1="30" y1="70" x2="70" y2="30" stroke-width="5"></line>"""
+                   """<line stroke="rgb(165, 42, 42)" x1="30" y1="30" x2="70" y2="70" stroke-width="5"></line>"""
+                   """<line stroke="rgb(165, 42, 42)" x1="30" y1="70" x2="70" y2="30" stroke-width="5"></line>"""
                    """</g>""" |]
 
 [<Fact>]
@@ -59,7 +59,7 @@ let ``Letter box`` () =
     <| String.concat
                 ""
                 [| """<g transform="translate(25,25)">"""
-                   """<rect fill="rgb(0, 100, 100)" stroke="rgb(94, 90, 55)" width="50" height="50" stroke-width="0.25"></rect>"""
+                   """<rect fill="rgb(0, 255, 255)" stroke="rgb(240, 230, 140)" width="50" height="50" stroke-width="0.25"></rect>"""
                    """</g>""" |]
 
 [<Fact>]
@@ -70,9 +70,9 @@ let ``Letter Y`` () =
     <| String.concat
                 ""
                 [| """<g>"""
-                   """<line stroke="rgb(83, 83, 83)" x1="40" y1="40" x2="50" y2="50" stroke-width="5"></line>"""
-                   """<line stroke="rgb(83, 83, 83)" x1="60" y1="40" x2="50" y2="50" stroke-width="5"></line>"""
-                   """<line stroke="rgb(83, 83, 83)" x1="50" y1="50" x2="50" y2="60" stroke-width="5"></line>"""
+                   """<line stroke="rgb(211, 211, 211)" x1="40" y1="40" x2="50" y2="50" stroke-width="5"></line>"""
+                   """<line stroke="rgb(211, 211, 211)" x1="60" y1="40" x2="50" y2="50" stroke-width="5"></line>"""
+                   """<line stroke="rgb(211, 211, 211)" x1="50" y1="50" x2="50" y2="60" stroke-width="5"></line>"""
                    """</g>""" |]
 
 [<Fact>]
@@ -83,9 +83,9 @@ let ``Letter Z`` () =
     <| String.concat
                 ""
                 [| """<g>"""
-                   """<line stroke="rgb(83, 83, 83)" x1="40" y1="40" x2="60" y2="40" stroke-width="5"></line>"""
-                   """<line stroke="rgb(83, 83, 83)" x1="60" y1="40" x2="40" y2="60" stroke-width="5"></line>"""
-                   """<line stroke="rgb(83, 83, 83)" x1="40" y1="60" x2="60" y2="60" stroke-width="5"></line>"""
+                   """<line stroke="rgb(211, 211, 211)" x1="40" y1="40" x2="60" y2="40" stroke-width="5"></line>"""
+                   """<line stroke="rgb(211, 211, 211)" x1="60" y1="40" x2="40" y2="60" stroke-width="5"></line>"""
+                   """<line stroke="rgb(211, 211, 211)" x1="40" y1="60" x2="60" y2="60" stroke-width="5"></line>"""
                    """</g>""" |]
 
 [<Fact>]
@@ -97,12 +97,12 @@ let ``Y symbol`` () =
                 ""
                 [| """<g>"""
                    """<g transform="translate(25,25)">"""
-                   """<rect fill="rgb(98, 92, 84)" stroke="rgb(0, 0, 100)" width="50" height="50" stroke-width="0.25"></rect>"""
+                   """<rect fill="rgb(250, 235, 215)" stroke="rgb(0, 0, 255)" width="50" height="50" stroke-width="0.25"></rect>"""
                    """</g>"""
                    """<g>"""
-                   """<line stroke="rgb(0, 0, 100)" x1="40" y1="40" x2="50" y2="50" stroke-width="5"></line>"""
-                   """<line stroke="rgb(0, 0, 100)" x1="60" y1="40" x2="50" y2="50" stroke-width="5"></line>"""
-                   """<line stroke="rgb(0, 0, 100)" x1="50" y1="50" x2="50" y2="60" stroke-width="5"></line>"""
+                   """<line stroke="rgb(0, 0, 255)" x1="40" y1="40" x2="50" y2="50" stroke-width="5"></line>"""
+                   """<line stroke="rgb(0, 0, 255)" x1="60" y1="40" x2="50" y2="50" stroke-width="5"></line>"""
+                   """<line stroke="rgb(0, 0, 255)" x1="50" y1="50" x2="50" y2="60" stroke-width="5"></line>"""
                    """</g>"""
                    """</g>""" |]
 
@@ -115,12 +115,12 @@ let ``Z symbol`` () =
                 ""
                 [| """<g>"""
                    """<g transform="translate(25,25)">"""
-                   """<rect fill="rgb(0, 0, 100)" stroke="rgb(98, 92, 84)" width="50" height="50" stroke-width="0.25"></rect>"""
+                   """<rect fill="rgb(0, 0, 255)" stroke="rgb(250, 235, 215)" width="50" height="50" stroke-width="0.25"></rect>"""
                    """</g>"""
                    """<g>"""
-                   """<line stroke="rgb(98, 92, 84)" x1="40" y1="40" x2="60" y2="40" stroke-width="5"></line>"""
-                   """<line stroke="rgb(98, 92, 84)" x1="60" y1="40" x2="40" y2="60" stroke-width="5"></line>"""
-                   """<line stroke="rgb(98, 92, 84)" x1="40" y1="60" x2="60" y2="60" stroke-width="5"></line>"""
+                   """<line stroke="rgb(250, 235, 215)" x1="40" y1="40" x2="60" y2="40" stroke-width="5"></line>"""
+                   """<line stroke="rgb(250, 235, 215)" x1="60" y1="40" x2="40" y2="60" stroke-width="5"></line>"""
+                   """<line stroke="rgb(250, 235, 215)" x1="40" y1="60" x2="60" y2="60" stroke-width="5"></line>"""
                    """</g>"""
                    """</g>""" |]
 
@@ -133,11 +133,11 @@ let ``H symbol`` () =
                 ""
                 [| """<g>"""
                    """<g transform="translate(25,25)">"""
-                   """<rect fill="rgb(100, 71, 76)" stroke="rgb(100, 84, 0)" width="50" height="50" stroke-width="0.25"></rect>"""
+                   """<rect fill="rgb(255, 182, 193)" stroke="rgb(255, 215, 0)" width="50" height="50" stroke-width="0.25"></rect>"""
                    """</g>"""
                    """<g>"""
-                   """<line stroke="rgb(100, 84, 0)" x1="40" y1="40" x2="40" y2="60" stroke-width="5"></line>"""
-                   """<line stroke="rgb(100, 84, 0)" x1="60" y1="40" x2="60" y2="60" stroke-width="5"></line>"""
-                   """<line stroke="rgb(100, 84, 0)" x1="40" y1="50" x2="60" y2="50" stroke-width="5"></line>"""
+                   """<line stroke="rgb(255, 215, 0)" x1="40" y1="40" x2="40" y2="60" stroke-width="5"></line>"""
+                   """<line stroke="rgb(255, 215, 0)" x1="60" y1="40" x2="60" y2="60" stroke-width="5"></line>"""
+                   """<line stroke="rgb(255, 215, 0)" x1="40" y1="50" x2="60" y2="50" stroke-width="5"></line>"""
                    """</g>"""
                    """</g>""" |]

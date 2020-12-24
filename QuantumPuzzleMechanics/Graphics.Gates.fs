@@ -5,7 +5,8 @@ open Xamarin.Forms
 
 // types
 
-type Place = Top
+type Place = Single
+           | Top
            | Middle
            | Bottom
 
@@ -32,10 +33,12 @@ let part (place: Place)
          (symbol: Symbol)
          (strokeColor: Color)
          (size: float)
-         : XmlNode =
+    : XmlNode =
     let horizWire = Elems.horizWire Color.Black size
     let vertWires =
             match place with
+            | Single ->
+                []
             | Top ->
                 [ Elems.bottomVertWire strokeColor size ]
             | Middle ->
@@ -62,4 +65,26 @@ let part (place: Place)
       [ symbolElem ] ]
     |> List.concat
     |> tag "g" []
-    
+
+let transform (i: int) (size: float): string =
+    i
+    |> float
+    |> (*) size
+    |> string
+    |> sprintf "translate(0,%s)"
+
+let gate1Graphics
+        (numOfQubits: int)
+        (index: int)
+        (symbol: Symbol)
+        (strokeColor: Color)
+        (size: float)
+    : XmlNode =
+    fun i -> 
+        let transformVal = transform i size
+        if i = index
+                then [ part Single symbol strokeColor size ]
+                else [ Elems.horizWire Color.Black size ]
+        |> tag "g" [ attr "transform" transformVal ]
+    |> List.init numOfQubits
+    |> tag "g" []

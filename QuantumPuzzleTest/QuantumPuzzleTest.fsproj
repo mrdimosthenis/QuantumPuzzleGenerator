@@ -15,6 +15,7 @@
     <Compile Include="QuantumPuzzleMechanics.Quantum.Gate2Test.fs" />
     <Compile Include="QuantumPuzzleMechanics.Quantum.Gate3Test.fs" />
     <Compile Include="QuantumPuzzleMechanics.Graphics.ElemsTest.fs" />
+    <Compile Include="QuantumPuzzleMechanics.Graphics.GatesTest.fs" />
     <Compile Include="Program.fs" />
   </ItemGroup>
 

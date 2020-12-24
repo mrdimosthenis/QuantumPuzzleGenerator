@@ -12,7 +12,7 @@ let lineWidth (size: float): string =
 
 let rgbVal (v: float): string =
     v
-    |> (*) 100.0
+    |> (*) 255.0
     |> Math.Round
     |> int
     |> string
