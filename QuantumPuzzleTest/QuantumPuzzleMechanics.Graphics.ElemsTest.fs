@@ -3,7 +3,8 @@
 open Xunit
 open FsUnit.Xunit
 
-open Giraffe.ViewEngine
+open Fable
+
 open Xamarin.Forms
 
 open QuantumPuzzleMechanics.Graphics.Elems
@@ -11,25 +12,25 @@ open QuantumPuzzleMechanics.Graphics.Elems
 [<Fact>]
 let ``Horizontal wire`` () =
     horizWire Color.Gray 100.0
-    |> RenderView.AsString.xmlNode
+    |> ReactServer.renderToString
     |> should equal """<line stroke="rgb(128, 128, 128)" x1="0" y1="50" x2="100" y2="50" stroke-width="5"></line>"""
 
 [<Fact>]
 let ``Vertical wire`` () =
     vertWire Color.Red 100.0
-    |> RenderView.AsString.xmlNode
+    |> ReactServer.renderToString
     |> should equal """<line stroke="rgb(255, 0, 0)" x1="50" y1="0" x2="50" y2="100" stroke-width="5"></line>"""
 
 [<Fact>]
 let ``Control symbol`` () =
     controlSymbol Color.Green 100.0
-    |> RenderView.AsString.xmlNode
+    |> ReactServer.renderToString
     |> should equal """<circle fill="rgb(0, 128, 0)" cx="50" cy="50" r="15"></circle>"""
 
 [<Fact>]
 let ``Not symbol`` () =
     notSymbol Color.Green 100.0
-    |> RenderView.AsString.xmlNode
+    |> ReactServer.renderToString
     |> should equal
     <| String.concat
                 ""
@@ -42,7 +43,7 @@ let ``Not symbol`` () =
 [<Fact>]
 let ``Swap symbol`` () =
     swapSymbol Color.Brown 100.0
-    |> RenderView.AsString.xmlNode
+    |> ReactServer.renderToString
     |> should equal
     <| String.concat
                 ""
@@ -54,7 +55,7 @@ let ``Swap symbol`` () =
 [<Fact>]
 let ``Letter box`` () =
     letterBox Color.Cyan Color.Khaki 100.0
-    |> RenderView.AsString.xmlNode
+    |> ReactServer.renderToString
     |> should equal
     <| String.concat
                 ""
@@ -65,7 +66,7 @@ let ``Letter box`` () =
 [<Fact>]
 let ``Letter Y`` () =
     letterY Color.LightGray 100.0
-    |> RenderView.AsString.xmlNode
+    |> ReactServer.renderToString
     |> should equal
     <| String.concat
                 ""
@@ -78,7 +79,7 @@ let ``Letter Y`` () =
 [<Fact>]
 let ``Letter Z`` () =
     letterZ Color.LightGray 100.0
-    |> RenderView.AsString.xmlNode
+    |> ReactServer.renderToString
     |> should equal
     <| String.concat
                 ""
@@ -91,7 +92,7 @@ let ``Letter Z`` () =
 [<Fact>]
 let ``Y symbol`` () =
     ySymbol Color.AntiqueWhite Color.Blue 100.0
-    |> RenderView.AsString.xmlNode
+    |> ReactServer.renderToString
     |> should equal
     <| String.concat
                 ""
@@ -109,7 +110,7 @@ let ``Y symbol`` () =
 [<Fact>]
 let ``Z symbol`` () =
     zSymbol Color.Blue Color.AntiqueWhite 100.0
-    |> RenderView.AsString.xmlNode
+    |> ReactServer.renderToString
     |> should equal
     <| String.concat
                 ""
@@ -127,7 +128,7 @@ let ``Z symbol`` () =
 [<Fact>]
 let ``H symbol`` () =
     hSymbol Color.LightPink Color.Gold 100.0
-    |> RenderView.AsString.xmlNode
+    |> ReactServer.renderToString
     |> should equal
     <| String.concat
                 ""

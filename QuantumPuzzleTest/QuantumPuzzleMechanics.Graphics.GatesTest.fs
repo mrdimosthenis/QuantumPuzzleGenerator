@@ -3,7 +3,7 @@
 open Xunit
 open FsUnit.Xunit
 
-open Giraffe.ViewEngine
+open Fable
 open Xamarin.Forms
 
 open QuantumPuzzleMechanics.Graphics.Gates
@@ -11,7 +11,7 @@ open QuantumPuzzleMechanics.Graphics.Gates
 [<Fact>]
 let ``H gate1 graphics on a single qubit`` () =
     gate1Graphics 1 0 HSymbol Color.LightGreen 200.0
-    |> RenderView.AsString.xmlNode
+    |> ReactServer.renderToString
     |> should equal
     <| String.concat
                 ""
@@ -28,7 +28,7 @@ let ``H gate1 graphics on a single qubit`` () =
 [<Fact>]
 let ``X gate1 graphics on the last of two qubits`` () =
     gate1Graphics 2 1 NotSymbol Color.DarkRed 200.0
-    |> RenderView.AsString.xmlNode
+    |> ReactServer.renderToString
     |> should equal
     <| String.concat
                 ""
@@ -45,7 +45,7 @@ let ``X gate1 graphics on the last of two qubits`` () =
 [<Fact>]
 let ``Z gate1 graphics on the middle of three qubits`` () =
     gate1Graphics 3 1 ZSymbol Color.LightGreen 200.0
-    |> RenderView.AsString.xmlNode
+    |> ReactServer.renderToString
     |> should equal
     <| String.concat
                 ""
@@ -66,7 +66,7 @@ let ``Z gate1 graphics on the middle of three qubits`` () =
 [<Fact>]
 let ``CY gate2 graphics on two qubits`` () =
     gate2Graphics 2 0 1 ControlSymbol YSymbol Color.Gray 200.0
-    |> RenderView.AsString.xmlNode
+    |> ReactServer.renderToString
     |> should equal
     <| String.concat
                 ""
@@ -88,7 +88,7 @@ let ``CY gate2 graphics on two qubits`` () =
 [<Fact>]
 let ``Inverted CX gate2 graphics on the first and last of three qubits`` () =
     gate2Graphics 3 2 0 ControlSymbol NotSymbol Color.MediumSeaGreen 200.0
-    |> RenderView.AsString.xmlNode
+    |> ReactServer.renderToString
     |> should equal
     <| String.concat
                 ""
@@ -106,7 +106,7 @@ let ``Inverted CX gate2 graphics on the first and last of three qubits`` () =
 [<Fact>]
 let ``Swap gate2 graphics on the middles of four qubits`` () =
     gate2Graphics 4 1 2 SwapSymbol SwapSymbol Color.Purple 200.0
-    |> RenderView.AsString.xmlNode
+    |> ReactServer.renderToString
     |> should equal
     <| String.concat
                 ""
@@ -125,7 +125,7 @@ let ``Swap gate2 graphics on the middles of four qubits`` () =
 [<Fact>]
 let ``Inverted CCX gate3 graphics on three qubits`` () =
     gate3Graphics 3 2 0 1 ControlSymbol NotSymbol ControlSymbol Color.Moccasin 200.0
-    |> RenderView.AsString.xmlNode
+    |> ReactServer.renderToString
     |> should equal
     <| String.concat
                 ""
@@ -145,7 +145,7 @@ let ``Inverted CCX gate3 graphics on three qubits`` () =
 [<Fact>]
 let ``Shuffled CSwap gate3 graphics on five qubits`` () =
     gate3Graphics 5 4 2 1 SwapSymbol ControlSymbol SwapSymbol Color.SpringGreen 200.0
-    |> RenderView.AsString.xmlNode
+    |> ReactServer.renderToString
     |> should equal
     <| String.concat
                 ""
@@ -169,7 +169,7 @@ let ``Shuffled CSwap gate3 graphics on five qubits`` () =
 let ``Inverted CZ gate graphics on the second and fourth of five qubits`` () =
     let gate = CZGate (3, 1)
     gateGraphics 5 gate Color.Plum 200.0
-    |> RenderView.AsString.xmlNode
+    |> ReactServer.renderToString
     |> should equal
     <| String.concat
                 ""
