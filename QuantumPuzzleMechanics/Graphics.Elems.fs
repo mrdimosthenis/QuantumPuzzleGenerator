@@ -40,6 +40,23 @@ let letterBox (fillColor: Color) (strokeColor: Color) (size: float): ReactElemen
     |> List.singleton
     |> g [ transform 0.25 size |> SVGAttr.Transform ]
 
+let lineElem (x1: float)
+       (y1: float)
+       (x2: float)
+       (y2: float)
+       (color: Color)
+       (strokeWidth: string)
+       (size: float)
+    : ReactElement =
+    let stroke = rgb color
+    line [ SVGAttr.Stroke stroke
+           SVGAttr.Custom("x1", size |> (*) x1 |> string)
+           SVGAttr.Custom("y1", size |> (*) y1 |> string)
+           SVGAttr.Custom("x2", size |> (*) x2 |> string)
+           SVGAttr.Custom("y2", size |> (*) y2 |> string)
+           SVGAttr.Custom("stroke-width", strokeWidth) ]
+         []
+
 let letter (aX1Point: float)
            (aY1Point: float)
            (aX2Point: float)
@@ -53,30 +70,12 @@ let letter (aX1Point: float)
            (cX2Point: float)
            (cY2Point: float)
            (color: Color)
-           (size: float): ReactElement =
-    let stroke = rgb color
+           (size: float)
+    : ReactElement =
     let strokeWidth = lineWidth size
-    let lineA = line [ SVGAttr.Stroke stroke
-                       SVGAttr.Custom("x1", size |> (*) aX1Point |> string)
-                       SVGAttr.Custom("y1", size |> (*) aY1Point |> string)
-                       SVGAttr.Custom("x2", size |> (*) aX2Point |> string)
-                       SVGAttr.Custom("y2", size |> (*) aY2Point |> string)
-                       SVGAttr.Custom("stroke-width", strokeWidth) ]
-                     []
-    let lineB = line [ SVGAttr.Stroke stroke
-                       SVGAttr.Custom("x1", size |> (*) bX1Point |> string)
-                       SVGAttr.Custom("y1", size |> (*) bY1Point |> string)
-                       SVGAttr.Custom("x2", size |> (*) bX2Point |> string)
-                       SVGAttr.Custom("y2", size |> (*) bY2Point |> string)
-                       SVGAttr.Custom("stroke-width", strokeWidth) ]
-                     []
-    let lineC = line [ SVGAttr.Stroke stroke
-                       SVGAttr.Custom("x1", size |> (*) cX1Point |> string)
-                       SVGAttr.Custom("y1", size |> (*) cY1Point |> string)
-                       SVGAttr.Custom("x2", size |> (*) cX2Point |> string)
-                       SVGAttr.Custom("y2", size |> (*) cY2Point |> string)
-                       SVGAttr.Custom("stroke-width", strokeWidth) ]
-                     []
+    let lineA = lineElem aX1Point aY1Point aX2Point aY2Point color strokeWidth size
+    let lineB = lineElem bX1Point bY1Point bX2Point bY2Point color strokeWidth size
+    let lineC = lineElem cX1Point cY1Point cX2Point cY2Point color strokeWidth size
     g [] [ lineA; lineB; lineC ]
 
 let letterY (color: Color) (size: float): ReactElement =
@@ -130,40 +129,20 @@ let letterH (color: Color) (size: float): ReactElement =
 // wires
 
 let horizWire (color: Color) (size: float): ReactElement =
-    line [ color |> rgb |> SVGAttr.Stroke
-           SVGAttr.Custom("x1", string 0)
-           SVGAttr.Custom("y1", size |> (*) 0.5 |> string)
-           SVGAttr.Custom("x2", string size)
-           SVGAttr.Custom("y2", size |> (*) 0.5 |> string)
-           SVGAttr.Custom("stroke-width", lineWidth size) ]
-         []
+    let strokeWidth = lineWidth size
+    lineElem 0.0 0.5 1.0 0.5 color strokeWidth size
 
 let vertWire (color: Color) (size: float): ReactElement =
-    line [ color |> rgb |> SVGAttr.Stroke
-           SVGAttr.Custom("x1", size |> (*) 0.5 |> string)
-           SVGAttr.Custom("y1", string 0)
-           SVGAttr.Custom("x2", size |> (*) 0.5 |> string)
-           SVGAttr.Custom("y2", string size)
-           SVGAttr.Custom("stroke-width", lineWidth size) ]
-         []
+    let strokeWidth = lineWidth size
+    lineElem 0.5 0.0 0.5 1.0 color strokeWidth size
 
 let topVertWire (color: Color) (size: float): ReactElement =
-    line [ color |> rgb |> SVGAttr.Stroke
-           SVGAttr.Custom("x1", size |> (*) 0.5 |> string)
-           SVGAttr.Custom("y1", string 0)
-           SVGAttr.Custom("x2", size |> (*) 0.5 |> string)
-           SVGAttr.Custom("y2", size |> (*) 0.5 |> string)
-           SVGAttr.Custom("stroke-width", lineWidth size) ]
-         []
+    let strokeWidth = lineWidth size
+    lineElem 0.5 0.0 0.5 0.5 color strokeWidth size
 
 let bottomVertWire (color: Color) (size: float): ReactElement =
-    line [ color |> rgb |> SVGAttr.Stroke
-           SVGAttr.Custom("x1", size |> (*) 0.5 |> string)
-           SVGAttr.Custom("y1", size |> (*) 0.5 |> string)
-           SVGAttr.Custom("x2", size |> (*) 0.5 |> string)
-           SVGAttr.Custom("y2", string size)
-           SVGAttr.Custom("stroke-width", lineWidth size) ]
-         []
+    let strokeWidth = lineWidth size
+    lineElem 0.5 0.5 0.5 1.0 color strokeWidth size
 
 // symbols
 
@@ -176,26 +155,11 @@ let controlSymbol (color: Color) (size: float): ReactElement =
 
 let notSymbol (color: Color) (size: float): ReactElement =
     let innerSize = 0.2 * size
-    let stroke = rgb color
     let strokeWidth = lineWidth size
-    let innerHorizWire =
-            line [ SVGAttr.Stroke stroke
-                   SVGAttr.Custom("x1", innerSize |> (*) -1.0 |> string)
-                   SVGAttr.Custom("y1", string 0)
-                   SVGAttr.Custom("x2", string innerSize)
-                   SVGAttr.Custom("y2", string 0)
-                   SVGAttr.Custom("stroke-width", strokeWidth) ]
-                 []
-    let innerVertWire =
-            line [ SVGAttr.Stroke stroke
-                   SVGAttr.Custom("x1", string 0)
-                   SVGAttr.Custom("y1", innerSize |> (*) -1.0 |> string)
-                   SVGAttr.Custom("x2", string 0)
-                   SVGAttr.Custom("y2", string innerSize)
-                   SVGAttr.Custom("stroke-width", strokeWidth) ]
-                 []
+    let innerHorizWire = lineElem -1.0 0.0 1.0 0.0 color strokeWidth innerSize
+    let innerVertWire = lineElem 0.0 -1.0 0.0 1.0 color strokeWidth innerSize
     let innerCircle =
-        circle [ SVGAttr.Stroke stroke
+        circle [ color |> rgb |> SVGAttr.Stroke
                  SVGAttr.Custom("cx", string 0)
                  SVGAttr.Custom("cy", string 0)
                  SVGAttr.Custom("r", string innerSize)
@@ -208,24 +172,9 @@ let notSymbol (color: Color) (size: float): ReactElement =
         innerCircle ]
 
 let swapSymbol (color: Color) (size: float): ReactElement =
-    let stroke = rgb color
     let strokeWidth = lineWidth size
-    let lineA =
-        line [ SVGAttr.Stroke stroke
-               SVGAttr.Custom("x1", size |> (*) 0.3 |> string)
-               SVGAttr.Custom("y1", size |> (*) 0.3 |> string)
-               SVGAttr.Custom("x2", size |> (*) 0.7 |> string)
-               SVGAttr.Custom("y2", size |> (*) 0.7 |> string)
-               SVGAttr.Custom("stroke-width", strokeWidth) ]
-             []
-    let lineB =
-        line [ SVGAttr.Stroke stroke
-               SVGAttr.Custom("x1", size |> (*) 0.3 |> string)
-               SVGAttr.Custom("y1", size |> (*) 0.7 |> string)
-               SVGAttr.Custom("x2", size |> (*) 0.7 |> string)
-               SVGAttr.Custom("y2", size |> (*) 0.3 |> string)
-               SVGAttr.Custom("stroke-width", strokeWidth) ]
-             []
+    let lineA = lineElem 0.3 0.3 0.7 0.7 color strokeWidth size
+    let lineB = lineElem 0.3 0.7 0.7 0.3 color strokeWidth size
     g [] [ lineA; lineB ]
 
 let ySymbol (fillColor: Color) (strokeColor: Color) (size: float): ReactElement =
