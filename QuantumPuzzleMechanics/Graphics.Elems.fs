@@ -54,7 +54,8 @@ let lineElem (x1: float)
            SVGAttr.Custom("y1", size |> (*) y1 |> string)
            SVGAttr.Custom("x2", size |> (*) x2 |> string)
            SVGAttr.Custom("y2", size |> (*) y2 |> string)
-           SVGAttr.Custom("stroke-width", strokeWidth) ]
+           SVGAttr.Custom("stroke-width", strokeWidth)
+           SVGAttr.StrokeLinecap "round" ]
          []
 
 let letter (aX1Point: float)
