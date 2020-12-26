@@ -10,6 +10,10 @@ open QuantumPuzzleMechanics
 
 type Generator = Random
 
+// exceptions
+
+exception InvalidGateSize
+
 // functions
 
 let nextInt (random: Random) (maxVal: int) (): int =
@@ -17,6 +21,10 @@ let nextInt (random: Random) (maxVal: int) (): int =
     |> (*) (float maxVal)
     |> floor
     |> int
+
+let nextListItem<'a> (random: Random) (ls: 'a list) (): 'a =
+    let i = nextInt random ls.Length ()
+    List.item i ls
 
 let rec nextDiffInt (random: Random) (maxVal: int) (excludedVals: int list) (): int =
     let n = nextInt random maxVal ()
@@ -68,3 +76,37 @@ let rec nextQState (random: Random) (numOfQubits: int) (): Matrix.Matrix =
              |> Seq.transpose
              |> Utils.ofSeqOfSeqs
         else nextQState random numOfQubits ()
+
+let nextGate (random: Random) (numOfQubits: int) (): Quantum.Gate.Gate =
+    let gateSize =
+            nextPosInt random 3 ()
+            |> min numOfQubits
+    match gateSize with
+    | 1 -> let selectedGate =
+                    nextListItem random
+                                 [ Quantum.Gate.XGate
+                                   Quantum.Gate.YGate
+                                   Quantum.Gate.ZGate
+                                   Quantum.Gate.HGate ]
+                                 ()
+           let index = nextInt random numOfQubits ()
+           selectedGate index
+    | 2 -> let selectedGate =
+                    nextListItem random
+                                    [ Quantum.Gate.SwapGate
+                                      Quantum.Gate.CXGate
+                                      Quantum.Gate.CZGate ]
+                                    ()
+           let indexA = nextInt random numOfQubits ()
+           let indexB = nextDiffInt random numOfQubits [indexA] ()
+           selectedGate (indexA, indexB)
+    | 3 -> let selectedGate =
+                    nextListItem random
+                                    [ Quantum.Gate.CCXGate
+                                      Quantum.Gate.CSwapGate ]
+                                    ()
+           let indexA = nextInt random numOfQubits ()
+           let indexB = nextDiffInt random numOfQubits [indexA] ()
+           let indexC = nextDiffInt random numOfQubits [indexA; indexB] ()
+           selectedGate (indexA, indexB, indexC)
+    | _ -> raise InvalidGateSize

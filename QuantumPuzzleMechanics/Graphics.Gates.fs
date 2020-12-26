@@ -21,16 +21,6 @@ type Symbol = ControlSymbol
             | ZSymbol
             | HSymbol
 
-type Gate = XGate of int
-          | YGate of int
-          | ZGate of int
-          | HGate of int
-          | SwapGate of int * int
-          | CXGate of int * int
-          | CZGate of int * int
-          | CCXGate of int * int * int
-          | CSwapGate of int * int * int
-
 // functions
 
 let part (place: Place)
@@ -159,33 +149,38 @@ let gate3Graphics
             |> g []
     | _ -> raise Quantum.Gate3.InvalidIndexOrder
 
-let gateGraphics (numOfQubits: int) (gate: Gate) (strokeColor: Color) (size: float): ReactElement =
+let gateGraphics
+        (numOfQubits: int)
+        (gate: Quantum.Gate.Gate)
+        (strokeColor: Color)
+        (size: float)
+    : ReactElement =
     match gate with
-    | XGate index ->
+    | Quantum.Gate.XGate index ->
         gate1Graphics numOfQubits
                       index
                       NotSymbol
                       strokeColor
                       size
-    | YGate index ->
+    | Quantum.Gate.YGate index ->
         gate1Graphics numOfQubits
                       index
                       YSymbol
                       strokeColor
                       size
-    | ZGate index ->
+    | Quantum.Gate.ZGate index ->
         gate1Graphics numOfQubits
                       index
                       ZSymbol
                       strokeColor
                       size
-    | HGate index ->
+    | Quantum.Gate.HGate index ->
         gate1Graphics numOfQubits
                       index
                       HSymbol
                       strokeColor
                       size
-    | SwapGate (indexA, indexB) ->
+    | Quantum.Gate.SwapGate (indexA, indexB) ->
         gate2Graphics numOfQubits
                       indexA
                       indexB
@@ -193,7 +188,7 @@ let gateGraphics (numOfQubits: int) (gate: Gate) (strokeColor: Color) (size: flo
                       SwapSymbol
                       strokeColor
                       size
-    | CXGate (indexA, indexB) ->
+    | Quantum.Gate.CXGate (indexA, indexB) ->
         gate2Graphics numOfQubits
                       indexA
                       indexB
@@ -201,7 +196,7 @@ let gateGraphics (numOfQubits: int) (gate: Gate) (strokeColor: Color) (size: flo
                       NotSymbol
                       strokeColor
                       size
-    | CZGate (indexA, indexB) ->
+    | Quantum.Gate.CZGate (indexA, indexB) ->
         gate2Graphics numOfQubits
                       indexA
                       indexB
@@ -209,7 +204,7 @@ let gateGraphics (numOfQubits: int) (gate: Gate) (strokeColor: Color) (size: flo
                       ZSymbol
                       strokeColor
                       size
-    | CCXGate (indexA, indexB, indexC) ->
+    | Quantum.Gate.CCXGate (indexA, indexB, indexC) ->
         gate3Graphics numOfQubits
                       indexA
                       indexB
@@ -219,7 +214,7 @@ let gateGraphics (numOfQubits: int) (gate: Gate) (strokeColor: Color) (size: flo
                       NotSymbol
                       strokeColor
                       size
-    | CSwapGate (indexA, indexB, indexC) ->
+    | Quantum.Gate.CSwapGate (indexA, indexB, indexC) ->
         gate3Graphics numOfQubits
                       indexA
                       indexB

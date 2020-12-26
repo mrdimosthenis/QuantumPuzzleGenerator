@@ -13,6 +13,7 @@
     <Compile Include="Quantum.Gate1.fs" />
     <Compile Include="Quantum.Gate2.fs" />
     <Compile Include="Quantum.Gate3.fs" />
+    <Compile Include="Quantum.Gate.fs" />
     <Compile Include="Graphics.Elems.fs" />
     <Compile Include="Graphics.Gates.fs" />
     <Compile Include="Generator.fs" />

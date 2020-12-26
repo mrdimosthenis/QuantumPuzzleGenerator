@@ -6,6 +6,7 @@ open FsUnit.Xunit
 open Fable
 open Xamarin.Forms
 
+open QuantumPuzzleMechanics
 open QuantumPuzzleMechanics.Graphics.Gates
 
 [<Fact>]
@@ -58,7 +59,7 @@ let ``Shuffled CSwap gate3 graphics on five qubits`` () =
 
 [<Fact>]
 let ``Inverted CZ gate graphics on the second and fourth of five qubits`` () =
-    let gate = CZGate (3, 1)
+    let gate = Quantum.Gate.CZGate (3, 1)
     gateGraphics 5 gate Color.Plum 200.0
     |> ReactServer.renderToString
     |> should equal """<g data-reactroot=""><g transform="translate(0,0)"><line stroke="rgb(0, 0, 0)" x1="0" y1="100" x2="200" y2="100" stroke-width="10" stroke-linecap="round"></line></g><g transform="translate(0,200)"><g><line stroke="rgb(0, 0, 0)" x1="0" y1="100" x2="200" y2="100" stroke-width="10" stroke-linecap="round"></line><line stroke="rgb(221, 160, 221)" x1="100" y1="100" x2="100" y2="200" stroke-width="10" stroke-linecap="round"></line><g><g transform="translate(50,50)"><rect fill="rgb(255, 255, 255)" stroke="rgb(221, 160, 221)" width="100" height="100" stroke-width="0.5"></rect></g><g><line stroke="rgb(221, 160, 221)" x1="80" y1="80" x2="120" y2="80" stroke-width="10" stroke-linecap="round"></line><line stroke="rgb(221, 160, 221)" x1="120" y1="80" x2="80" y2="120" stroke-width="10" stroke-linecap="round"></line><line stroke="rgb(221, 160, 221)" x1="80" y1="120" x2="120" y2="120" stroke-width="10" stroke-linecap="round"></line></g></g></g></g><g transform="translate(0,400)"><line stroke="rgb(0, 0, 0)" x1="0" y1="100" x2="200" y2="100" stroke-width="10" stroke-linecap="round"></line><line stroke="rgb(221, 160, 221)" x1="100" y1="0" x2="100" y2="200" stroke-width="10" stroke-linecap="round"></line></g><g transform="translate(0,600)"><g><line stroke="rgb(0, 0, 0)" x1="0" y1="100" x2="200" y2="100" stroke-width="10" stroke-linecap="round"></line><line stroke="rgb(221, 160, 221)" x1="100" y1="0" x2="100" y2="100" stroke-width="10" stroke-linecap="round"></line><circle fill="rgb(221, 160, 221)" cx="100" cy="100" r="30"></circle></g></g><g transform="translate(0,800)"><line stroke="rgb(0, 0, 0)" x1="0" y1="100" x2="200" y2="100" stroke-width="10" stroke-linecap="round"></line></g></g>"""
