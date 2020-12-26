@@ -202,7 +202,7 @@ let notSymbol (color: Color) (size: float): ReactElement =
                  SVGAttr.Custom("stroke-width", strokeWidth)
                  SVGAttr.Custom("fill-opacity", "0.0") ]
                []
-    g [ transform 0.25 size |> SVGAttr.Transform ]
+    g [ transform 0.5 size |> SVGAttr.Transform ]
       [ innerHorizWire
         innerVertWire
         innerCircle ]
