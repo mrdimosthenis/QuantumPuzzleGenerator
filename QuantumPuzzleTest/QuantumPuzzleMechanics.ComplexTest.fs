@@ -24,12 +24,12 @@ let ``Of polar`` () =
 
 [<Fact>]
 let ``To polar`` () =
-    let (r, theta) = ofNumbers -1.0 2.0
+    let (r, theta) = ofNumbers 2.3 1.9
                      |> toPolar
-    -63.4
+    40.0
     |> Number.toRadians
     |> almostEqNum theta
-    |> (&&) (almostEqNum r 2.2)
+    |> (&&) (almostEqNum r 3.0)
     |> should equal true
 
 [<Fact>]

@@ -54,7 +54,7 @@ let inverse (c: Complex): Complex option =
 
 let toPolar (c: Complex): Number.Number * Number.Number =
     let r = absVal c
-    let theta = atan (c.Im / c.Re)
+    let theta = atan2 c.Im  c.Re
     (r, theta)
 
 let ofPolar (r: Number.Number, theta: Number.Number): Complex =
