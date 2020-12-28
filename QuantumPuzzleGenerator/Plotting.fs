@@ -2,6 +2,8 @@
 
 open System
 
+open FSharpx.Collections
+
 open XPlot.Plotly
 open Xamarin
 
@@ -19,13 +21,13 @@ let rec coordinates (i: int): float * float * float =
     | 7 -> (1.0, 1.0, 1.0)
     | _ when i < 16 ->
             let (x, y, z) = coordinates (i - 8)
-            (x + 3.0, y, z)
+            (x + 2.0, y, z)
     | _ when i < 32 ->
         let (x, y, z) = coordinates (i - 16)
-        (x, y + 4.0, z)
+        (x, y + 2.0, z)
     | _ ->
         let (x, y, z) = coordinates (i - 32)
-        (x, y, z + 5.0)
+        (x, y, z + 2.0)
 
 let hue (c: Complex.Complex): float =
     if c = Complex.zero
@@ -42,7 +44,6 @@ let layout: Layout =
             xaxis=Xaxis(
                 title="",
                 autorange=true,
-                showgrid=false,
                 ticks="",
                 showticklabels=false,
                 zeroline=false
@@ -50,7 +51,6 @@ let layout: Layout =
             yaxis=Yaxis(
                 title="",
                 autorange=true,
-                showgrid=false,
                 ticks="",
                 showticklabels=false,
                 zeroline=false
@@ -58,7 +58,6 @@ let layout: Layout =
             zaxis=Zaxis(
                 title="",
                 autorange=true,
-                showgrid=false,
                 ticks="",
                 showticklabels=false,
                 zeroline=false
@@ -67,9 +66,9 @@ let layout: Layout =
     )
 
 let trace (coords: float * float * float)
-          (opacity: float)
           (size: float)
           (color: Forms.Color)
+          (symbol: string)
     :Scatter3d =
     let (x, y, z) = coords
     Scatter3d(
@@ -79,16 +78,31 @@ let trace (coords: float * float * float)
         hoverinfo = "none",
         mode = "markers",
         showlegend = false,
-        marker =
-            Marker(
-                color = Graphics.Elems.rgb color,
-                size = size,
-                opacity = opacity
-            )
+        marker = Marker(
+            color = Graphics.Elems.rgb color,
+            size = size,
+            symbol = symbol
+        )
     )
 
-let plot () =
-    let p = []
-            |> Chart.Plot
-            |> Chart.WithLayout layout
-    p.GetHtml()
+let representationHtml (qState: Matrix.Matrix): string =
+    let plot = qState
+               |> LazyList.concat
+               |> Seq.indexed
+               |> LazyList.ofSeq
+               |> LazyList.map
+                       (fun (i, c) ->
+                           let coords = coordinates i
+                           let size = c
+                                      |> Complex.toPolar
+                                      |> fst
+                                      |> (*) 100.0
+                           let h = hue c
+                           let color = Forms.Color.FromHsv(h, 1.0, 1.0)
+                           let symbol = if i = 0 then "diamond" else "circle"
+                           trace coords size color symbol
+                       )
+               |> LazyList.toList
+               |> Chart.Plot
+               |> Chart.WithLayout layout
+    plot.GetInlineHtml()
