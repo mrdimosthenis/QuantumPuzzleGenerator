@@ -94,6 +94,7 @@
   <Import Project="..\packages\Xamarin.Forms.4.8.0.1687\build\Xamarin.Forms.targets" Condition="Exists('..\packages\Xamarin.Forms.4.8.0.1687\build\Xamarin.Forms.targets')" />
   <ItemGroup>
     <None Include="Assets\AboutAssets.txt" />
+    <AndroidAsset Include="Assets\plotly_latest_min.js" />
     <None Include="Properties\AndroidManifest.xml" />
     <None Include="Resources\AboutResources.txt" />
     <AndroidResource Include="Resources\drawable\icon.png" />

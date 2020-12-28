@@ -5,6 +5,7 @@ open System
 open FSharpx.Collections
 
 open XPlot.Plotly
+open Fabulous.XamarinForms
 open Xamarin
 
 open QuantumPuzzleMechanics
@@ -105,4 +106,30 @@ let representationHtml (qState: Matrix.Matrix): string =
                |> LazyList.toList
                |> Chart.Plot
                |> Chart.WithLayout layout
-    plot.GetInlineHtml()
+    let oldScriptLines = plot.GetInlineJS().Split('\n')
+    let guid = Guid.NewGuid().ToString()
+    let config = "{responsive:true,displayModeBar:false}"
+    let newScriptLines =
+            [ "<!DOCTYPE html>"
+              "<html>"
+              "<head>"
+              """<meta charset="UTF-8" />"""
+              """<script src="plotly_latest_min.js"></script>"""
+              "</head>"
+              "<body>"
+              sprintf """<div id="%s"></div>""" guid
+              "<script>"
+              oldScriptLines.[1]
+              oldScriptLines.[2]
+              sprintf """Plotly.newPlot('%s', data, layout, %s);""" guid config
+              "</script>"
+              "</body>"
+              "</html>" ]
+            |> List.map (fun s -> s.Trim())
+    String.Join("\n", newScriptLines)
+
+let sampleQstate =
+    QuantumPuzzleMechanics.Generator.nextQState (System.Random()) 4 ()
+
+let quantumState(qState: Matrix.Matrix) =
+    View.WebView(source=Xamarin.Forms.HtmlWebViewSource(Html=representationHtml qState))

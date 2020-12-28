@@ -60,3 +60,9 @@ let ``Color by hsv`` () =
           0.17620819117478337
           0.8237918088252166
           0.32379180882521663 ]
+
+[<Fact>]
+let ``sdfsdf`` () =
+    Generator.nextQState (System.Random()) 4 ()
+    |> representationHtml
+    |> should equal ""

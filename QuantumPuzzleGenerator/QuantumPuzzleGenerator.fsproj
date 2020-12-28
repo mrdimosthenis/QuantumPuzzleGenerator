@@ -6,10 +6,15 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Include="Selection.fs" />
-    <Compile Include="Plotting.fs" />
+    <Resource Include="Selection.fs" />
+    <Resource Include="resources\plotly_latest_min.js" />
+    <Compile Include="Plotting.fs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
     <Compile Include="QuantumPuzzleGenerator.fs" />
   </ItemGroup>
+
+  <ItemGroup />
   
   <ItemGroup>
     <PackageReference Include="Fable.React" Version="7.2.0" />
