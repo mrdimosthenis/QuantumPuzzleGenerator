@@ -20,9 +20,12 @@ let rec coordinates (i: int): float * float * float =
     | _ when i < 16 ->
             let (x, y, z) = coordinates (i - 8)
             (x + 3.0, y, z)
-    | _ ->
+    | _ when i < 32 ->
         let (x, y, z) = coordinates (i - 16)
         (x, y + 4.0, z)
+    | _ ->
+        let (x, y, z) = coordinates (i - 32)
+        (x, y, z + 5.0)
 
 let hue (c: Complex.Complex): float =
     if c = Complex.zero
