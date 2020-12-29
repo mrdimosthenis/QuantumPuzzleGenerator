@@ -6,11 +6,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Resource Include="Selection.fs" />
-    <Resource Include="resources\plotly_latest_min.js" />
-    <Compile Include="Plotting.fs">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Compile>
+    <Compile Include="Selection.fs" />
+    <Compile Include="Plotting.fs" />
     <Compile Include="QuantumPuzzleGenerator.fs" />
   </ItemGroup>
 
