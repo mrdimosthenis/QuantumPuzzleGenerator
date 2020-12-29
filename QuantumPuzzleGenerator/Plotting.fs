@@ -10,7 +10,13 @@ open Xamarin
 
 open QuantumPuzzleMechanics
 
-let rec coordinates (i: int): float * float * float =
+// types
+
+type SpaceCoordinates = float * float * float
+
+// functions
+
+let rec coordinates (i: int): SpaceCoordinates =
     match i with
     | 0 -> (0.0, 0.0, 0.0)
     | 1 -> (1.0, 0.0, 0.0)
@@ -39,31 +45,39 @@ let hue (c: Complex.Complex): float =
              |> (+) Math.PI
              |> (*) (0.5 / Math.PI)
 
-let layout: Layout =
+let layout (coordinateLazyList: SpaceCoordinates LazyList): Layout =
+    let (maxX, maxY, maxZ) =
+            LazyList.fold
+                (fun (accX, accY, accZ) (x, y, z) ->
+                    (max accX x, max accY y, max accZ z)
+                )
+                (0.0, 0.0, 0.0)
+                coordinateLazyList
     Layout(
         scene=Scene(
             xaxis=Xaxis(
                 title="",
-                autorange=true,
+                range=[ -0.5; maxX + 0.5 ],
                 ticks="",
                 showticklabels=false,
                 zeroline=false
             ),
             yaxis=Yaxis(
                 title="",
-                autorange=true,
+                range=[ -0.5; maxY + 0.5 ],
                 ticks="",
                 showticklabels=false,
                 zeroline=false
             ),
             zaxis=Zaxis(
                 title="",
-                autorange=true,
+                range=[ -0.5; maxZ + 0.5 ],
                 ticks="",
                 showticklabels=false,
                 zeroline=false
             )
-        )
+        ),
+        margin=Margin(l=0.0,r=0.0,t=0.0,b=0.0)
     )
 
 let trace (coords: float * float * float)
@@ -87,13 +101,17 @@ let trace (coords: float * float * float)
     )
 
 let representationHtml (qState: Matrix.Matrix): string =
-    let plot = qState
-               |> LazyList.concat
-               |> Seq.indexed
-               |> LazyList.ofSeq
+    let indexedQState = qState
+                        |> LazyList.concat
+                        |> Seq.indexed
+                        |> LazyList.ofSeq
+    let coordinateLazyList = LazyList.map
+                                (fun (i, _) -> coordinates i)
+                                indexedQState
+    let lyt = layout coordinateLazyList
+    let plot = LazyList.zip indexedQState coordinateLazyList
                |> LazyList.map
-                       (fun (i, c) ->
-                           let coords = coordinates i
+                       (fun ((i, c), coords) ->
                            let size = c
                                       |> Complex.toPolar
                                       |> fst
@@ -105,7 +123,7 @@ let representationHtml (qState: Matrix.Matrix): string =
                        )
                |> LazyList.toList
                |> Chart.Plot
-               |> Chart.WithLayout layout
+               |> Chart.WithLayout lyt
     let oldScriptLines = plot.GetInlineJS().Split('\n')
     let guid = Guid.NewGuid().ToString()
     let config = "{responsive:true,displayModeBar:false}"
@@ -129,7 +147,7 @@ let representationHtml (qState: Matrix.Matrix): string =
     String.Join("\n", newScriptLines)
 
 let sampleQstate =
-    QuantumPuzzleMechanics.Generator.nextQState (System.Random()) 4 ()
+    QuantumPuzzleMechanics.Generator.nextQState (System.Random()) 6 ()
 
 let quantumState(qState: Matrix.Matrix) =
     View.WebView(source=Xamarin.Forms.HtmlWebViewSource(Html=representationHtml qState))
