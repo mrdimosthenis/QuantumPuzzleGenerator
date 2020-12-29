@@ -30,13 +30,13 @@ let rec coordinates (i: int): SpaceCoordinates =
     | 7 -> (1.0, 1.0, 1.0)
     | _ when i < 16 ->
             let (x, y, z) = coordinates (i - 8)
-            (x + 2.0, y, z)
+            (x + 4.0, y, z)
     | _ when i < 32 ->
         let (x, y, z) = coordinates (i - 16)
-        (x, y + 2.0, z)
+        (x, y + 4.0, z)
     | _ ->
         let (x, y, z) = coordinates (i - 32)
-        (x, y, z + 2.0)
+        (x, y, z + 4.0)
 
 let hue (c: Complex.Complex): float =
     if c = Complex.zero
@@ -59,21 +59,21 @@ let layout (coordinateLazyList: SpaceCoordinates LazyList): Layout =
         scene=Scene(
             xaxis=Xaxis(
                 title="",
-                range=[ -0.5; maxX + 0.5 ],
+                range=[ -0.5 .. maxX + 0.5 ],
                 ticks="",
                 showticklabels=false,
                 zeroline=false
             ),
             yaxis=Yaxis(
                 title="",
-                range=[ -0.5; maxY + 0.5 ],
+                range=[ -0.5 .. maxY + 0.5 ],
                 ticks="",
                 showticklabels=false,
                 zeroline=false
             ),
             zaxis=Zaxis(
                 title="",
-                range=[ -0.5; maxZ + 0.5 ],
+                range=[ -0.5 .. maxZ + 0.5 ],
                 ticks="",
                 showticklabels=false,
                 zeroline=false
@@ -150,4 +150,4 @@ let webView (qState: Matrix.Matrix): ViewElement =
 
 // TODO: delete
 let sampleQstate =
-    QuantumPuzzleMechanics.Generator.nextQState (System.Random()) 6 ()
+    QuantumPuzzleMechanics.Generator.nextQState (System.Random()) 5 ()
