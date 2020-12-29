@@ -45,7 +45,7 @@ module App =
 
     let view (model: Model) dispatch =
         View.ContentPage(
-          content = Plotting.quantumState(Plotting.sampleQstate)
+          content = Plotting.webView(Plotting.sampleQstate)
         )
 
     // Note, this declaration is needed if you enable LiveUpdate

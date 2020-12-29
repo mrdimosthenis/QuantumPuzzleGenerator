@@ -1,12 +1,14 @@
 ﻿module QuantumPuzzleGenerator.Plotting
 
 open System
-
-open FSharpx.Collections
-
-open XPlot.Plotly
+open Fable
+open Fable.React
+open Fable.React.Props
+open Fabulous
 open Fabulous.XamarinForms
 open Xamarin
+open XPlot.Plotly
+open FSharpx.Collections
 
 open QuantumPuzzleMechanics
 
@@ -100,54 +102,52 @@ let trace (coords: float * float * float)
         )
     )
 
-let representationHtml (qState: Matrix.Matrix): string =
-    let indexedQState = qState
-                        |> LazyList.concat
-                        |> Seq.indexed
-                        |> LazyList.ofSeq
-    let coordinateLazyList = LazyList.map
-                                (fun (i, _) -> coordinates i)
-                                indexedQState
-    let lyt = layout coordinateLazyList
-    let plot = LazyList.zip indexedQState coordinateLazyList
-               |> LazyList.map
-                       (fun ((i, c), coords) ->
-                           let size = c
-                                      |> Complex.toPolar
-                                      |> fst
-                                      |> (*) 100.0
-                           let h = hue c
-                           let color = Forms.Color.FromHsv(h, 1.0, 1.0)
-                           let symbol = if i = 0 then "diamond" else "circle"
-                           trace coords size color symbol
-                       )
-               |> LazyList.toList
-               |> Chart.Plot
-               |> Chart.WithLayout lyt
-    let oldScriptLines = plot.GetInlineJS().Split('\n')
-    let guid = Guid.NewGuid().ToString()
-    let config = "{responsive:true,displayModeBar:false}"
-    let newScriptLines =
-            [ "<!DOCTYPE html>"
-              "<html>"
-              "<head>"
-              """<meta charset="UTF-8" />"""
-              """<script src="plotly_latest_min.js"></script>"""
-              "</head>"
-              "<body>"
-              sprintf """<div id="%s"></div>""" guid
-              "<script>"
-              oldScriptLines.[1]
-              oldScriptLines.[2]
-              sprintf """Plotly.newPlot('%s', data, layout, %s);""" guid config
-              "</script>"
-              "</body>"
-              "</html>" ]
-            |> List.map (fun s -> s.Trim())
-    String.Join("\n", newScriptLines)
+let jsScriptPair (qState: Matrix.Matrix): string * string =
+   let indexedQState = qState
+                       |> LazyList.concat
+                       |> Seq.indexed
+                       |> LazyList.ofSeq
+   let coordinateLazyList = LazyList.map
+                               (fun (i, _) -> coordinates i)
+                               indexedQState
+   let lyt = layout coordinateLazyList
+   let plot = LazyList.zip indexedQState coordinateLazyList
+              |> LazyList.map
+                      (fun ((i, c), coords) ->
+                          let size = c
+                                     |> Complex.toPolar
+                                     |> fst
+                                     |> (*) 100.0
+                          let h = hue c
+                          let color = Forms.Color.FromHsv(h, 1.0, 1.0)
+                          let symbol = if i = 0 then "diamond" else "circle"
+                          trace coords size color symbol
+                      )
+              |> LazyList.toList
+              |> Chart.Plot
+              |> Chart.WithLayout lyt
+   let scriptLines = plot.GetInlineJS().Split('\n')
+   (scriptLines.[1].Trim(), scriptLines.[2].Trim())
 
+let htmlContent (divId: string) (jsPair: string * string): ReactElement =
+    let (js1, js2) = jsPair
+    let plotConfig = "{responsive:true,displayModeBar:false}"
+    let js3 = sprintf "Plotly.newPlot('%s', data, layout, %s);" divId plotConfig
+    let rawJsString = String.Join("\n", [ js1; js2; js3 ])
+    html []
+         [ head [] [ meta [ CharSet "UTF-8" ]
+                     script [ Src "plotly_latest_min.js" ] [] ]
+           body [] [ div [ Id divId ] []
+                     script [] [ RawText rawJsString ] ] ]
+
+let webView (qState: Matrix.Matrix): ViewElement =
+    let divId = Guid.NewGuid().ToString()
+    let htmlString = qState
+                  |> jsScriptPair
+                  |> htmlContent divId
+                  |> ReactServer.renderToString
+    View.WebView(source=Xamarin.Forms.HtmlWebViewSource(Html=htmlString))
+
+// TODO: delete
 let sampleQstate =
     QuantumPuzzleMechanics.Generator.nextQState (System.Random()) 6 ()
-
-let quantumState(qState: Matrix.Matrix) =
-    View.WebView(source=Xamarin.Forms.HtmlWebViewSource(Html=representationHtml qState))
