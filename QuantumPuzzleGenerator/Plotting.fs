@@ -161,8 +161,27 @@ let webView (qState: Matrix.Matrix): ViewElement =
                   |> jsScriptPair
                   |> htmlContent divId
                   |> ReactServer.renderToString
-    View.WebView(source=Xamarin.Forms.HtmlWebViewSource(Html=htmlString))
+    View.WebView(
+        source=Xamarin.Forms.HtmlWebViewSource(Html=htmlString),
+        width=900.0,
+        height=500.0
+    )
 
 // TODO: delete
-let sampleQstate =
+let sampleQstate1 =
+    QuantumPuzzleMechanics.Generator.nextQState (System.Random()) 1 ()
+
+let sampleQstate2 =
+    QuantumPuzzleMechanics.Generator.nextQState (System.Random()) 2 ()
+
+let sampleQstate3 =
     QuantumPuzzleMechanics.Generator.nextQState (System.Random()) 3 ()
+
+let sampleQstate4 =
+    QuantumPuzzleMechanics.Generator.nextQState (System.Random()) 4 ()
+
+let sampleQstate5 =
+    QuantumPuzzleMechanics.Generator.nextQState (System.Random()) 5 ()
+
+let sampleQstate6 =
+    QuantumPuzzleMechanics.Generator.nextQState (System.Random()) 6 ()

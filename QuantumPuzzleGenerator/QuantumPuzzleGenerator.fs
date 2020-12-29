@@ -45,7 +45,21 @@ module App =
 
     let view (model: Model) dispatch =
         View.ContentPage(
-          content = Plotting.webView(Plotting.sampleQstate)
+            content = View.ScrollView(
+                verticalOptions = LayoutOptions.Start,
+                content = View.StackLayout(
+                    horizontalOptions = LayoutOptions.Center,
+                    verticalOptions = LayoutOptions.Center,
+                    children = [
+                        Plotting.webView(Plotting.sampleQstate1)
+                        Plotting.webView(Plotting.sampleQstate2)
+                        Plotting.webView(Plotting.sampleQstate3)
+                        Plotting.webView(Plotting.sampleQstate4)
+                        Plotting.webView(Plotting.sampleQstate5)
+                        Plotting.webView(Plotting.sampleQstate6)
+                    ]
+                )
+            )
         )
 
     // Note, this declaration is needed if you enable LiveUpdate
