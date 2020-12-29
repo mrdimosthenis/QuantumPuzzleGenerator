@@ -48,32 +48,47 @@ let hue (c: Complex.Complex): float =
              |> (*) (0.5 / Math.PI)
 
 let layout (coordinateLazyList: SpaceCoordinates LazyList): Layout =
-    let (maxX, maxY, maxZ) =
+    let (hd, tl) = LazyList.uncons coordinateLazyList
+    let (initX, initY, initZ) = hd
+    let (maxX, maxY, maxZ, minX, minY, minZ) =
             LazyList.fold
-                (fun (accX, accY, accZ) (x, y, z) ->
-                    (max accX x, max accY y, max accZ z)
+                (fun (accMaxX, accMaxY, accMaxZ, accMinX, accMinY, accMinZ) (x, y, z) ->
+                    (
+                        max accMaxX x, max accMaxY y, max accMaxZ z,
+                        min accMinX x, min accMinY y, min accMinZ z
+                    )
                 )
-                (0.0, 0.0, 0.0)
-                coordinateLazyList
+                (initX, initY, initZ, initX, initY, initZ)
+                tl
+    let maxHalfDistance = maxX - minX
+                          |> max (maxY - minY)
+                          |> max (maxZ - minZ)
+                          |> (*) 0.5
+    let middleX = (minX + maxX) / 2.0
+    let middleY = (minY + maxY) / 2.0
+    let middleZ = (minZ + maxZ) / 2.0
+    let rangeX = [ middleX - maxHalfDistance - 0.5; middleX + maxHalfDistance + 0.5]
+    let rangeY = [ middleY - maxHalfDistance - 0.5; middleY + maxHalfDistance + 0.5]
+    let rangeZ = [ middleZ - maxHalfDistance - 0.5; middleZ + maxHalfDistance + 0.5]
     Layout(
         scene=Scene(
             xaxis=Xaxis(
                 title="",
-                range=[ -0.5 .. maxX + 0.5 ],
+                range=rangeX,
                 ticks="",
                 showticklabels=false,
                 zeroline=false
             ),
             yaxis=Yaxis(
                 title="",
-                range=[ -0.5 .. maxY + 0.5 ],
+                range=rangeY,
                 ticks="",
                 showticklabels=false,
                 zeroline=false
             ),
             zaxis=Zaxis(
                 title="",
-                range=[ -0.5 .. maxZ + 0.5 ],
+                range=rangeZ,
                 ticks="",
                 showticklabels=false,
                 zeroline=false
@@ -117,7 +132,7 @@ let jsScriptPair (qState: Matrix.Matrix): string * string =
                           let size = c
                                      |> Complex.toPolar
                                      |> fst
-                                     |> (*) 100.0
+                                     |> (*) 50.0
                           let h = hue c
                           let color = Forms.Color.FromHsv(h, 1.0, 1.0)
                           let symbol = if i = 0 then "diamond" else "circle"
@@ -150,4 +165,4 @@ let webView (qState: Matrix.Matrix): ViewElement =
 
 // TODO: delete
 let sampleQstate =
-    QuantumPuzzleMechanics.Generator.nextQState (System.Random()) 5 ()
+    QuantumPuzzleMechanics.Generator.nextQState (System.Random()) 3 ()
