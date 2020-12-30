@@ -183,6 +183,12 @@ let gateGraphics
                       HSymbol
                       strokeColor
                       size
+    | Quantum.Gate.TGate index ->
+        gate1Graphics numOfQubits
+                      index
+                      TSymbol
+                      strokeColor
+                      size
     | Quantum.Gate.SwapGate (indexA, indexB) ->
         gate2Graphics numOfQubits
                       indexA
