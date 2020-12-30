@@ -59,6 +59,12 @@ let ``Swap selected as first and second gate does not result distinct quantum st
     |> should equal true
 
 [<Fact>]
+let ``Select four gates and the quantum states of one qubit with  0_2 difference threshold`` () =
+    let (selectedGates, selectedQStates) = selectGatesAndQStates random 4 1 0.2
+    (LazyList.length selectedGates, LazyList.length selectedQStates)
+    |> should equal (4, 16)
+
+[<Fact>]
 let ``Select one gate and the quantum states of three qubits with  0_01 difference threshold`` () =
     let (selectedGates, selectedQStates) = selectGatesAndQStates random 1 3 0.01
     (LazyList.length selectedGates, LazyList.length selectedQStates)
@@ -77,7 +83,7 @@ let ``Select three gates and the quantum states of five qubits with  0_3 differe
     |> should equal (3, 8)
 
 [<Fact>]
-let ``Select three gates of one qubits with  0_01 difference threshold`` () =
+let ``Select three gates of one qubit with  0_01 difference threshold`` () =
     let randomInstance = System.Random(1000)
     selectGatesAndQStates randomInstance 3 1 0.01
     |> fst
