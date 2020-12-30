@@ -153,13 +153,13 @@ let vertWire (color: Color) (size: float): ReactElement =
     let strokeWidth = lineWidth size
     lineElem 0.5 0.0 0.5 1.0 color strokeWidth size
 
-let topVertWire (color: Color) (size: float): ReactElement =
+let leftHorizWire (color: Color) (size: float): ReactElement =
     let strokeWidth = lineWidth size
-    lineElem 0.5 0.0 0.5 0.5 color strokeWidth size
+    lineElem 0.0 0.5 0.5 0.5 color strokeWidth size
 
-let bottomVertWire (color: Color) (size: float): ReactElement =
+let rightHorizWire (color: Color) (size: float): ReactElement =
     let strokeWidth = lineWidth size
-    lineElem 0.5 0.5 0.5 1.0 color strokeWidth size
+    lineElem 0.5 0.5 1.0 0.5 color strokeWidth size
 
 // symbols
 
