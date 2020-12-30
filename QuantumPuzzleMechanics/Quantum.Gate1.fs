@@ -1,5 +1,7 @@
 ﻿module QuantumPuzzleMechanics.Quantum.Gate1
 
+open System
+
 open FSharpx.Collections
 
 open QuantumPuzzleMechanics
@@ -26,6 +28,14 @@ let H: Matrix.Matrix =
       [ Complex.ofNum 1.0; Complex.ofNum -1.0 ] ]
     |> Utils.ofListOfLists
     |> Matrix.timesNumber (1.0 / sqrt 2.0)
+
+let T: Matrix.Matrix =
+    let piQuarter = Math.PI / 4.0
+    let re = cos piQuarter
+    let im = sin piQuarter
+    [ [ Complex.ofNum 1.0; Complex.zero ]
+      [ Complex.zero; Complex.ofNumbers re im ] ]
+    |> Utils.ofListOfLists
 
 // for states of multiple qubits
 

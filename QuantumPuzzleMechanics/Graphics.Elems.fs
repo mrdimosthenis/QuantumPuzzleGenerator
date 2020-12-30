@@ -127,6 +127,22 @@ let letterH (color: Color) (size: float): ReactElement =
            color
            size
 
+let letterT (color: Color) (size: float): ReactElement =
+    letter 0.4
+           0.4
+           0.5
+           0.4
+           0.5
+           0.4
+           0.6
+           0.4
+           0.5
+           0.4
+           0.5
+           0.6
+           color
+           size
+
 // wires
 
 let horizWire (color: Color) (size: float): ReactElement =
@@ -186,3 +202,6 @@ let zSymbol (fillColor: Color) (strokeColor: Color) (size: float): ReactElement 
     
 let hSymbol (fillColor: Color) (strokeColor: Color) (size: float): ReactElement =
     g [] [ letterBox fillColor strokeColor size; letterH strokeColor size ]
+
+let tSymbol (fillColor: Color) (strokeColor: Color) (size: float): ReactElement =
+    g [] [ letterBox fillColor strokeColor size; letterT strokeColor size ]

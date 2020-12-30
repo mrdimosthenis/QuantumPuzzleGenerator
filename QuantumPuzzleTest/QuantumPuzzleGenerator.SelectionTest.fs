@@ -83,9 +83,9 @@ let ``Select three gates of one qubits with  0_01 difference threshold`` () =
     |> fst
     |> LazyList.toList
     |> should equal
-        [ Quantum.Gate.YGate 0
+        [ Quantum.Gate.HGate 0
           Quantum.Gate.ZGate 0
-          Quantum.Gate.XGate 0]
+          Quantum.Gate.XGate 0 ]
 
 [<Fact>]
 let ``Select four gates of five qubits with  0_2 difference threshold`` () =
@@ -94,10 +94,10 @@ let ``Select four gates of five qubits with  0_2 difference threshold`` () =
     |> fst
     |> LazyList.toList
     |> should equal
-        [ Quantum.Gate.YGate 1
-          Quantum.Gate.ZGate 4
-          Quantum.Gate.CXGate (1, 2)
-          Quantum.Gate.CSwapGate (4, 3, 1) ]
+         [ Quantum.Gate.YGate 1
+           Quantum.Gate.HGate 4
+           Quantum.Gate.CXGate (1, 2)
+           Quantum.Gate.CSwapGate (4, 3, 1) ]
 
 [<Fact>]
 let ``Select 10 gates of four qubits with  0_2 difference threshold`` () =
@@ -107,9 +107,9 @@ let ``Select 10 gates of four qubits with  0_2 difference threshold`` () =
     |> LazyList.toList
     |> should equal
         [ Quantum.Gate.CXGate (1, 0)
-          Quantum.Gate.CSwapGate (2, 1, 0)
+          Quantum.Gate.CCXGate (3, 1, 2)
           Quantum.Gate.CZGate (1, 0)
-          Quantum.Gate.XGate 0
+          Quantum.Gate.YGate 0
           Quantum.Gate.CCXGate (0, 2, 3)
           Quantum.Gate.CXGate (1, 3)
           Quantum.Gate.SwapGate (1, 0)

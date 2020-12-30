@@ -20,6 +20,7 @@ type Symbol = ControlSymbol
             | YSymbol
             | ZSymbol
             | HSymbol
+            | TSymbol
 
 // functions
 
@@ -54,6 +55,8 @@ let part (place: Place)
                 Elems.zSymbol Color.White strokeColor size
             | HSymbol ->
                 Elems.hSymbol Color.White strokeColor size
+            | TSymbol ->
+                Elems.tSymbol Color.White strokeColor size
     [ [ horizWire ]
       vertWires
       [ symbolElem ] ]
