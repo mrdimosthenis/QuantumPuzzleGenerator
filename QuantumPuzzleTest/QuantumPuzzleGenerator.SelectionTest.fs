@@ -59,8 +59,8 @@ let ``Swap selected as first and second gate does not result distinct quantum st
     |> should equal true
 
 [<Fact>]
-let ``Select four gates and the quantum states of one qubit with  0_2 difference threshold`` () =
-    let (selectedGates, selectedQStates) = selectGatesAndQStates random 4 1 0.2
+let ``Select four gates and the quantum states of one qubit with  0_1 difference threshold`` () =
+    let (selectedGates, selectedQStates) = selectGatesAndQStates random 4 1 0.1
     (LazyList.length selectedGates, LazyList.length selectedQStates)
     |> should equal (4, 16)
 
