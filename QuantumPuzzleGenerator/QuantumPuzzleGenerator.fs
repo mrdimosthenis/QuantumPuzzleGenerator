@@ -7,64 +7,20 @@ open Fabulous.XamarinForms
 open Fabulous.XamarinForms.LiveUpdate
 open Xamarin.Forms
 
-module App = 
-    type Model = 
-      { Count: int
-        Step: int
-        TimerOn: bool }
+module App =
+    let init () = Model.initModel(), Cmd.none
 
-    type Msg = 
-        | Increment 
-        | Decrement 
-        | Reset
-        | SetStep of int
-        | TimerToggled of bool
-        | TimedTick
-
-    let initModel = { Count = 0; Step = 1; TimerOn=false }
-
-    let init () = initModel, Cmd.none
-
-    let timerCmd =
-        async { do! Async.Sleep 200
-                return TimedTick }
-        |> Cmd.ofAsyncMsg
-
-    let update msg model =
-        match msg with
-        | Increment -> { model with Count = model.Count + model.Step }, Cmd.none
-        | Decrement -> { model with Count = model.Count - model.Step }, Cmd.none
-        | Reset -> init ()
-        | SetStep n -> { model with Step = n }, Cmd.none
-        | TimerToggled on -> { model with TimerOn = on }, (if on then timerCmd else Cmd.none)
-        | TimedTick -> 
-            if model.TimerOn then 
-                { model with Count = model.Count + model.Step }, timerCmd
-            else 
-                model, Cmd.none
-
-    let view (model: Model) dispatch =
+    let view (model: Model.Model) (dispatch: Model.Msg -> unit) =
         View.ContentPage(
             content = View.ScrollView(
                 verticalOptions = LayoutOptions.Start,
-                content = View.StackLayout(
-                    horizontalOptions = LayoutOptions.Center,
-                    verticalOptions = LayoutOptions.Center,
-                    children = [
-                        View.Image(source = (Resources.gateImage 4 Resources.gate))
-
-                        Plotting.webView(Plotting.sampleQstate1)
-                        Plotting.webView(Plotting.sampleQstate2)
-                        Plotting.webView(Plotting.sampleQstate3)
-                        Plotting.webView(Plotting.sampleQstate4)
-                    ]
-                )
+                content = GateDrawing.stackLayout model dispatch
             )
         )
 
     // Note, this declaration is needed if you enable LiveUpdate
     let program =
-        XamarinFormsProgram.mkProgram init update view
+        XamarinFormsProgram.mkProgram init Model.update view
 #if DEBUG
         |> Program.withConsoleTrace
 #endif

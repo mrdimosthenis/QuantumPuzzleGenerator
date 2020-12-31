@@ -32,6 +32,17 @@ let rec nextDiffInt (random: Random) (maxVal: int) (excludedVals: int list) (): 
         then n
         else nextDiffInt random maxVal excludedVals ()
 
+let nextDistinctGroup (random: Random) (maxVal: int) (groupSize: int) (): int list =
+    
+    let rec go (acc: int list) (n : int): int list =
+        if n < groupSize
+            then let hd = nextDiffInt random maxVal acc ()
+                 let nextAcc = List.cons hd acc
+                 n + 1 |> go nextAcc
+            else acc
+
+    go [] 0
+
 let nextPosInt (random: Random) (maxVal: int) (): int =
     nextInt random maxVal ()
     |> (+) 1
@@ -110,38 +121,3 @@ let nextGate3 (random: Random) (numOfQubits: int) (): Quantum.Gate.Gate =
     let indexB = nextDiffInt random numOfQubits [indexA] ()
     let indexC = nextDiffInt random numOfQubits [indexA; indexB] ()
     selectedGate (indexA, indexB, indexC)
-
-let nextGate (random: Random) (numOfQubits: int) (): Quantum.Gate.Gate =
-    let gateSize =
-            nextPosInt random 3 ()
-            |> min numOfQubits
-    match gateSize with
-    | 1 -> let selectedGate =
-                    nextListItem random
-                                 [ Quantum.Gate.XGate
-                                   Quantum.Gate.YGate
-                                   Quantum.Gate.ZGate
-                                   Quantum.Gate.HGate
-                                   Quantum.Gate.TGate ]
-                                 ()
-           let index = nextInt random numOfQubits ()
-           selectedGate index
-    | 2 -> let selectedGate =
-                    nextListItem random
-                                    [ Quantum.Gate.SwapGate
-                                      Quantum.Gate.CXGate
-                                      Quantum.Gate.CZGate ]
-                                    ()
-           let indexA = nextInt random numOfQubits ()
-           let indexB = nextDiffInt random numOfQubits [indexA] ()
-           selectedGate (indexA, indexB)
-    | 3 -> let selectedGate =
-                    nextListItem random
-                                    [ Quantum.Gate.CCXGate
-                                      Quantum.Gate.CSwapGate ]
-                                    ()
-           let indexA = nextInt random numOfQubits ()
-           let indexB = nextDiffInt random numOfQubits [indexA] ()
-           let indexC = nextDiffInt random numOfQubits [indexA; indexB] ()
-           selectedGate (indexA, indexB, indexC)
-    | _ -> raise InvalidGateSize

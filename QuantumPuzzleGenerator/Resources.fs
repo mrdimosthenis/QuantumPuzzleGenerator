@@ -24,7 +24,7 @@ let gateName (numOfQubits: int) (gate: Quantum.Gate.Gate): string =
     | Quantum.Gate.CCXGate (ia, ib, ic) -> sprintf "ccx%i%i%i%i" numOfQubits ia ib ic
     | Quantum.Gate.CSwapGate (ia, ib, ic) -> sprintf "csw%i%i%i%i" numOfQubits ia ib ic
 
-let gateImage (numOfQubits: int) (gate: Quantum.Gate.Gate): Image.Value =
+let gateImage (gate: Quantum.Gate.Gate) (numOfQubits: int): Image.Value =
     gateName numOfQubits gate
     |> sprintf "gates.%s"
     |> image
