@@ -8,6 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Include="CustomScripts.CreateSvgFiles.fs" />
     <Compile Include="QuantumPuzzleMechanics.ComplexTest.fs" />
     <Compile Include="QuantumPuzzleMechanics.VectorTest.fs" />
     <Compile Include="QuantumPuzzleMechanics.MatrixTest.fs" />
