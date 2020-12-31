@@ -77,6 +77,40 @@ let rec nextQState (random: Random) (numOfQubits: int) (): Matrix.Matrix =
              |> Utils.ofSeqOfSeqs
         else nextQState random numOfQubits ()
 
+let nextGate1 (random: Random) (numOfQubits: int) (): Quantum.Gate.Gate =
+    let selectedGate =
+            nextListItem random
+              [ Quantum.Gate.XGate
+                Quantum.Gate.YGate
+                Quantum.Gate.ZGate
+                Quantum.Gate.HGate
+                Quantum.Gate.TGate ]
+              ()
+    let index = nextInt random numOfQubits ()
+    selectedGate index
+
+let nextGate2 (random: Random) (numOfQubits: int) (): Quantum.Gate.Gate =
+    let selectedGate =
+            nextListItem random
+                 [ Quantum.Gate.SwapGate
+                   Quantum.Gate.CXGate
+                   Quantum.Gate.CZGate ]
+                 ()
+    let indexA = nextInt random numOfQubits ()
+    let indexB = nextDiffInt random numOfQubits [indexA] ()
+    selectedGate (indexA, indexB)
+
+let nextGate3 (random: Random) (numOfQubits: int) (): Quantum.Gate.Gate =
+    let selectedGate =
+            nextListItem random
+                 [ Quantum.Gate.CCXGate
+                   Quantum.Gate.CSwapGate ]
+                 ()
+    let indexA = nextInt random numOfQubits ()
+    let indexB = nextDiffInt random numOfQubits [indexA] ()
+    let indexC = nextDiffInt random numOfQubits [indexA; indexB] ()
+    selectedGate (indexA, indexB, indexC)
+
 let nextGate (random: Random) (numOfQubits: int) (): Quantum.Gate.Gate =
     let gateSize =
             nextPosInt random 3 ()

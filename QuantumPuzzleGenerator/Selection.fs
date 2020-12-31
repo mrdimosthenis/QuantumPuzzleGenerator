@@ -30,17 +30,28 @@ let distinctQStates
 
 let rec selectNextGateAndQStates
         (random: Random)
+        (maxGateType: int)
         (numOfQubits: int)
         (differenceThreshold: Number.Number)
         (reachedQStates: Matrix.Matrix LazyList)
     : Quantum.Gate.Gate * Matrix.Matrix LazyList =
-    let candidateGate = Generator.nextGate random numOfQubits ()
+    let candidateGate =
+            match maxGateType with
+            | 1 -> Generator.nextGate1 random numOfQubits ()
+            | 2 -> if random.NextDouble() < 0.5
+                        then Generator.nextGate1 random numOfQubits ()
+                        else Generator.nextGate2 random numOfQubits ()
+            | _ -> match random.NextDouble() with
+                   | x when x < 0.33 -> Generator.nextGate1 random numOfQubits ()
+                   | x when x < 0.66 -> Generator.nextGate2 random numOfQubits ()
+                   | _ -> Generator.nextGate3 random numOfQubits ()
     match distinctQStates numOfQubits differenceThreshold reachedQStates candidateGate with
     | Some qStates -> (candidateGate, qStates)
-    | None -> selectNextGateAndQStates random numOfQubits differenceThreshold reachedQStates
+    | None -> selectNextGateAndQStates random maxGateType numOfQubits differenceThreshold reachedQStates
 
 let selectGatesAndQStates
         (random: Random)
+        (maxGateType: int)
         (numOfGates: int)
         (numOfQubits: int)
         (differenceThreshold: Number.Number)
@@ -53,6 +64,7 @@ let selectGatesAndQStates
             then (selectedGates, selectedQStates)
             else let (nextGate, nextSelectedQStates) =
                         selectNextGateAndQStates random
+                                                 maxGateType
                                                  numOfQubits
                                                  differenceThreshold
                                                  selectedQStates
