@@ -179,9 +179,3 @@ let sampleQstate3 =
 
 let sampleQstate4 =
     QuantumPuzzleMechanics.Generator.nextQState (System.Random()) 4 ()
-
-let sampleQstate5 =
-    QuantumPuzzleMechanics.Generator.nextQState (System.Random()) 5 ()
-
-let sampleQstate6 =
-    QuantumPuzzleMechanics.Generator.nextQState (System.Random()) 6 ()

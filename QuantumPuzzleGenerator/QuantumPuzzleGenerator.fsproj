@@ -177,9 +177,9 @@
     <EmbeddedResource Include="resources\images\gates\z42.png" />
     <EmbeddedResource Include="resources\images\gates\z43.png" />
     <Compile Include="Resources.fs" />
-    <EmbeddedResource Include="Selection.fs" />
-    <EmbeddedResource Include="Plotting.fs" />
-    <EmbeddedResource Include="QuantumPuzzleGenerator.fs" />
+    <Compile Include="Selection.fs" />
+    <Compile Include="Plotting.fs" />
+    <Compile Include="QuantumPuzzleGenerator.fs" />
   </ItemGroup>
   
   <ItemGroup>

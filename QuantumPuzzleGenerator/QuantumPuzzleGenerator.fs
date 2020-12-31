@@ -51,12 +51,12 @@ module App =
                     horizontalOptions = LayoutOptions.Center,
                     verticalOptions = LayoutOptions.Center,
                     children = [
+                        View.Image(source = (Resources.gateImage 4 Resources.gate))
+
                         Plotting.webView(Plotting.sampleQstate1)
                         Plotting.webView(Plotting.sampleQstate2)
                         Plotting.webView(Plotting.sampleQstate3)
                         Plotting.webView(Plotting.sampleQstate4)
-                        Plotting.webView(Plotting.sampleQstate5)
-                        Plotting.webView(Plotting.sampleQstate6)
                     ]
                 )
             )
