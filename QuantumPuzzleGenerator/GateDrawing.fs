@@ -11,7 +11,7 @@ let stackLayout (model: Model.Model) (dispatch: Model.Msg -> unit) : ViewElement
         |> List.map
             (fun (i, (g, b)) ->
                 View.ImageButton(
-                    source = (model |> Model.numOfGates |> Resources.gateImage g),
+                    source = (model |> Model.numOfQubits |> Resources.gateImage g),
                     backgroundColor = (if b then Color.LightGreen else Color.Transparent),
                     command = fun () -> i |> Model.GateClick |> dispatch
                 )
