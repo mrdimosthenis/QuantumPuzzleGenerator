@@ -7,9 +7,7 @@ open QuantumPuzzleMechanics
 
 // types
 
-type Msg = 
-    | GateClick of int
-    | Msg2
+type Msg = | GateClick of int
 
 type Model = { Level: int
                InitQState: Matrix.Matrix
@@ -22,7 +20,17 @@ type Model = { Level: int
 
 let update (msg: Msg) (model: Model) =
     match msg with
-    | _ -> model, Cmd.none
+    | GateClick index ->
+        let newGateSelection = model.GateSelection
+                               |> List.indexed
+                               |> List.map
+                                    (fun (i, b) ->
+                                        if i = index
+                                            then not b
+                                            else b
+                                    )
+        let newModel = { model with GateSelection = newGateSelection }
+        newModel, Cmd.none
 
 // model functions
 
