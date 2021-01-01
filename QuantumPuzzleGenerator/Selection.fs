@@ -59,19 +59,21 @@ let selectGatesAndQStates
 
     let rec go (selectedGates: Quantum.Gate.Gate LazyList)
                (selectedQStates: Matrix.Matrix LazyList)
+               (n: int)
         : Quantum.Gate.Gate LazyList * Matrix.Matrix LazyList =
-        if LazyList.length selectedGates = numOfGates
-            then (selectedGates, selectedQStates)
-            else let (nextGate, nextSelectedQStates) =
-                        selectNextGateAndQStates random
-                                                 maxGateType
-                                                 numOfQubits
-                                                 differenceThreshold
-                                                 selectedQStates
+        if n < numOfGates
+            then let (nextGate, nextSelectedQStates) =
+                        selectNextGateAndQStates
+                                        random
+                                        maxGateType
+                                        numOfQubits
+                                        differenceThreshold
+                                        selectedQStates
                  let nextSelectedGates = LazyList.cons nextGate selectedGates
-                 go nextSelectedGates nextSelectedQStates
+                 n + 1 |> go nextSelectedGates nextSelectedQStates
+            else (selectedGates, selectedQStates)
     
     let initSelectedGates = LazyList.empty
     let initSelectedQStates =
             LazyList.ofList [ Generator.nextQState random numOfQubits () ]
-    go initSelectedGates initSelectedQStates
+    go initSelectedGates initSelectedQStates 0

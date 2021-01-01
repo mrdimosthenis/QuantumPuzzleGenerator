@@ -14,7 +14,7 @@ module App =
         View.ContentPage(
             content = View.ScrollView(
                 verticalOptions = LayoutOptions.Start,
-                content = GateDrawing.stackLayout model dispatch
+                content = Pages.Play.stackLayout model dispatch
             )
         )
 

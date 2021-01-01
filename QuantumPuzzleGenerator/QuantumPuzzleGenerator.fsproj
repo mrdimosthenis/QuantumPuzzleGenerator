@@ -76,7 +76,7 @@
     <Compile Include="Selection.fs" />
     <Compile Include="Plotting.fs" />
     <Compile Include="Model.fs" />
-    <Compile Include="GateDrawing.fs" />
+    <Compile Include="Pages.Play.fs" />
     <Compile Include="QuantumPuzzleGenerator.fs" />
   </ItemGroup>
   

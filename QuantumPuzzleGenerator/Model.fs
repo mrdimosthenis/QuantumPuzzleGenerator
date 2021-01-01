@@ -12,6 +12,7 @@ type Msg =
     | Msg2
 
 type Model = { Level: int
+               InitQState: Matrix.Matrix
                TargetIndex: int
                TargetQStates: Matrix.Matrix list
                GateSelection: bool list
@@ -59,15 +60,19 @@ let initModel (): Model =
                         4
                         1
                         0.2
+    let (initQState, otherQStates) = qStates
+                                     |> LazyList.rev
+                                     |> LazyList.uncons
     let targetQStates =
             Generator.nextDistinctGroup
                 random
-                (LazyList.length qStates)
+                (LazyList.length otherQStates)
                 10
                 ()
-            |> List.map (fun i -> Seq.item i qStates)
+            |> List.map (fun i -> Seq.item i otherQStates)
     let gates = LazyList.toList gateLazyList
     { Level = 1
+      InitQState = initQState
       TargetIndex = 0
       TargetQStates = targetQStates
       GateSelection = List.replicate gates.Length false
