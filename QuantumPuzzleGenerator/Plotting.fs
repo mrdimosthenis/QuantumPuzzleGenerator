@@ -150,9 +150,14 @@ let htmlContent (divId: string) (jsPair: string * string): ReactElement =
     let rawJsString = String.Join("\n", [ js1; js2; js3 ])
     html []
          [ head [] [ meta [ CharSet "UTF-8" ]
+                     Standard.style [] ["loader.css" |> Resources.text |> RawText]
                      script [] [ "plotly_latest_min.js" |> Resources.text |> RawText ] ]
-           body [] [ div [ Id divId ] []
-                     script [] [ RawText rawJsString ] ] ]
+           body [] [ div [ Id "loader"; Class "loader" ] []
+                     div [ Id divId ] []
+                     script [] [ sprintf "document.getElementById('%s').style.display = 'none';" divId |> RawText ]
+                     script [] [ RawText rawJsString ]
+                     script [] [ sprintf "document.getElementById('%s').style.display = 'block';" divId |> RawText ]
+                     script [] [ RawText "document.getElementById('loader').style.display = 'none';" ] ] ]
 
 let webView (qState: Matrix.Matrix): ViewElement =
     let divId = Guid.NewGuid().ToString()
