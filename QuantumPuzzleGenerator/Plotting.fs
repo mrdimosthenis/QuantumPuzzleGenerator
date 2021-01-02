@@ -100,7 +100,6 @@ let layout (coordinateLazyList: SpaceCoordinates LazyList): Layout =
 let trace (coords: float * float * float)
           (size: float)
           (color: Forms.Color)
-          (symbol: string)
     :Scatter3d =
     let (x, y, z) = coords
     Scatter3d(
@@ -108,12 +107,10 @@ let trace (coords: float * float * float)
         y = [y],
         z = [z],
         hoverinfo = "none",
-        mode = "markers",
         showlegend = false,
         marker = Marker(
             color = Graphics.Elems.rgb color,
-            size = size,
-            symbol = symbol
+            size = size
         )
     )
 
@@ -122,21 +119,23 @@ let jsScriptPair (qState: Matrix.Matrix): string * string =
                        |> LazyList.concat
                        |> Seq.indexed
                        |> LazyList.ofSeq
-   let coordinateLazyList = LazyList.map
-                               (fun (i, _) -> coordinates i)
-                               indexedQState
+   let coordinateLazyList =
+            (fun i -> coordinates i)
+            |> Seq.init (LazyList.length indexedQState)
+            |> LazyList.ofSeq
    let lyt = layout coordinateLazyList
-   let plot = LazyList.zip indexedQState coordinateLazyList
+   let plot = qState
+              |> LazyList.concat
+              |> LazyList.zip coordinateLazyList
               |> LazyList.map
-                      (fun ((i, c), coords) ->
+                      (fun (coords, c) ->
                           let size = c
                                      |> Complex.toPolar
                                      |> fst
                                      |> (*) 50.0
                           let h = hue c
                           let color = Forms.Color.FromHsv(h, 1.0, 1.0)
-                          let symbol = if i = 0 then "diamond" else "circle"
-                          trace coords size color symbol
+                          trace coords size color
                       )
               |> LazyList.toList
               |> Chart.Plot
