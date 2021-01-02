@@ -120,7 +120,6 @@
     <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\ios-marketing.png">
       <Visible>false</Visible>
     </ImageAsset>
-    <BundleResource Include="res\plotly_latest_min.js" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Browser.Blob">

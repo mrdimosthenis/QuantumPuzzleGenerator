@@ -151,7 +151,7 @@ let htmlContent (divId: string) (jsPair: string * string): ReactElement =
     let rawJsString = String.Join("\n", [ js1; js2; js3 ])
     html []
          [ head [] [ meta [ CharSet "UTF-8" ]
-                     script [ Src "plotly_latest_min.js" ] [] ]
+                     script [] [ "plotly_latest_min.js" |> Resources.text |> RawText ] ]
            body [] [ div [ Id divId ] []
                      script [] [ RawText rawJsString ] ] ]
 
