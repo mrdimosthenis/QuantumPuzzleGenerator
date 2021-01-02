@@ -1,9 +1,23 @@
 ﻿module QuantumPuzzleGenerator.Resources
 
+open System.IO
+open System.Reflection
+
 open Fabulous.XamarinForms
 open Xamarin.Forms
 
 open QuantumPuzzleMechanics
+
+// text files
+
+let text (fullName: string): string =
+    use stream = fullName
+                 |> sprintf "QuantumPuzzleGenerator.resources.text_files.%s"
+                 |> Assembly.GetExecutingAssembly().GetManifestResourceStream
+    use reader = new StreamReader(stream)
+    reader.ReadToEnd()
+
+// images
 
 let image (name: string): Image.Value = 
     name
