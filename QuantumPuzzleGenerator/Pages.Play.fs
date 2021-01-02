@@ -21,19 +21,7 @@ let gateButtons (model: Model.Model) (dispatch: Model.Msg -> unit) : ViewElement
 
 let stackLayout (model: Model.Model) (dispatch: Model.Msg -> unit) : ViewElement =
     let numOfQubits = Model.numOfQubits model
-
-    let threeHtmlText = Resources.text "three.html"
-    let n = List.zip model.Gates model.GateSelection
-            |> List.filter snd
-            |> List.length
-            |> string
-    let htmlString = threeHtmlText.Replace("%s", n)
-    let goalQStatePlot = View.WebView(
-                             source=Xamarin.Forms.HtmlWebViewSource(Html=htmlString),
-                             width=300.0,
-                             height=300.0
-                         )
-
+    let goalQStatePlot = Plotting.webView model.TargetQStates.[model.TargetIndex]
     let currentQStatePlot =
             List.zip model.Gates model.GateSelection
             |> List.filter snd

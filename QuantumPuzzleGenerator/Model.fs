@@ -52,7 +52,7 @@ let maxGateType (model: Model): int =
 
 let numOfGates (model: Model): int =
     match model.Level with
-    | 1 -> 4
+    | 1 -> 3
     | n when n < 4 -> 5
     | n when n < 8 -> 6
     | 8 -> 7
@@ -65,7 +65,7 @@ let initModel (): Model =
             Selection.selectGatesAndQStates
                         random
                         1
-                        4
+                        3
                         1
                         0.2
     let (initQState, otherQStates) = qStates
@@ -75,7 +75,7 @@ let initModel (): Model =
             Generator.nextDistinctGroup
                 random
                 (LazyList.length otherQStates)
-                10
+                4
                 ()
             |> List.map (fun i -> Seq.item i otherQStates)
     let gates = LazyList.toList gateLazyList

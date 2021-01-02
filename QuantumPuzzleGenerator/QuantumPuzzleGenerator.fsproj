@@ -6,8 +6,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="resources\text_files\textfile1.txt" />
-    <EmbeddedResource Include="resources\text_files\three.html" />
     <EmbeddedResource Include="resources\images\gates\ccx3012.png" />
     <EmbeddedResource Include="resources\images\gates\ccx3021.png" />
     <EmbeddedResource Include="resources\images\gates\ccx3102.png" />
@@ -82,7 +80,9 @@
     <Compile Include="QuantumPuzzleGenerator.fs" />
   </ItemGroup>
 
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="resources\text_files\" />
+  </ItemGroup>
   
   <ItemGroup>
     <PackageReference Include="Fable.React" Version="7.2.0" />
