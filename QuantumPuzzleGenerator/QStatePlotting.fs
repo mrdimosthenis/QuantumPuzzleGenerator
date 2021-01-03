@@ -159,7 +159,10 @@ let singlePlotHtmlString
                  |> sprintf "var generatedByQuantumPuzzles = %s;"
     let drawJs = Resources.text "single_plot.js"
     html []
-         [ head [] [ Standard.style
+         [ head [] [ meta
+                        [ Name "viewport"
+                          HTMLAttr.Custom("content", "width=device-width, initial-scale=1") ]
+                     Standard.style
                         []
                         [ RawText "* { margin: 0; }" ]
                      script
