@@ -139,6 +139,7 @@ let singlePlotHtmlString
         (numOfQubits: int)
         (qState: Matrix.Matrix)
     : string =
+    let css = Resources.text "loader.css"
     let visJs = Resources.text "vis_graph3d_601.js"
     let dataJs = generatedByQuantumPuzzles numOfQubits qState
                  |> sprintf "var generatedByQuantumPuzzles = %s;"
@@ -146,7 +147,7 @@ let singlePlotHtmlString
     html []
          [ head [] [ Standard.style
                         []
-                        [ RawText "* { margin: 0; }" ]
+                        [ RawText css ]
                      script
                         [ Type "text/javascript" ]
                         [ RawText visJs ]
@@ -158,7 +159,8 @@ let singlePlotHtmlString
                         [ RawText drawJs ] ]
            body
             [ HTMLAttr.Custom("onload", "drawVisualization();") ]
-            [ div [ Id "mygraph"] [] ] ]
+            [ div [ Id "loader"; Class "loader" ] []
+              div [ Id "mygraph"] [] ] ]
     |> ReactServer.renderToString
 
 let webView

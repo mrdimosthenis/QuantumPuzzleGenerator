@@ -36,4 +36,6 @@
 
     var container = document.getElementById('mygraph');
     graph3d = new vis.Graph3d(container, generatedByQuantumPuzzles, options);
+
+    document.getElementById('loader').style.display = 'none';
 }
