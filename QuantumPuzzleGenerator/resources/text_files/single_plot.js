@@ -5,7 +5,7 @@
         height: "100%",
         style: "dot-color",
         showLegend: false,
-        dotSizeRatio: 0.035,
+        dotSizeRatio: 0.035 * generatedByQuantumPuzzles.dotSizeRatioScale,
         dataColor: {
             strokeWidth: 10
         },
@@ -35,5 +35,5 @@
     };
 
     var container = document.getElementById('mygraph');
-    graph3d = new vis.Graph3d(container, generatedByQuantumPuzzles, options);
+    graph3d = new vis.Graph3d(container, generatedByQuantumPuzzles.data, options);
 }

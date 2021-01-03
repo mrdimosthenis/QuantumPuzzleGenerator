@@ -31,6 +31,11 @@ type Row = {
 
 type Data = Row list
 
+type GeneratedByQuantumPuzzles = {
+    DotSizeRatioScale: float
+    Data: Data
+}
+
 // exceptions
 
 exception InvalidNumOfQubits
@@ -130,7 +135,17 @@ let generatedByQuantumPuzzles
         (numOfQubits: int)
         (qState: Matrix.Matrix)
     : string =
-    let content = data numOfQubits qState
+    let dotSizeRatioScale =
+            match numOfQubits with
+            | 1 -> 4.0
+            | 2 -> 3.0
+            | 3 -> 2.0
+            | 4 -> 1.0
+            | _ -> raise InvalidNumOfQubits
+    let content = {
+        DotSizeRatioScale = dotSizeRatioScale
+        Data = data numOfQubits qState
+    }
     let serializerSettings = new JsonSerializerSettings()
     serializerSettings.ContractResolver <- new CamelCasePropertyNamesContractResolver()
     JsonConvert.SerializeObject(content, serializerSettings)
