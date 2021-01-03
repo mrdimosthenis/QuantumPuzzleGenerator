@@ -21,7 +21,9 @@ let gateButtons (model: Model.Model) (dispatch: Model.Msg -> unit) : ViewElement
 
 let stackLayout (model: Model.Model) (dispatch: Model.Msg -> unit) : ViewElement =
     let numOfQubits = Model.numOfQubits model
-    let goalQStatePlot = Plotting.webView model.TargetQStates.[model.TargetIndex]
+    let goalQStatePlot =
+            model.TargetQStates.[model.TargetIndex]
+            |> QStatePlotting.webView numOfQubits
     let currentQStatePlot =
             List.zip model.Gates model.GateSelection
             |> List.filter snd
@@ -32,7 +34,7 @@ let stackLayout (model: Model.Model) (dispatch: Model.Msg -> unit) : ViewElement
                          Matrix.standardProduct gateMatrix qState
                  )
                  model.InitQState
-            |> Plotting.webView
+            |> QStatePlotting.webView numOfQubits
     let children = List.concat [ [ goalQStatePlot ]
                                  gateButtons model dispatch
                                  [ currentQStatePlot ] ]

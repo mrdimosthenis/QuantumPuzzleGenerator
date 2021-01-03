@@ -20,7 +20,7 @@
     <MonoAndroidAssetsPrefix>Assets</MonoAndroidAssetsPrefix>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <AndroidLinkMode>None</AndroidLinkMode>
-    <SelectedDevice>Android Emulator</SelectedDevice>
+    <SelectedDevice>Xiaomi Redmi 6</SelectedDevice>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -304,9 +304,6 @@
     </Reference>
     <Reference Include="System.Buffers">
       <HintPath>..\packages\System.Buffers.4.5.1\lib\netstandard2.0\System.Buffers.dll</HintPath>
-    </Reference>
-    <Reference Include="XPlot.Plotly">
-      <HintPath>..\packages\XPlot.Plotly.3.0.1\lib\netstandard2.0\XPlot.Plotly.dll</HintPath>
     </Reference>
   </ItemGroup>
 </Project>

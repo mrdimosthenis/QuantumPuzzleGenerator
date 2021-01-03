@@ -7,7 +7,6 @@ open Fable.React.Props
 open Fabulous
 open Fabulous.XamarinForms
 open Xamarin
-open XPlot.Plotly
 open FSharpx.Collections
 
 open QuantumPuzzleMechanics
@@ -31,12 +30,6 @@ type Row = {
 }
 
 type Data = Row list
-
-type GeneratedByQuantumPuzzles = {
-    Width: string
-    Height: string
-    Data: Data
-}
 
 // exceptions
 
@@ -134,16 +127,47 @@ let data (numOfQubits: int) (qState: Matrix.Matrix): Data =
     |> LazyList.toList
 
 let generatedByQuantumPuzzles
-        (width: int)
-        (height: int)
         (numOfQubits: int)
         (qState: Matrix.Matrix)
     : string =
-    let content = {
-        Width = sprintf "%ipx" width
-        Height = sprintf "%ipx" height
-        Data = data numOfQubits qState
-    }
+    let content = data numOfQubits qState
     let serializerSettings = new JsonSerializerSettings()
     serializerSettings.ContractResolver <- new CamelCasePropertyNamesContractResolver()
     JsonConvert.SerializeObject(content, serializerSettings)
+
+let singlePlotHtmlString
+        (numOfQubits: int)
+        (qState: Matrix.Matrix)
+    : string =
+    let visJs = Resources.text "vis_graph3d_601.js"
+    let dataJs = generatedByQuantumPuzzles numOfQubits qState
+                 |> sprintf "var generatedByQuantumPuzzles = %s;"
+    let drawJs = Resources.text "single_plot.js"
+    html []
+         [ head [] [ Standard.style
+                        []
+                        [ RawText "* { margin: 0; }" ]
+                     script
+                        [ Type "text/javascript" ]
+                        [ RawText visJs ]
+                     script
+                        [ Type "text/javascript" ]
+                        [ RawText dataJs ]
+                     script
+                        [ Type "text/javascript" ]
+                        [ RawText drawJs ] ]
+           body
+            [ HTMLAttr.Custom("onload", "drawVisualization();") ]
+            [ div [ Id "mygraph"] [] ] ]
+    |> ReactServer.renderToString
+
+let webView
+        (numOfQubits: int)
+        (qState: Matrix.Matrix)
+    : ViewElement =
+    let htmlString = singlePlotHtmlString numOfQubits qState
+    View.WebView(
+        source=Xamarin.Forms.HtmlWebViewSource(Html=htmlString),
+        width=600.0,
+        height=600.0
+    )

@@ -6,9 +6,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Content Include="resources\text_files\visjs.html" />
-    <EmbeddedResource Include="resources\text_files\loader.css" />
-    <EmbeddedResource Include="resources\text_files\plotly_latest_min.js" />
+    <EmbeddedResource Include="resources\text_files\vis_graph3d_601.js" />
+    <EmbeddedResource Include="resources\text_files\single_plot.js" />
     <EmbeddedResource Include="resources\images\gates\ccx3012.png" />
     <EmbeddedResource Include="resources\images\gates\ccx3021.png" />
     <EmbeddedResource Include="resources\images\gates\ccx3102.png" />
@@ -77,12 +76,13 @@
     <EmbeddedResource Include="resources\images\gates\z32.png" />
     <Compile Include="Resources.fs" />
     <Compile Include="Selection.fs" />
-    <Compile Include="Plotting.fs" />
     <Compile Include="QStatePlotting.fs" />
     <Compile Include="Model.fs" />
     <Compile Include="Pages.Play.fs" />
     <Compile Include="QuantumPuzzleGenerator.fs" />
   </ItemGroup>
+
+  <ItemGroup />
   
   <ItemGroup>
     <PackageReference Include="Fable.React" Version="7.2.0" />
@@ -92,7 +92,6 @@
     <PackageReference Include="Fabulous.XamarinForms" Version="0.60.0" />
     <PackageReference Include="Fabulous.XamarinForms.LiveUpdate" Version="0.60.0" />
     <PackageReference Include="FSharp.Core" Version="5.0.0" />
-    <PackageReference Include="XPlot.Plotly" Version="3.0.1" />
     <PackageReference Update="FSharp.Core" Version="5.0.0" /> <!-- workaround for VSMac bug https://github.com/mono/monodevelop/pull/5137 --> 
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
   </ItemGroup>

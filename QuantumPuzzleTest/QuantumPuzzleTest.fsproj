@@ -18,7 +18,6 @@
     <Compile Include="QuantumPuzzleMechanics.Graphics.ElemsTest.fs" />
     <Compile Include="QuantumPuzzleMechanics.Graphics.GatesTest.fs" />
     <Compile Include="QuantumPuzzleGenerator.SelectionTest.fs" />
-    <Compile Include="QuantumPuzzleGenerator.PlottingTest.fs" />
     <Compile Include="QuantumPuzzleGenerator.QStatePlottingTest.fs" />
     <Compile Include="Program.fs" />
   </ItemGroup>
