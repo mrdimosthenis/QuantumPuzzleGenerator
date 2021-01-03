@@ -78,12 +78,11 @@
     <Compile Include="Resources.fs" />
     <Compile Include="Selection.fs" />
     <Compile Include="Plotting.fs" />
+    <Compile Include="QStatePlotting.fs" />
     <Compile Include="Model.fs" />
     <Compile Include="Pages.Play.fs" />
     <Compile Include="QuantumPuzzleGenerator.fs" />
   </ItemGroup>
-
-  <ItemGroup />
   
   <ItemGroup>
     <PackageReference Include="Fable.React" Version="7.2.0" />
