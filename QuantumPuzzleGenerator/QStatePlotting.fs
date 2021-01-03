@@ -100,7 +100,11 @@ let fillColor (c: Complex.Complex): Forms.Color =
     let v = c
             |> Complex.toPolar
             |> fst
-    Forms.Color.FromRgba(v, v, v, 1.0)
+            |> (*) -256.0
+            |> (+) 256.0
+            |> Math.Floor
+            |> int
+    Forms.Color.FromRgb(v, v, v)
 
 let strokeColor (c: Complex.Complex): Forms.Color =
     if c = Complex.zero
@@ -122,8 +126,8 @@ let data (numOfQubits: int) (qState: Matrix.Matrix): Data =
                     Y = y
                     Z = z
                     Style = {
-                        Fill = (fillColor complex).ToHex()
-                        Stroke = (strokeColor complex).ToHex()
+                        Fill = complex |> fillColor |> Graphics.Elems.rgb
+                        Stroke = complex |> strokeColor |> Graphics.Elems.rgb
                     }
                 }
             )
