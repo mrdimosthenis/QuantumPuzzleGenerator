@@ -6,6 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Include="resources\text_files\visjs.html" />
     <EmbeddedResource Include="resources\text_files\loader.css" />
     <EmbeddedResource Include="resources\text_files\plotly_latest_min.js" />
     <EmbeddedResource Include="resources\images\gates\ccx3012.png" />
