@@ -11,15 +11,19 @@ open QuantumPuzzleMechanics
 // text files
 
 let text (fullName: string): string =
-    use stream = fullName
-                 |> sprintf "QuantumPuzzleGenerator.resources.text_files.%s"
-                 |> Assembly.GetExecutingAssembly().GetManifestResourceStream
+    use stream =
+        fullName
+        |> sprintf "QuantumPuzzleGenerator.resources.text_files.%s"
+        |> Assembly
+            .GetExecutingAssembly()
+            .GetManifestResourceStream
+
     use reader = new StreamReader(stream)
     reader.ReadToEnd()
 
 // images
 
-let image (name: string): Image.Value = 
+let image (name: string): Image.Value =
     name
     |> sprintf "QuantumPuzzleGenerator.resources.images.%s.png"
     |> ImageSource.FromResource
@@ -41,6 +45,3 @@ let gateImage (gate: Quantum.Gate.Gate) (numOfQubits: int): Image.Value =
     gateName numOfQubits gate
     |> sprintf "gates.%s"
     |> image
-
-// TODO: delete
-let gate = Quantum.Gate.CSwapGate (1, 3, 2)

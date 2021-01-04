@@ -139,8 +139,8 @@ let generatedByQuantumPuzzles (numOfQubits: int) (qState: Matrix.Matrix): string
         { DotSizeRatioScale = dotSizeRatioScale
           Data = data numOfQubits qState }
 
-    let serializerSettings = new JsonSerializerSettings()
-    serializerSettings.ContractResolver <- new CamelCasePropertyNamesContractResolver()
+    let serializerSettings = JsonSerializerSettings()
+    serializerSettings.ContractResolver <- CamelCasePropertyNamesContractResolver()
     JsonConvert.SerializeObject(content, serializerSettings)
 
 let singlePlotHtmlString (numOfQubits: int) (qState: Matrix.Matrix): string =

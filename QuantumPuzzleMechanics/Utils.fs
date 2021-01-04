@@ -12,7 +12,7 @@ let ofSeqOfSeqs<'a> (sq: 'a seq seq): 'a LazyList LazyList =
     |> LazyList.ofSeq
     |> LazyList.map LazyList.ofSeq
 
-let toListOfLists<'a> (lzls: 'a LazyList LazyList): 'a List List =
-    lzls
+let toListOfLists<'a> (lazyList: 'a LazyList LazyList): 'a List List =
+    lazyList
     |> LazyList.map LazyList.toList
     |> LazyList.toList

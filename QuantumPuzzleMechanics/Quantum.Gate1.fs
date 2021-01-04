@@ -1,7 +1,5 @@
 ﻿module QuantumPuzzleMechanics.Quantum.Gate1
 
-open System
-
 open FSharpx.Collections
 
 open QuantumPuzzleMechanics

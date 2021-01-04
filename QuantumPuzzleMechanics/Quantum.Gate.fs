@@ -5,15 +5,16 @@ open QuantumPuzzleMechanics.Quantum
 
 // types
 
-type Gate = XGate of int
-          | YGate of int
-          | ZGate of int
-          | HGate of int
-          | SwapGate of int * int
-          | CXGate of int * int
-          | CZGate of int * int
-          | CCXGate of int * int * int
-          | CSwapGate of int * int * int
+type Gate =
+    | XGate of int
+    | YGate of int
+    | ZGate of int
+    | HGate of int
+    | SwapGate of int * int
+    | CXGate of int * int
+    | CZGate of int * int
+    | CCXGate of int * int * int
+    | CSwapGate of int * int * int
 
 // functions
 
@@ -27,4 +28,4 @@ let matrix (numOfQubits: int) (gate: Gate): Matrix.Matrix =
     | CXGate (indexA, indexB) -> Gate2.matrix numOfQubits indexA indexB Gate2.CX
     | CZGate (indexA, indexB) -> Gate2.matrix numOfQubits indexA indexB Gate2.CZ
     | CCXGate (indexA, indexB, indexC) -> Gate3.matrix numOfQubits indexA indexB indexC Gate3.CCX
-    | CSwapGate (indexA, indexB, indexC) ->  Gate3.matrix numOfQubits indexA indexB indexC Gate3.CSWAP
+    | CSwapGate (indexA, indexB, indexC) -> Gate3.matrix numOfQubits indexA indexB indexC Gate3.CSWAP
