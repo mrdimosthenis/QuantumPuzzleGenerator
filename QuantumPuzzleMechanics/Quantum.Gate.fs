@@ -5,6 +5,11 @@ open QuantumPuzzleMechanics.Quantum
 
 // types
 
+type MaxGateType =
+    | SingleQubit
+    | DoubleQubit
+    | TripleQubit
+
 type Gate =
     | XGate of int
     | YGate of int

@@ -60,32 +60,32 @@ let ``Swap selected as first and second gate does not result distinct quantum st
 
 [<Fact>]
 let ``Select three gates and the quantum states of one qubit with  0_2 difference threshold`` () =
-    let (selectedGates, selectedQStates) = selectGatesAndQStates random 1 3 1 0.2
+    let (selectedGates, selectedQStates) = selectGatesAndQStates random Quantum.Gate.SingleQubit 3 1 0.2
     (LazyList.length selectedGates, LazyList.length selectedQStates)
     |> should equal (3, 8)
 
 [<Fact>]
 let ``Select one gate and the quantum states of three qubits with  0_01 difference threshold`` () =
-    let (selectedGates, selectedQStates) = selectGatesAndQStates random 2 1 3 0.01
+    let (selectedGates, selectedQStates) = selectGatesAndQStates random Quantum.Gate.DoubleQubit 1 3 0.01
     (LazyList.length selectedGates, LazyList.length selectedQStates)
     |> should equal (1, 2)
 
 [<Fact>]
 let ``Select two gates and the quantum states of four qubits with  0_1 difference threshold`` () =
-    let (selectedGates, selectedQStates) = selectGatesAndQStates random 3 2 4 0.1
+    let (selectedGates, selectedQStates) = selectGatesAndQStates random Quantum.Gate.TripleQubit 2 4 0.1
     (LazyList.length selectedGates, LazyList.length selectedQStates)
     |> should equal (2, 4)
 
 [<Fact>]
 let ``Select three gates and the quantum states of five qubits with  0_3 difference threshold`` () =
-    let (selectedGates, selectedQStates) = selectGatesAndQStates random 1 3 5 0.3
+    let (selectedGates, selectedQStates) = selectGatesAndQStates random Quantum.Gate.SingleQubit 3 5 0.3
     (LazyList.length selectedGates, LazyList.length selectedQStates)
     |> should equal (3, 8)
 
 [<Fact>]
 let ``Select three single-qubit-gates for one qubit with 0_02 difference threshold`` () =
     let randomInstance = System.Random(1000)
-    selectGatesAndQStates randomInstance 1 3 1 0.02
+    selectGatesAndQStates randomInstance Quantum.Gate.SingleQubit 3 1 0.02
     |> fst
     |> LazyList.toList
     |> should equal
@@ -96,7 +96,7 @@ let ``Select three single-qubit-gates for one qubit with 0_02 difference thresho
 [<Fact>]
 let ``Select four single-or-double-qubit-gates for five qubits with 0_2 difference threshold`` () =
     let randomInstance = System.Random(1000)
-    selectGatesAndQStates randomInstance 2 4 5 0.2
+    selectGatesAndQStates randomInstance Quantum.Gate.DoubleQubit 4 5 0.2
     |> fst
     |> LazyList.toList
     |> should equal
@@ -108,7 +108,7 @@ let ``Select four single-or-double-qubit-gates for five qubits with 0_2 differen
 [<Fact>]
 let ``Select 10 single-qubit-gates for four qubits with 0_2 difference threshold`` () =
     let randomInstance = System.Random(1000)
-    selectGatesAndQStates randomInstance 1 10 4 0.2
+    selectGatesAndQStates randomInstance Quantum.Gate.SingleQubit 10 4 0.2
     |> fst
     |> LazyList.toList
     |> should equal
@@ -126,7 +126,7 @@ let ``Select 10 single-qubit-gates for four qubits with 0_2 difference threshold
 [<Fact>]
 let ``Select 10 single-or-double-or-triple-qubit-gates for three qubits with 0_2 difference threshold`` () =
     let randomInstance = System.Random(1000)
-    selectGatesAndQStates randomInstance 3 10 3 0.2
+    selectGatesAndQStates randomInstance Quantum.Gate.TripleQubit 10 3 0.2
     |> fst
     |> LazyList.toList
     |> should equal

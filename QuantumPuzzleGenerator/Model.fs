@@ -64,7 +64,7 @@ let initModel (): Model =
     let random = System.Random()
 
     let (gatesRev, qStates) =
-        Selection.selectGatesAndQStates random 1 3 1 0.2
+        Selection.selectGatesAndQStates random Quantum.Gate.SingleQubit 3 1 0.2
 
     let (initQState, otherQStates) =
         qStates |> LazyList.rev |> LazyList.uncons
