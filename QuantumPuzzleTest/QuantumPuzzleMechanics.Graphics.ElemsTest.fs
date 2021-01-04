@@ -74,9 +74,3 @@ let ``H symbol`` () =
     hSymbol Color.LightPink Color.Gold 100.0
     |> ReactServer.renderToString
     |> should equal """<g data-reactroot=""><g transform="translate(25,25)"><rect fill="rgb(255, 182, 193)" stroke="rgb(255, 215, 0)" width="50" height="50" stroke-width="0.25"></rect></g><g><line stroke="rgb(255, 215, 0)" x1="40" y1="40" x2="40" y2="60" stroke-width="5" stroke-linecap="round"></line><line stroke="rgb(255, 215, 0)" x1="60" y1="40" x2="60" y2="60" stroke-width="5" stroke-linecap="round"></line><line stroke="rgb(255, 215, 0)" x1="40" y1="50" x2="60" y2="50" stroke-width="5" stroke-linecap="round"></line></g></g>"""
-
-[<Fact>]
-let ``T symbol`` () =
-    tSymbol Color.LavenderBlush Color.DarkGray 100.0
-    |> ReactServer.renderToString
-    |> should equal """<g data-reactroot=""><g transform="translate(25,25)"><rect fill="rgb(255, 240, 245)" stroke="rgb(169, 169, 169)" width="50" height="50" stroke-width="0.25"></rect></g><g><line stroke="rgb(169, 169, 169)" x1="40" y1="40" x2="50" y2="40" stroke-width="5" stroke-linecap="round"></line><line stroke="rgb(169, 169, 169)" x1="50" y1="40" x2="60" y2="40" stroke-width="5" stroke-linecap="round"></line><line stroke="rgb(169, 169, 169)" x1="50" y1="40" x2="50" y2="60" stroke-width="5" stroke-linecap="round"></line></g></g>"""

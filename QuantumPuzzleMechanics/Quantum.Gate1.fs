@@ -29,14 +29,6 @@ let H: Matrix.Matrix =
     |> Utils.ofListOfLists
     |> Matrix.timesNumber (1.0 / sqrt 2.0)
 
-let T: Matrix.Matrix =
-    let piQuarter = Math.PI / 4.0
-    let re = cos piQuarter
-    let im = sin piQuarter
-    [ [ Complex.ofNum 1.0; Complex.zero ]
-      [ Complex.zero; Complex.ofNumbers re im ] ]
-    |> Utils.ofListOfLists
-
 // for states of multiple qubits
 
 let matrix (numOfQubits: int) (index: int) (q1Gate: Matrix.Matrix): Matrix.Matrix =

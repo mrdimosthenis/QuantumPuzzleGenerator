@@ -31,7 +31,6 @@ let gateName (numOfQubits: int) (gate: Quantum.Gate.Gate): string =
     | Quantum.Gate.YGate i -> sprintf "y%i%i" numOfQubits i
     | Quantum.Gate.ZGate i -> sprintf "z%i%i" numOfQubits i
     | Quantum.Gate.HGate i -> sprintf "h%i%i" numOfQubits i
-    | Quantum.Gate.TGate i -> sprintf "t%i%i" numOfQubits i
     | Quantum.Gate.SwapGate (ia, ib) -> sprintf "sw%i%i%i" numOfQubits ia ib
     | Quantum.Gate.CXGate (ia, ib) -> sprintf "cx%i%i%i" numOfQubits ia ib
     | Quantum.Gate.CZGate (ia, ib) -> sprintf "cz%i%i%i" numOfQubits ia ib

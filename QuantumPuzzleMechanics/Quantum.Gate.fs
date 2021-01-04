@@ -9,7 +9,6 @@ type Gate = XGate of int
           | YGate of int
           | ZGate of int
           | HGate of int
-          | TGate of int
           | SwapGate of int * int
           | CXGate of int * int
           | CZGate of int * int
@@ -24,7 +23,6 @@ let matrix (numOfQubits: int) (gate: Gate): Matrix.Matrix =
     | YGate index -> Gate1.matrix numOfQubits index Gate1.Y
     | ZGate index -> Gate1.matrix numOfQubits index Gate1.Z
     | HGate index -> Gate1.matrix numOfQubits index Gate1.H
-    | TGate index -> Gate1.matrix numOfQubits index Gate1.T
     | SwapGate (indexA, indexB) -> Gate2.matrix numOfQubits indexA indexB Gate2.SWAP
     | CXGate (indexA, indexB) -> Gate2.matrix numOfQubits indexA indexB Gate2.CX
     | CZGate (indexA, indexB) -> Gate2.matrix numOfQubits indexA indexB Gate2.CZ

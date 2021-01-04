@@ -20,7 +20,6 @@ type Symbol = ControlSymbol
             | YSymbol
             | ZSymbol
             | HSymbol
-            | TSymbol
 
 // functions
 
@@ -55,8 +54,6 @@ let part (place: Place)
                 Elems.zSymbol Color.White strokeColor size
             | HSymbol ->
                 Elems.hSymbol Color.White strokeColor size
-            | TSymbol ->
-                Elems.tSymbol Color.White strokeColor size
     [ [ horizWire ]
       vertWires
       [ symbolElem ] ]
@@ -181,12 +178,6 @@ let gateGraphics
         gate1Graphics numOfQubits
                       index
                       HSymbol
-                      strokeColor
-                      size
-    | Quantum.Gate.TGate index ->
-        gate1Graphics numOfQubits
-                      index
-                      TSymbol
                       strokeColor
                       size
     | Quantum.Gate.SwapGate (indexA, indexB) ->

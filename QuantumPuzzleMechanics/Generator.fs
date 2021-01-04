@@ -94,8 +94,7 @@ let nextGate1 (random: Random) (numOfQubits: int) (): Quantum.Gate.Gate =
               [ Quantum.Gate.XGate
                 Quantum.Gate.YGate
                 Quantum.Gate.ZGate
-                Quantum.Gate.HGate
-                Quantum.Gate.TGate ]
+                Quantum.Gate.HGate ]
               ()
     let index = nextInt random numOfQubits ()
     selectedGate index
