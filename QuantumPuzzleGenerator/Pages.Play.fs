@@ -25,7 +25,7 @@ let gateButtons (model: Model.Model) (dispatch: Model.Msg -> unit): ViewElement 
                 (source = Resources.gateImage g model.Level.NumOfQubits,
                  width = gateWidth,
                  height = gateHeight,
-                 backgroundColor = (if b then Color.LightGreen else Color.LightBlue),
+                 backgroundColor = (if b then Color.YellowGreen else Color.LightBlue),
                  command = fun () -> i |> Model.GateClick |> dispatch))
 
     View.StackLayout
