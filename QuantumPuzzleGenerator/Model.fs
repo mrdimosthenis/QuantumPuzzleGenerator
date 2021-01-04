@@ -10,7 +10,7 @@ open QuantumPuzzleMechanics
 type Msg = GateClick of int
 
 type Model =
-    { Level: int
+    { Level: Constants.Level
       InitQState: Matrix.Matrix
       TargetIndex: int
       TargetQStates: Matrix.Matrix list
@@ -35,48 +35,31 @@ let update (msg: Msg) (model: Model) =
 
 // model functions
 
-let numOfQubits (model: Model): int =
-    match model.Level with
-    | 1 -> 1
-    | n when n < 5 -> 2
-    | _ -> 3
-
-let maxGateType (model: Model): int =
-    match model.Level with
-    | 1 -> 1
-    | 2 -> 1
-    | 3 -> 2
-    | 4 -> 2
-    | 5 -> 1
-    | 6 -> 2
-    | _ -> 3
-
-let numOfGates (model: Model): int =
-    match model.Level with
-    | 1 -> 3
-    | n when n < 4 -> 5
-    | n when n < 8 -> 6
-    | 8 -> 7
-    | 9 -> 8
-    | _ -> 9
-
 let initModel (): Model =
-    let random = System.Random()
+
+    let initLevel = List.item 0 Constants.levels
 
     let (gatesRev, qStates) =
-        Selection.selectGatesAndQStates random Quantum.Gate.SingleQubit 3 1 0.2
+        Selection.selectGatesAndQStates
+            Constants.random
+            initLevel.MaxGateType
+            initLevel.NumOfGates
+            initLevel.NumOfQubits
+            Constants.differenceThreshold
 
     let (initQState, otherQStates) =
         qStates |> LazyList.rev |> LazyList.uncons
 
+    let otherQStatesLength = LazyList.length otherQStates
+
     let targetQStates =
-        Generator.nextDistinctGroup random (LazyList.length otherQStates) 4 ()
+        Generator.nextDistinctGroup Constants.random otherQStatesLength Constants.numOfPuzzlesPerLevel ()
         |> List.map (fun i -> Seq.item i otherQStates)
 
     let gates =
         gatesRev |> LazyList.rev |> LazyList.toList
 
-    { Level = 1
+    { Level = initLevel
       InitQState = initQState
       TargetIndex = 0
       TargetQStates = targetQStates

@@ -13,10 +13,7 @@ let gateButtons (model: Model.Model) (dispatch: Model.Msg -> unit): ViewElement 
         |> List.indexed
         |> List.map (fun (i, (g, b)) ->
             View.ImageButton
-                (source =
-                    (model
-                     |> Model.numOfQubits
-                     |> Resources.gateImage g),
+                (source = Resources.gateImage g model.Level.NumOfQubits,
                  backgroundColor = (if b then Color.LightGreen else Color.Transparent),
                  command = fun () -> i |> Model.GateClick |> dispatch))
 
@@ -30,20 +27,19 @@ let gateButtons (model: Model.Model) (dispatch: Model.Msg -> unit): ViewElement 
                   children = children))
 
 let stackLayout (model: Model.Model) (dispatch: Model.Msg -> unit): ViewElement =
-    let numOfQubits = Model.numOfQubits model
 
     let goalQStatePlot =
         model.TargetQStates.[model.TargetIndex]
-        |> QStatePlotting.webView numOfQubits
+        |> QStatePlotting.webView model.Level.NumOfQubits
 
     let currentQStatePlot =
         List.zip model.Gates model.GateSelection
         |> List.filter snd
         |> List.map fst
         |> List.fold (fun qState gate ->
-            let gateMatrix = Quantum.Gate.matrix numOfQubits gate
+            let gateMatrix = Quantum.Gate.matrix model.Level.NumOfQubits gate
             Matrix.standardProduct gateMatrix qState) model.InitQState
-        |> QStatePlotting.webView numOfQubits
+        |> QStatePlotting.webView model.Level.NumOfQubits
 
     View.StackLayout
         (horizontalOptions = LayoutOptions.Center,

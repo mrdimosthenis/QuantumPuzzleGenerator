@@ -1,5 +1,6 @@
 ﻿module QuantumPuzzleGenerator.Constants
 
+open System
 open Xamarin.Forms
 
 open QuantumPuzzleMechanics
@@ -12,6 +13,10 @@ type Level =
       NumOfGates: int }
 
 // constants
+
+let random: Random = System.Random()
+
+let differenceThreshold:Number.Number = 0.2
 
 let numOfPuzzlesPerLevel: int = 10
 
