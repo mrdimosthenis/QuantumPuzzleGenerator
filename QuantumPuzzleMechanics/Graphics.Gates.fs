@@ -29,18 +29,18 @@ let part (place: Place)
          (strokeColor: Color)
          (size: float)
     : ReactElement =
-    let vertWire = Elems.vertWire Color.Black size
-    let horizWires =
+    let horizWire = Elems.horizWire Color.Black size
+    let vertWires =
             match place with
             | Single ->
                 []
             | Top ->
-                [ Elems.rightHorizWire strokeColor size ]
+                [ Elems.bottomVertWire strokeColor size ]
             | Middle ->
-                [ Elems.leftHorizWire strokeColor size
-                  Elems.rightHorizWire strokeColor size ]
+                [ Elems.topVertWire strokeColor size
+                  Elems.bottomVertWire strokeColor size ]
             | Bottom ->
-                [ Elems.leftHorizWire strokeColor size ]
+                [ Elems.topVertWire strokeColor size ]
     let symbolElem =
             match symbol with
             | ControlSymbol ->
@@ -57,8 +57,8 @@ let part (place: Place)
                 Elems.hSymbol Color.White strokeColor size
             | TSymbol ->
                 Elems.tSymbol Color.White strokeColor size
-    [ [ vertWire ]
-      horizWires
+    [ [ horizWire ]
+      vertWires
       [ symbolElem ] ]
     |> List.concat
     |> g []
@@ -68,7 +68,7 @@ let transform (i: int) (size: float): string =
     |> float
     |> (*) size
     |> string
-    |> sprintf "translate(%s,0)"
+    |> sprintf "translate(0,%s)"
 
 let gate1Graphics
         (numOfQubits: int)
@@ -80,7 +80,7 @@ let gate1Graphics
     fun i ->
         if i = index
                 then [ part Single symbol strokeColor size ]
-                else [ Elems.vertWire Color.Black size ]
+                else [ Elems.horizWire Color.Black size ]
         |> g [ transform i size |> SVGAttr.Transform ]
     |> List.init numOfQubits
     |> g []
@@ -107,10 +107,10 @@ let gate2Graphics
         | _ when i = maxIndex ->
             [ part Bottom maxSymbol strokeColor size ]
         | _ when i < minIndex || i > maxIndex ->
-            [ Elems.vertWire Color.Black size ]
+            [ Elems.horizWire Color.Black size ]
         | _ ->
-            [ Elems.vertWire Color.Black size
-              Elems.horizWire strokeColor size ]
+            [ Elems.horizWire Color.Black size
+              Elems.vertWire strokeColor size ]
         |> g [ transform i size |> SVGAttr.Transform ]
     |> List.init numOfQubits
     |> g []
@@ -143,10 +143,10 @@ let gate3Graphics
                 | _ when i = maxIndex ->
                     [ part Bottom maxSymbol strokeColor size ]
                 | _ when i < minIndex || i > maxIndex ->
-                    [ Elems.vertWire Color.Black size ]
+                    [ Elems.horizWire Color.Black size ]
                 | _ ->
-                    [ Elems.vertWire Color.Black size
-                      Elems.horizWire strokeColor size ]
+                    [ Elems.horizWire Color.Black size
+                      Elems.vertWire strokeColor size ]
                 |> g [ transform i size |> SVGAttr.Transform ]
             |> List.init numOfQubits
             |> g []
