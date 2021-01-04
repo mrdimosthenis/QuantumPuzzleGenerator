@@ -175,12 +175,15 @@ let singlePlotHtmlString (numOfQubits: int) (qState: Matrix.Matrix): string =
     ]
     |> ReactServer.renderToString
 
-let webView (numOfQubits: int) (qState: Matrix.Matrix): ViewElement =
+let webView (plotScale: float) (numOfQubits: int) (qState: Matrix.Matrix): ViewElement =
+    let size =
+        Constants.deviceWidth |> (*) 0.75 |> (*) plotScale
+
     let htmlString = singlePlotHtmlString numOfQubits qState
 
     View.WebView
         (source = Xamarin.Forms.HtmlWebViewSource(Html = htmlString),
-         width = 300.0,
-         height = 300.0,
+         width = size,
+         height = size,
          horizontalOptions = Forms.LayoutOptions.Center,
          verticalOptions = Forms.LayoutOptions.Center)

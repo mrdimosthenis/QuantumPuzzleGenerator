@@ -9,13 +9,19 @@ open QuantumPuzzleMechanics
 
 type Msg = GateClick of int
 
+type Settings =
+    { FontScale: float
+      PlotScale: float
+      CircuitScale: float }
+
 type Model =
     { Level: Constants.Level
       InitQState: Matrix.Matrix
       TargetIndex: int
       TargetQStates: Matrix.Matrix list
       GateSelection: bool list
-      Gates: Quantum.Gate.Gate list }
+      Gates: Quantum.Gate.Gate list
+      Settings: Settings }
 
 // update function
 
@@ -64,4 +70,8 @@ let initModel (): Model =
       TargetIndex = 0
       TargetQStates = targetQStates
       GateSelection = List.replicate gates.Length false
-      Gates = gates }
+      Gates = gates
+      Settings =
+          { FontScale = 1.0
+            PlotScale = 1.0
+            CircuitScale = 1.0 } }
