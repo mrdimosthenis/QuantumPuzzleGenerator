@@ -42,8 +42,11 @@ let update (msg: Msg) (model: Model) =
 // model functions
 
 let initModel (): Model =
+    
+    //TODO: replace with 0
+    let levelIndex = Generator.nextInt Constants.random Constants.levels.Length ()
 
-    let initLevel = List.item 0 Constants.levels
+    let initLevel = List.item levelIndex Constants.levels
 
     let (gatesRev, qStates) =
         Selection.selectGatesAndQStates
