@@ -168,6 +168,7 @@
     <EmbeddedResource Include="resources\images\gates\ccx3102.png" />
     <EmbeddedResource Include="resources\images\gates\ccx3021.png" />
     <EmbeddedResource Include="resources\images\gates\ccx3012.png" />
+    <Compile Include="Constants.fs" />
     <Compile Include="Resources.fs" />
     <Compile Include="Selection.fs" />
     <Compile Include="QStatePlotting.fs" />
