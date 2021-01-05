@@ -9,7 +9,9 @@ open QuantumPuzzleMechanics
 
 type Msg =
     | GateClick of int
-    | ResetModel //TODO: remove
+    | Regenerate
+    | NextPuzzle
+    | NextLevel
 
 type Settings =
     { FontScale: float
@@ -27,23 +29,14 @@ type Model =
 
       Level: Level.Level
       Puzzle: Puzzle
-      
+
       GateSelection: bool list
 
       Settings: Settings }
 
-// model initialization
+// initialization
 
-let initModel (): Model =
-
-    //TODO: replace with 0
-    let levelIndex =
-        Generator.nextInt Constants.random Level.levels.Length ()
-        
-    let puzzleIndex = 0
-
-    let level = List.item levelIndex Level.levels
-
+let initPuzzle (level: Level.Level): Puzzle =
     let (gatesRev, qStates) =
         Selection.selectGatesAndQStates
             Constants.random
@@ -65,12 +58,17 @@ let initModel (): Model =
     let gates =
         gatesRev |> LazyList.rev |> LazyList.toList
 
-    let puzzle =
-        { InitQState = initQState
-          TargetQState = targetQState
-          Gates = gates }
-        
-    let gateSelection = List.replicate gates.Length false
+    { InitQState = initQState
+      TargetQState = targetQState
+      Gates = gates }
+
+let initModel (levelIndex: int) (puzzleIndex: int): Model =
+
+    let level = List.item levelIndex Level.levels
+
+    let puzzle = initPuzzle level
+
+    let gateSelection = List.replicate puzzle.Gates.Length false
 
     { LevelIndex = levelIndex
       PuzzleIndex = puzzleIndex
@@ -79,7 +77,7 @@ let initModel (): Model =
       Puzzle = puzzle
 
       GateSelection = gateSelection
-      
+
       Settings =
           { FontScale = 1.0
             PlotScale = 1.0
@@ -101,4 +99,17 @@ let update (msg: Msg) (model: Model) =
 
         newModel, Cmd.none
 
-    | ResetModel -> initModel (), Cmd.none
+    | Regenerate -> initModel model.LevelIndex model.PuzzleIndex, Cmd.none
+
+    | NextPuzzle ->
+        let newModel =
+            model.PuzzleIndex
+            |> (+) 1
+            |> initModel model.LevelIndex
+
+        newModel, Cmd.none
+
+    | NextLevel ->
+        let newLevelIndex = model.LevelIndex + 1
+
+        initModel newLevelIndex 0, Cmd.none

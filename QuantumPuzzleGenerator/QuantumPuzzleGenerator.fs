@@ -8,7 +8,7 @@ open Fabulous.XamarinForms.LiveUpdate
 open Xamarin.Forms
 
 module App =
-    let init () = Model.initModel(), Cmd.none
+    let init () = Model.initModel 0 0, Cmd.none
 
     let view (model: Model.Model) (dispatch: Model.Msg -> unit) =
         View.ContentPage(
