@@ -170,6 +170,7 @@
     <EmbeddedResource Include="resources\images\gates\ccx3012.png" />
     <Compile Include="Constants.fs" />
     <Compile Include="Resources.fs" />
+    <Compile Include="Level.fs" />
     <Compile Include="Selection.fs" />
     <Compile Include="QStatePlotting.fs" />
     <Compile Include="Model.fs" />

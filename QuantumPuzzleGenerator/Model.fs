@@ -15,7 +15,7 @@ type Settings =
       CircuitScale: float }
 
 type Model =
-    { Level: Constants.Level
+    { Level: Level.Level
       InitQState: Matrix.Matrix
       TargetIndex: int
       TargetQStates: Matrix.Matrix list
@@ -44,9 +44,9 @@ let update (msg: Msg) (model: Model) =
 let initModel (): Model =
     
     //TODO: replace with 0
-    let levelIndex = Generator.nextInt Constants.random Constants.levels.Length ()
+    let levelIndex = Generator.nextInt Constants.random Level.levels.Length ()
 
-    let initLevel = List.item levelIndex Constants.levels
+    let initLevel = List.item levelIndex Level.levels
 
     let (gatesRev, qStates) =
         Selection.selectGatesAndQStates
