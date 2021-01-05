@@ -25,10 +25,15 @@ let stackLayout (model: Model.Model) (dispatch: Model.Msg -> unit): ViewElement 
             Matrix.standardProduct gateMatrix qState) model.InitQState
         |> QStatePlotting.webView model.Settings.PlotScale model.Level.NumOfQubits
 
+    //TODO: remove
+    let resetModelBtn =
+        View.Button(text = "reset model", command = fun () -> dispatch Model.ResetModel)
+
     View.StackLayout
         (horizontalOptions = LayoutOptions.Center,
          verticalOptions = LayoutOptions.Center,
          children =
              [ goalQStatePlot
                CircuitDrawing.stackLayout model dispatch
-               currentQStatePlot ])
+               currentQStatePlot
+               resetModelBtn ]) //TODO: remove

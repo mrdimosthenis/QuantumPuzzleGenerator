@@ -7,7 +7,9 @@ open QuantumPuzzleMechanics
 
 // types
 
-type Msg = GateClick of int
+type Msg =
+    | GateClick of int
+    | ResetModel //TODO: remove
 
 type Settings =
     { FontScale: float
@@ -23,28 +25,13 @@ type Model =
       Gates: Quantum.Gate.Gate list
       Settings: Settings }
 
-// update function
-
-let update (msg: Msg) (model: Model) =
-    match msg with
-    | GateClick index ->
-        let newGateSelection =
-            model.GateSelection
-            |> List.indexed
-            |> List.map (fun (i, b) -> if i = index then not b else b)
-
-        let newModel =
-            { model with
-                  GateSelection = newGateSelection }
-
-        newModel, Cmd.none
-
-// model functions
+// model initialization
 
 let initModel (): Model =
-    
+
     //TODO: replace with 0
-    let levelIndex = Generator.nextInt Constants.random Level.levels.Length ()
+    let levelIndex =
+        Generator.nextInt Constants.random Level.levels.Length ()
 
     let initLevel = List.item levelIndex Level.levels
 
@@ -78,3 +65,21 @@ let initModel (): Model =
           { FontScale = 1.0
             PlotScale = 1.0
             CircuitScale = 1.0 } }
+
+// update function
+
+let update (msg: Msg) (model: Model) =
+    match msg with
+    | GateClick index ->
+        let newGateSelection =
+            model.GateSelection
+            |> List.indexed
+            |> List.map (fun (i, b) -> if i = index then not b else b)
+
+        let newModel =
+            { model with
+                  GateSelection = newGateSelection }
+
+        newModel, Cmd.none
+
+    | ResetModel -> initModel (), Cmd.none
