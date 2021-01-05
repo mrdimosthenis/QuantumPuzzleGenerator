@@ -102,14 +102,14 @@ let update (msg: Msg) (model: Model) =
     | Regenerate -> initModel model.LevelIndex model.PuzzleIndex, Cmd.none
 
     | NextPuzzle ->
-        let newModel =
-            model.PuzzleIndex
-            |> (+) 1
-            |> initModel model.LevelIndex
+        let nextPuzzleIndex = model.PuzzleIndex + 1
+        Preferences.setInt Preferences.puzzleIndexKey nextPuzzleIndex
+        let newModel = initModel model.LevelIndex nextPuzzleIndex
 
         newModel, Cmd.none
 
     | NextLevel ->
         let newLevelIndex = model.LevelIndex + 1
+        Preferences.setInt Preferences.levelIndexKey newLevelIndex
 
         initModel newLevelIndex 0, Cmd.none

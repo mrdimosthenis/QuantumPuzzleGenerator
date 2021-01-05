@@ -5,18 +5,27 @@ open System.Diagnostics
 open Fabulous
 open Fabulous.XamarinForms
 open Fabulous.XamarinForms.LiveUpdate
+open Xamarin.Essentials
+open Xamarin.Essentials
 open Xamarin.Forms
 
 module App =
-    let init () = Model.initModel 0 0, Cmd.none
+    let initLevelIndex =
+        Preferences.levelIndexKey
+        |> Preferences.tryGetInt
+        |> Option.defaultValue 0
+
+    let puzzleLevelIndex =
+        Preferences.puzzleIndexKey
+        |> Preferences.tryGetInt
+        |> Option.defaultValue 0
+
+    let init () = Model.initModel initLevelIndex puzzleLevelIndex, Cmd.none
 
     let view (model: Model.Model) (dispatch: Model.Msg -> unit) =
-        View.ContentPage(
-            content = View.ScrollView(
-                verticalOptions = LayoutOptions.Start,
-                content = Pages.Play.stackLayout model dispatch
-            )
-        )
+        View.ContentPage
+            (content =
+                View.ScrollView(verticalOptions = LayoutOptions.Start, content = Pages.Play.stackLayout model dispatch))
 
     // Note, this declaration is needed if you enable LiveUpdate
     let program =
@@ -25,50 +34,51 @@ module App =
         |> Program.withConsoleTrace
 #endif
 
-type App () as app = 
-    inherit Application ()
+type App() as app =
+    inherit Application()
 
-    let runner = 
-        App.program
-        |> XamarinFormsProgram.run app
+    let runner =
+        App.program |> XamarinFormsProgram.run app
 
 #if DEBUG
-    // Uncomment this line to enable live update in debug mode. 
-    // See https://fsprojects.github.io/Fabulous/Fabulous.XamarinForms/tools.html#live-update for further  instructions.
-    //
-    //do runner.EnableLiveUpdate()
-#endif    
+// Uncomment this line to enable live update in debug mode.
+// See https://fsprojects.github.io/Fabulous/Fabulous.XamarinForms/tools.html#live-update for further  instructions.
+//
+//do runner.EnableLiveUpdate()
+#endif
 
-    // Uncomment this code to save the application state to app.Properties using Newtonsoft.Json
-    // See https://fsprojects.github.io/Fabulous/Fabulous.XamarinForms/models.html#saving-application-state for further  instructions.
+// Uncomment this code to save the application state to app.Properties using Newtonsoft.Json
+// See https://fsprojects.github.io/Fabulous/Fabulous.XamarinForms/models.html#saving-application-state for further  instructions.
 #if APPSAVE
     let modelId = "model"
-    override __.OnSleep() = 
 
-        let json = Newtonsoft.Json.JsonConvert.SerializeObject(runner.CurrentModel)
+    override __.OnSleep() =
+
+        let json =
+            Newtonsoft.Json.JsonConvert.SerializeObject(runner.CurrentModel)
+
         Console.WriteLine("OnSleep: saving model into app.Properties, json = {0}", json)
-
         app.Properties.[modelId] <- json
 
-    override __.OnResume() = 
+    override __.OnResume() =
         Console.WriteLine "OnResume: checking for model in app.Properties"
-        try 
+
+        try
             match app.Properties.TryGetValue modelId with
-            | true, (:? string as json) -> 
+            | true, (:? string as json) ->
 
                 Console.WriteLine("OnResume: restoring model from app.Properties, json = {0}", json)
-                let model = Newtonsoft.Json.JsonConvert.DeserializeObject<App.Model>(json)
+
+                let model =
+                    Newtonsoft.Json.JsonConvert.DeserializeObject<App.Model>(json)
 
                 Console.WriteLine("OnResume: restoring model from app.Properties, model = {0}", (sprintf "%0A" model))
-                runner.SetCurrentModel (model, Cmd.none)
+                runner.SetCurrentModel(model, Cmd.none)
 
             | _ -> ()
-        with ex -> 
-            App.program.onError("Error while restoring model found in app.Properties", ex)
+        with ex -> App.program.onError ("Error while restoring model found in app.Properties", ex)
 
-    override this.OnStart() = 
+    override this.OnStart() =
         Console.WriteLine "OnStart: using same logic as OnResume()"
         this.OnResume()
 #endif
-
-
