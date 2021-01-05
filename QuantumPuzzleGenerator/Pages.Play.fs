@@ -7,33 +7,6 @@ open Xamarin.Forms
 open QuantumPuzzleMechanics
 open QuantumPuzzleGenerator
 
-let gateButtons (model: Model.Model) (dispatch: Model.Msg -> unit): ViewElement =
-    let gateWidth =
-        model.Level.NumOfGates
-        |> float
-        |> (/) Constants.deviceWidth
-        |> (*) model.Settings.CircuitScale
-
-    let gateHeight =
-        model.Level.NumOfQubits |> float |> (*) gateWidth
-
-    let children =
-        List.zip model.Gates model.GateSelection
-        |> List.indexed
-        |> List.map (fun (i, (g, b)) ->
-            View.ImageButton
-                (source = Resources.gateImage g model.Level.NumOfQubits,
-                 width = gateWidth,
-                 height = gateHeight,
-                 backgroundColor = (if b then Color.YellowGreen else Color.LightBlue),
-                 command = fun () -> i |> Model.GateClick |> dispatch))
-
-    View.StackLayout
-        (orientation = StackOrientation.Horizontal,
-         horizontalOptions = LayoutOptions.Center,
-         verticalOptions = LayoutOptions.Center,
-         spacing = 0.0,
-         children = children)
 
 let stackLayout (model: Model.Model) (dispatch: Model.Msg -> unit): ViewElement =
 
@@ -57,5 +30,5 @@ let stackLayout (model: Model.Model) (dispatch: Model.Msg -> unit): ViewElement 
          verticalOptions = LayoutOptions.Center,
          children =
              [ goalQStatePlot
-               gateButtons model dispatch
+               CircuitDrawing.stackLayout model dispatch
                currentQStatePlot ])
