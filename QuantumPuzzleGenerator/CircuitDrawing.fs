@@ -41,7 +41,7 @@ let stackLayout (model: Model.Model) (dispatch: Model.Msg -> unit): ViewElement 
         model.Level.NumOfQubits |> float |> (*) gateWidth
 
     let children =
-        List.zip model.Gates model.GateSelection
+        List.zip model.Puzzle.Gates model.GateSelection
         |> List.indexed
         |> List.map (fun (i, (g, b)) ->
             View.ImageButton

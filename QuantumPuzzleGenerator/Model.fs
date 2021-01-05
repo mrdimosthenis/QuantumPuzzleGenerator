@@ -16,13 +16,20 @@ type Settings =
       PlotScale: float
       CircuitScale: float }
 
+type Puzzle =
+    { InitQState: Matrix.Matrix
+      TargetQState: Matrix.Matrix
+      Gates: Quantum.Gate.Gate list }
+
 type Model =
-    { Level: Level.Level
-      InitQState: Matrix.Matrix
-      TargetIndex: int
-      TargetQStates: Matrix.Matrix list
+    { LevelIndex: int
+      PuzzleIndex: int
+
+      Level: Level.Level
+      Puzzle: Puzzle
+      
       GateSelection: bool list
-      Gates: Quantum.Gate.Gate list
+
       Settings: Settings }
 
 // model initialization
@@ -32,15 +39,17 @@ let initModel (): Model =
     //TODO: replace with 0
     let levelIndex =
         Generator.nextInt Constants.random Level.levels.Length ()
+        
+    let puzzleIndex = 0
 
-    let initLevel = List.item levelIndex Level.levels
+    let level = List.item levelIndex Level.levels
 
     let (gatesRev, qStates) =
         Selection.selectGatesAndQStates
             Constants.random
-            initLevel.MaxGateType
-            initLevel.NumOfGates
-            initLevel.NumOfQubits
+            level.MaxGateType
+            level.NumOfGates
+            level.NumOfQubits
             Constants.differenceThreshold
 
     let (initQState, otherQStates) =
@@ -48,19 +57,29 @@ let initModel (): Model =
 
     let otherQStatesLength = LazyList.length otherQStates
 
-    let targetQStates =
-        Generator.nextDistinctGroup Constants.random otherQStatesLength Constants.numOfPuzzlesPerLevel ()
-        |> List.map (fun i -> Seq.item i otherQStates)
+    let randomQStatesIndex =
+        Generator.nextInt Constants.random otherQStatesLength ()
+
+    let targetQState = Seq.item randomQStatesIndex otherQStates
 
     let gates =
         gatesRev |> LazyList.rev |> LazyList.toList
 
-    { Level = initLevel
-      InitQState = initQState
-      TargetIndex = 0
-      TargetQStates = targetQStates
-      GateSelection = List.replicate gates.Length false
-      Gates = gates
+    let puzzle =
+        { InitQState = initQState
+          TargetQState = targetQState
+          Gates = gates }
+        
+    let gateSelection = List.replicate gates.Length false
+
+    { LevelIndex = levelIndex
+      PuzzleIndex = puzzleIndex
+
+      Level = level
+      Puzzle = puzzle
+
+      GateSelection = gateSelection
+      
       Settings =
           { FontScale = 1.0
             PlotScale = 1.0

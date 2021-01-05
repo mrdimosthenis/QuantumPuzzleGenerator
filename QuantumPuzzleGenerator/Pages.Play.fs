@@ -11,18 +11,18 @@ open QuantumPuzzleGenerator
 let stackLayout (model: Model.Model) (dispatch: Model.Msg -> unit): ViewElement =
 
     let goalQStatePlot =
-        model.TargetQStates.[model.TargetIndex]
+        model.Puzzle.TargetQState
         |> QStatePlotting.webView model.Settings.PlotScale model.Level.NumOfQubits
 
     let currentQStatePlot =
-        List.zip model.Gates model.GateSelection
+        List.zip model.Puzzle.Gates model.GateSelection
         |> List.filter snd
         |> List.map fst
         |> List.fold (fun qState gate ->
             let gateMatrix =
                 Quantum.Gate.matrix model.Level.NumOfQubits gate
 
-            Matrix.standardProduct gateMatrix qState) model.InitQState
+            Matrix.standardProduct gateMatrix qState) model.Puzzle.InitQState
         |> QStatePlotting.webView model.Settings.PlotScale model.Level.NumOfQubits
 
     //TODO: remove
