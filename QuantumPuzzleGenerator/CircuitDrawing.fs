@@ -35,7 +35,7 @@ let stackLayout (model: Model.Model) (dispatch: Model.Msg -> unit): ViewElement 
         model.Level.NumOfGates
         |> float
         |> (/) Constants.deviceWidth
-        |> (*) 0.5
+        |> (*) 0.8
         |> (*) model.Settings.CircuitScale
 
     let gateHeight =
