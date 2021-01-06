@@ -13,6 +13,11 @@ type Msg =
     | NextPuzzle
     | NextLevel
 
+type SelectedPage =
+    | HomePage
+    | PlayPage
+    | LearnPage
+
 type Settings =
     { FontScale: float
       PlotScale: float
@@ -24,8 +29,10 @@ type Puzzle =
       Gates: Quantum.Gate.Gate list }
 
 type Model =
-    { Level: Level.Level
-      
+    { SelectedPage: SelectedPage
+
+      Level: Level.Level
+
       Puzzle: Puzzle
       PuzzleIndex: int
 
@@ -70,8 +77,10 @@ let initModel (levelIndex: int) (puzzleIndex: int): Model =
 
     let gateSelection = List.replicate puzzle.Gates.Length false
 
-    { Level = level
-      
+    { SelectedPage = HomePage
+
+      Level = level
+
       Puzzle = puzzle
       PuzzleIndex = puzzleIndex
 
@@ -98,20 +107,47 @@ let update (msg: Msg) (model: Model) =
 
         newModel, Cmd.none
 
-    | Regenerate -> initModel model.Level.Index model.PuzzleIndex, Cmd.none
-
-    | NextPuzzle ->
-        let nextPuzzleIndex = model.PuzzleIndex + 1
-        Preferences.setInt Preferences.puzzleIndexKey nextPuzzleIndex
+    | Regenerate ->
+        let puzzle = initPuzzle model.Level
+        let gateSelection = List.replicate puzzle.Gates.Length false
 
         let newModel =
-            initModel model.Level.Index nextPuzzleIndex
+            { model with
+                  Puzzle = puzzle
+                  GateSelection = gateSelection }
+
+        newModel, Cmd.none
+
+    | NextPuzzle ->
+        let puzzle = initPuzzle model.Level
+        let puzzleIndex = model.PuzzleIndex + 1
+        let gateSelection = List.replicate puzzle.Gates.Length false
+
+        Preferences.setInt Preferences.puzzleIndexKey puzzleIndex
+
+        let newModel =
+            { model with
+                  Puzzle = puzzle
+                  PuzzleIndex = puzzleIndex
+                  GateSelection = gateSelection }
 
         newModel, Cmd.none
 
     | NextLevel ->
-        let newLevelIndex = model.Level.Index + 1
-        let nextPuzzleIndex = 0
-        Preferences.setInt Preferences.levelIndexKey newLevelIndex
-        Preferences.setInt Preferences.puzzleIndexKey nextPuzzleIndex
-        initModel newLevelIndex nextPuzzleIndex, Cmd.none
+        let levelIndex = model.Level.Index + 1
+        let level = List.item levelIndex Level.levels
+        let puzzle = initPuzzle level
+        let puzzleIndex = 0
+        let gateSelection = List.replicate puzzle.Gates.Length false
+
+        Preferences.setInt Preferences.levelIndexKey levelIndex
+        Preferences.setInt Preferences.puzzleIndexKey puzzleIndex
+
+        let newModel =
+            { model with
+                  Level = level
+                  Puzzle = puzzle
+                  PuzzleIndex = puzzleIndex
+                  GateSelection = gateSelection }
+
+        newModel, Cmd.none
