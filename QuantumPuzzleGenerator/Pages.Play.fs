@@ -7,14 +7,6 @@ open Xamarin.Forms
 open QuantumPuzzleMechanics
 open QuantumPuzzleGenerator
 
-let titleLbl: ViewElement =
-    View.Label
-        (text = "Quantum Puzzle Generator",
-         horizontalTextAlignment = TextAlignment.Center,
-         verticalTextAlignment = TextAlignment.Center,
-         horizontalOptions = LayoutOptions.Center,
-         verticalOptions = LayoutOptions.Center)
-
 let levelLbl (model: Model.Model): ViewElement =
     let displayedLevel = model.Level.Index + 1
 
@@ -69,6 +61,15 @@ let regeneratePuzzleOrLevelBtn (currentQState: Matrix.Matrix)
     | true when puzzleIndex >= Constants.numOfPuzzlesPerLevel - 1 -> nextLevelBtn
     | true -> nextPuzzleBtn
 
+let backBtn (dispatch: Model.Msg -> unit) =
+    View.Button
+        (text = "Back",
+         command =
+             fun () ->
+                 Model.Page.HomePage
+                 |> Model.SelectPage
+                 |> dispatch)
+
 let stackLayout (model: Model.Model) (dispatch: Model.Msg -> unit): ViewElement =
     let goalQStatePlot =
         model.Puzzle.TargetQState
@@ -91,8 +92,7 @@ let stackLayout (model: Model.Model) (dispatch: Model.Msg -> unit): ViewElement 
         (horizontalOptions = LayoutOptions.Center,
          verticalOptions = LayoutOptions.Center,
          children =
-             [ titleLbl
-               levelLbl model
+             [ levelLbl model
                puzzleLbl model
                goalQStatePlot
                CircuitDrawing.stackLayout model dispatch
@@ -102,4 +102,5 @@ let stackLayout (model: Model.Model) (dispatch: Model.Msg -> unit): ViewElement 
                    model.Puzzle.TargetQState
                    model.Level.Index
                    model.PuzzleIndex
-                   dispatch ])
+                   dispatch
+               backBtn dispatch ])

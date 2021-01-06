@@ -7,13 +7,7 @@ open QuantumPuzzleMechanics
 
 // types
 
-type Msg =
-    | GateClick of int
-    | Regenerate
-    | NextPuzzle
-    | NextLevel
-
-type SelectedPage =
+type Page =
     | HomePage
     | PlayPage
     | LearnPage
@@ -29,7 +23,7 @@ type Puzzle =
       Gates: Quantum.Gate.Gate list }
 
 type Model =
-    { SelectedPage: SelectedPage
+    { SelectedPage: Page
 
       Level: Level.Level
 
@@ -39,6 +33,13 @@ type Model =
       GateSelection: bool list
 
       Settings: Settings }
+
+type Msg =
+    | SelectPage of Page
+    | GateClick of int
+    | Regenerate
+    | NextPuzzle
+    | NextLevel
 
 // initialization
 
@@ -95,6 +96,11 @@ let initModel (levelIndex: int) (puzzleIndex: int): Model =
 
 let update (msg: Msg) (model: Model) =
     match msg with
+    | SelectPage page ->
+        let newModel = { model with SelectedPage = page }
+
+        newModel, Cmd.none
+
     | GateClick index ->
         let newGateSelection =
             model.GateSelection

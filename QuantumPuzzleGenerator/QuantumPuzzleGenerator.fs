@@ -20,12 +20,17 @@ module App =
         |> Preferences.tryGetInt
         |> Option.defaultValue 0
 
-    let init () = Model.initModel initLevelIndex puzzleLevelIndex, Cmd.none
+    let init () =
+        Model.initModel initLevelIndex puzzleLevelIndex, Cmd.none
 
     let view (model: Model.Model) (dispatch: Model.Msg -> unit) =
-        View.ContentPage
-            (content =
-                View.ScrollView(verticalOptions = LayoutOptions.Start, content = Pages.Play.stackLayout model dispatch))
+        let page =
+            match model.SelectedPage with
+            | Model.Page.HomePage -> Pages.Home.stackLayout model dispatch
+            | Model.Page.LearnPage -> Pages.Learn.stackLayout model dispatch
+            | Model.Page.PlayPage -> Pages.Play.stackLayout model dispatch
+
+        View.ContentPage(content = View.ScrollView(verticalOptions = LayoutOptions.Start, content = page))
 
     // Note, this declaration is needed if you enable LiveUpdate
     let program =
