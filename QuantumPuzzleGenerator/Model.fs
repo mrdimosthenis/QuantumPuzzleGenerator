@@ -42,6 +42,7 @@ let initPuzzle (level: Level.Level): Puzzle =
             level.MaxGateType
             level.NumOfGates
             level.NumOfQubits
+            level.IsAbsoluteInitQState
             Constants.differenceThreshold
 
     let (initQState, otherQStates) =

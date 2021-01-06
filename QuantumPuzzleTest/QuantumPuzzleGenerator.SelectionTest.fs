@@ -69,7 +69,7 @@ let ``Swap selected as first and second gate does not result distinct quantum st
 [<Fact>]
 let ``Select one gate and the quantum states of three qubits with  0_01 difference threshold`` () =
     let (selectedGates, selectedQStates) =
-        selectGatesAndQStates random Quantum.Gate.DoubleQubit 1 3 0.01
+        selectGatesAndQStates random Quantum.Gate.DoubleQubit 1 3 false 0.01
 
     (LazyList.length selectedGates, LazyList.length selectedQStates)
     |> should equal (1, 2)
@@ -77,7 +77,7 @@ let ``Select one gate and the quantum states of three qubits with  0_01 differen
 [<Fact>]
 let ``Select two gates and the quantum states of four qubits with  0_1 difference threshold`` () =
     let (selectedGates, selectedQStates) =
-        selectGatesAndQStates random Quantum.Gate.TripleQubit 2 4 0.1
+        selectGatesAndQStates random Quantum.Gate.TripleQubit 2 4 false 0.1
 
     (LazyList.length selectedGates, LazyList.length selectedQStates)
     |> should equal (2, 4)
@@ -85,7 +85,7 @@ let ``Select two gates and the quantum states of four qubits with  0_1 differenc
 [<Fact>]
 let ``Select three gates and the quantum states of five qubits with  0_3 difference threshold`` () =
     let (selectedGates, selectedQStates) =
-        selectGatesAndQStates random Quantum.Gate.SingleQubit 3 5 0.3
+        selectGatesAndQStates random Quantum.Gate.SingleQubit 3 5 false 0.3
 
     (LazyList.length selectedGates, LazyList.length selectedQStates)
     |> should equal (3, 8)
@@ -93,21 +93,21 @@ let ``Select three gates and the quantum states of five qubits with  0_3 differe
 let numOfDiffQStates (levelIndex: int): int =
     let level = List.item levelIndex Level.levels
 
-    selectGatesAndQStates random level.MaxGateType level.NumOfGates level.NumOfQubits Constants.differenceThreshold
+    selectGatesAndQStates random level.MaxGateType level.NumOfGates level.NumOfQubits level.IsAbsoluteInitQState Constants.differenceThreshold
     |> snd
     |> LazyList.length
 
 [<Fact>]
-let ``Select puzzle for level 1`` () = numOfDiffQStates 0 |> should equal 8
+let ``Select puzzle for level 1`` () = numOfDiffQStates 0 |> should equal 4
 
 [<Fact>]
-let ``Select puzzle for level 2`` () = numOfDiffQStates 1 |> should equal 16
+let ``Select puzzle for level 2`` () = numOfDiffQStates 1 |> should equal 4
 
 [<Fact>]
-let ``Select puzzle for level 3`` () = numOfDiffQStates 2 |> should equal 16
+let ``Select puzzle for level 3`` () = numOfDiffQStates 2 |> should equal 8
 
 [<Fact>]
-let ``Select puzzle for level 4`` () = numOfDiffQStates 3 |> should equal 32
+let ``Select puzzle for level 4`` () = numOfDiffQStates 3 |> should equal 8
 
 [<Fact>]
 let ``Select puzzle for level 5`` () = numOfDiffQStates 4 |> should equal 16
@@ -116,22 +116,52 @@ let ``Select puzzle for level 5`` () = numOfDiffQStates 4 |> should equal 16
 let ``Select puzzle for level 6`` () = numOfDiffQStates 5 |> should equal 16
 
 [<Fact>]
-let ``Select puzzle for level 7`` () = numOfDiffQStates 6 |> should equal 16
+let ``Select puzzle for level 7`` () = numOfDiffQStates 6 |> should equal 8
 
 [<Fact>]
-let ``Select puzzle for level 8`` () = numOfDiffQStates 7 |> should equal 32
+let ``Select puzzle for level 8`` () = numOfDiffQStates 7 |> should equal 8
 
 [<Fact>]
-let ``Select puzzle for level 9`` () = numOfDiffQStates 8 |> should equal 64
+let ``Select puzzle for level 9`` () = numOfDiffQStates 8 |> should equal 8
 
 [<Fact>]
-let ``Select puzzle for level 10`` () = numOfDiffQStates 9 |> should equal 128
+let ``Select puzzle for level 10`` () = numOfDiffQStates 9 |> should equal 8
+
+[<Fact>]
+let ``Select puzzle for level 11`` () = numOfDiffQStates 10 |> should equal 8
+
+[<Fact>]
+let ``Select puzzle for level 12`` () = numOfDiffQStates 11 |> should equal 8
+
+[<Fact>]
+let ``Select puzzle for level 13`` () = numOfDiffQStates 12 |> should equal 16
+
+[<Fact>]
+let ``Select puzzle for level 14`` () = numOfDiffQStates 13 |> should equal 16
+
+[<Fact>]
+let ``Select puzzle for level 15`` () = numOfDiffQStates 14 |> should equal 32
+
+[<Fact>]
+let ``Select puzzle for level 16`` () = numOfDiffQStates 15 |> should equal 32
+
+[<Fact>]
+let ``Select puzzle for level 17`` () = numOfDiffQStates 16 |> should equal 64
+
+[<Fact>]
+let ``Select puzzle for level 18`` () = numOfDiffQStates 17 |> should equal 64
+
+[<Fact>]
+let ``Select puzzle for level 19`` () = numOfDiffQStates 18 |> should equal 128
+
+[<Fact>]
+let ``Select puzzle for level 20`` () = numOfDiffQStates 19 |> should equal 128
 
 [<Fact>]
 let ``Select three single-qubit-gates for one qubit with 0_02 difference threshold`` () =
     let randomInstance = System.Random(1000)
 
-    selectGatesAndQStates randomInstance Quantum.Gate.SingleQubit 3 1 0.02
+    selectGatesAndQStates randomInstance Quantum.Gate.SingleQubit 3 1 false 0.02
     |> fst
     |> LazyList.toList
     |> should
@@ -144,7 +174,7 @@ let ``Select three single-qubit-gates for one qubit with 0_02 difference thresho
 let ``Select four single-or-double-qubit-gates for five qubits with 0_2 difference threshold`` () =
     let randomInstance = System.Random(1000)
 
-    selectGatesAndQStates randomInstance Quantum.Gate.DoubleQubit 4 5 0.2
+    selectGatesAndQStates randomInstance Quantum.Gate.DoubleQubit 4 5 false 0.2
     |> fst
     |> LazyList.toList
     |> should
@@ -158,7 +188,7 @@ let ``Select four single-or-double-qubit-gates for five qubits with 0_2 differen
 let ``Select 10 single-qubit-gates for four qubits with 0_2 difference threshold`` () =
     let randomInstance = System.Random(1000)
 
-    selectGatesAndQStates randomInstance Quantum.Gate.SingleQubit 10 4 0.2
+    selectGatesAndQStates randomInstance Quantum.Gate.SingleQubit 10 4 false 0.2
     |> fst
     |> LazyList.toList
     |> should
@@ -178,7 +208,7 @@ let ``Select 10 single-qubit-gates for four qubits with 0_2 difference threshold
 let ``Select 10 single-or-double-or-triple-qubit-gates for three qubits with 0_2 difference threshold`` () =
     let randomInstance = System.Random(1000)
 
-    selectGatesAndQStates randomInstance Quantum.Gate.TripleQubit 10 3 0.2
+    selectGatesAndQStates randomInstance Quantum.Gate.TripleQubit 10 3 false 0.2
     |> fst
     |> LazyList.toList
     |> should

@@ -56,6 +56,7 @@ let selectGatesAndQStates (random: Random)
                           (maxGateType: Quantum.Gate.MaxGateType)
                           (numOfGates: int)
                           (numOfQubits: int)
+                          (isAbsoluteInitQState: bool)
                           (differenceThreshold: Number.Number)
                           : Quantum.Gate.Gate LazyList * Matrix.Matrix LazyList =
 
@@ -75,6 +76,10 @@ let selectGatesAndQStates (random: Random)
     let initSelectedGates = LazyList.empty
 
     let initSelectedQStates =
-        LazyList.ofList [ Generator.nextQState random numOfQubits () ]
+        if isAbsoluteInitQState
+        then Generator.nextAbsolutQState random numOfQubits ()
+        else Generator.nextQState random numOfQubits ()
+        |> Seq.singleton
+        |> LazyList.ofSeq
 
     go initSelectedGates initSelectedQStates 0

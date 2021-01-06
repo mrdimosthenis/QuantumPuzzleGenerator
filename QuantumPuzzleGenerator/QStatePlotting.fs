@@ -102,7 +102,7 @@ let fillColor (c: Complex.Complex): Forms.Color =
 
 let strokeColor (c: Complex.Complex): Forms.Color =
     if c = Complex.zero then
-        Forms.Color.White
+        Forms.Color.Black
     else
         let h =
             c
