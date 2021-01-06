@@ -7,6 +7,14 @@ open Xamarin.Forms
 open QuantumPuzzleMechanics
 open QuantumPuzzleGenerator
 
+let titleLbl: ViewElement =
+    View.Label
+        (text = "Quantum Puzzle Generator",
+         horizontalTextAlignment = TextAlignment.Center,
+         verticalTextAlignment = TextAlignment.Center,
+         horizontalOptions = LayoutOptions.Center,
+         verticalOptions = LayoutOptions.Center)
+
 let levelLbl (model: Model.Model): ViewElement =
     let displayedLevel = model.Level.Index + 1
 
@@ -39,13 +47,20 @@ let regeneratePuzzleOrLevelBtn (currentQState: Matrix.Matrix)
                                (dispatch: Model.Msg -> unit)
                                : ViewElement =
     let regenerateBtn =
-        View.Button(text = "Regenerate", command = fun () -> dispatch Model.Regenerate)
+        View.Button
+            (text = "Regenerate", image = Resources.image "icons.refresh", command = fun () -> dispatch Model.Regenerate)
 
     let nextPuzzleBtn =
-        View.Button(text = "Next Puzzle", command = fun () -> dispatch Model.NextPuzzle)
+        View.Button
+            (text = "Next Puzzle",
+             image = Resources.image "icons.play_light",
+             command = fun () -> dispatch Model.NextPuzzle)
 
     let nextLevelBtn =
-        View.Button(text = "Next Level", command = fun () -> dispatch Model.NextLevel)
+        View.Button
+            (text = "Next Level",
+             image = Resources.image "icons.play_dark",
+             command = fun () -> dispatch Model.NextLevel)
 
     match Matrix.almostEqual Constants.differenceThreshold currentQState targetQState with
     | false -> regenerateBtn
@@ -76,7 +91,8 @@ let stackLayout (model: Model.Model) (dispatch: Model.Msg -> unit): ViewElement 
         (horizontalOptions = LayoutOptions.Center,
          verticalOptions = LayoutOptions.Center,
          children =
-             [ levelLbl model
+             [ titleLbl
+               levelLbl model
                puzzleLbl model
                goalQStatePlot
                CircuitDrawing.stackLayout model dispatch

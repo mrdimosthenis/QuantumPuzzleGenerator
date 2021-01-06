@@ -68,6 +68,11 @@
     <EmbeddedResource Include="resources\images\gates\ccx3102.png" />
     <EmbeddedResource Include="resources\images\gates\ccx3021.png" />
     <EmbeddedResource Include="resources\images\gates\ccx3012.png" />
+    <EmbeddedResource Include="resources\images\icons\play_dark.png" />
+    <EmbeddedResource Include="resources\images\icons\play_light.png" />
+    <EmbeddedResource Include="resources\images\icons\refresh.png" />
+    <EmbeddedResource Include="resources\images\icons\zoom_out.png" />
+    <EmbeddedResource Include="resources\images\icons\zoom_in.png" />
     <Compile Include="Constants.fs" />
     <Compile Include="Resources.fs" />
     <Compile Include="Preferences.fs" />
