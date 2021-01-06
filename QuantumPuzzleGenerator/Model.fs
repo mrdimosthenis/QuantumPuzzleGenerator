@@ -24,11 +24,10 @@ type Puzzle =
       Gates: Quantum.Gate.Gate list }
 
 type Model =
-    { LevelIndex: int
-      PuzzleIndex: int
-
-      Level: Level.Level
+    { Level: Level.Level
+      
       Puzzle: Puzzle
+      PuzzleIndex: int
 
       GateSelection: bool list
 
@@ -70,11 +69,10 @@ let initModel (levelIndex: int) (puzzleIndex: int): Model =
 
     let gateSelection = List.replicate puzzle.Gates.Length false
 
-    { LevelIndex = levelIndex
-      PuzzleIndex = puzzleIndex
-
-      Level = level
+    { Level = level
+      
       Puzzle = puzzle
+      PuzzleIndex = puzzleIndex
 
       GateSelection = gateSelection
 
@@ -99,19 +97,19 @@ let update (msg: Msg) (model: Model) =
 
         newModel, Cmd.none
 
-    | Regenerate -> initModel model.LevelIndex model.PuzzleIndex, Cmd.none
+    | Regenerate -> initModel model.Level.Index model.PuzzleIndex, Cmd.none
 
     | NextPuzzle ->
         let nextPuzzleIndex = model.PuzzleIndex + 1
         Preferences.setInt Preferences.puzzleIndexKey nextPuzzleIndex
 
         let newModel =
-            initModel model.LevelIndex nextPuzzleIndex
+            initModel model.Level.Index nextPuzzleIndex
 
         newModel, Cmd.none
 
     | NextLevel ->
-        let newLevelIndex = model.LevelIndex + 1
+        let newLevelIndex = model.Level.Index + 1
         let nextPuzzleIndex = 0
         Preferences.setInt Preferences.levelIndexKey newLevelIndex
         Preferences.setInt Preferences.puzzleIndexKey nextPuzzleIndex

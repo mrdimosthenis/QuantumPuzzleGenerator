@@ -10,7 +10,7 @@ open QuantumPuzzleGenerator
 
 let stackLayout (model: Model.Model) (dispatch: Model.Msg -> unit): ViewElement =
 
-    let displayedLevel = model.LevelIndex + 1
+    let displayedLevel = model.Level.Index + 1
     let displayedPuzzle = model.PuzzleIndex + 1
 
     let levelLbl =
@@ -59,7 +59,7 @@ let stackLayout (model: Model.Model) (dispatch: Model.Msg -> unit): ViewElement 
         match Matrix.almostEqual Constants.differenceThreshold currentQState model.Puzzle.TargetQState with
         | false -> regenerateBtn
         | true when model.PuzzleIndex = Constants.numOfPuzzlesPerLevel - 1
-                    && model.LevelIndex = Level.levels.Length - 1 -> regenerateBtn
+                    && model.Level.Index = Level.levels.Length - 1 -> regenerateBtn
         | true when model.PuzzleIndex = Constants.numOfPuzzlesPerLevel - 1 -> nextLevelBtn
         | true -> nextPuzzleBtn
 
