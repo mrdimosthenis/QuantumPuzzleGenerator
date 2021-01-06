@@ -26,12 +26,12 @@ let nextListItem<'a> (random: Random) (ls: 'a list) (): 'a =
     let i = nextInt random ls.Length ()
     List.item i ls
 
-let rec nextDiffInt (random: Random) (maxVal: int) (excludedVals: int list) (): int =
+let rec nextDiffInt (random: Random) (maxVal: int) (excludedValues: int list) (): int =
     let n = nextInt random maxVal ()
 
-    if (Seq.forall ((<>) n) excludedVals)
+    if (Seq.forall ((<>) n) excludedValues)
     then n
-    else nextDiffInt random maxVal excludedVals ()
+    else nextDiffInt random maxVal excludedValues ()
 
 let nextDistinctGroup (random: Random) (maxVal: int) (groupSize: int) (): int list =
 
@@ -63,13 +63,14 @@ let nextVector (random: Random) (n: int) (): Vector.Vector =
 let nextMatrix (random: Random) (m: int) (n: int) (): Matrix.Matrix =
     Matrix.zero m n
     |> LazyList.map (fun _ -> nextVector random m ())
-
-let rec nextQState (random: Random) (numOfQubits: int) (): Matrix.Matrix =
-    let n =
-        Math.Pow(2.0, float numOfQubits)
+    
+let qStateSize (numOfQubits: int): int =
+    Math.Pow(2.0, float numOfQubits)
         |> Math.Round
         |> int
 
+let rec nextQState (random: Random) (numOfQubits: int) (): Matrix.Matrix =
+    let n = qStateSize numOfQubits
     let v = nextVector random n ()
 
     if (Seq.exists ((<>) Complex.zero) v) then
@@ -81,6 +82,16 @@ let rec nextQState (random: Random) (numOfQubits: int) (): Matrix.Matrix =
         |> Utils.ofSeqOfSeqs
     else
         nextQState random numOfQubits ()
+        
+let rec nextAbsolutQState (random: Random) (numOfQubits: int) (): Matrix.Matrix =
+    let n = qStateSize numOfQubits
+    let nonZeroIndex = nextInt random n ()
+    
+    fun i -> if i = nonZeroIndex
+                then seq [ Complex.ofNum 1.0 ]
+                else seq [ Complex.zero ]
+    |> Seq.init n
+    |> Utils.ofSeqOfSeqs
 
 let nextGate1 (random: Random) (numOfQubits: int) (): Quantum.Gate.Gate =
     let selectedGate =
