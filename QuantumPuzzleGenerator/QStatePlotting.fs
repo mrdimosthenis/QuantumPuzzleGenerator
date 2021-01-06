@@ -59,25 +59,6 @@ let coordsForThreeQubits: SpaceCoordinates LazyList =
       (0.75, 0.75, 0.75) ]
     |> LazyList.ofList
 
-let coordsForFourQubits: SpaceCoordinates LazyList =
-    [ (0.1, 0.4, 0.4)
-      (0.3, 0.4, 0.4)
-      (0.1, 0.6, 0.4)
-      (0.3, 0.6, 0.4)
-      (0.1, 0.4, 0.6)
-      (0.3, 0.4, 0.6)
-      (0.1, 0.6, 0.6)
-      (0.3, 0.6, 0.6)
-      (0.7, 0.4, 0.4)
-      (0.9, 0.4, 0.4)
-      (0.7, 0.6, 0.4)
-      (0.9, 0.6, 0.4)
-      (0.7, 0.4, 0.6)
-      (0.9, 0.4, 0.6)
-      (0.7, 0.6, 0.6)
-      (0.9, 0.6, 0.6) ]
-    |> LazyList.ofList
-
 // functions
 
 let coordsForQubits (numOfQubits: int): SpaceCoordinates LazyList =
@@ -85,7 +66,6 @@ let coordsForQubits (numOfQubits: int): SpaceCoordinates LazyList =
     | 1 -> coordsForOneQubit
     | 2 -> coordsForTwoQubits
     | 3 -> coordsForThreeQubits
-    | 4 -> coordsForFourQubits
     | _ -> raise InvalidNumOfQubits
 
 let fillColor (c: Complex.Complex): Forms.Color =

@@ -5,22 +5,13 @@
         height: "100%",
         style: "dot-color",
         showLegend: false,
-        dotSizeRatio: 0.035 * generatedByQuantumPuzzles.dotSizeRatioScale,
+        dotSizeRatio: 0.04 * generatedByQuantumPuzzles.dotSizeRatioScale,
         dataColor: {
-            strokeWidth: 10
+            strokeWidth: 8
         },
-        xValueLabel: function (_) {
-            return '';
-        },
-        yValueLabel: function (_) {
-            return '';
-        },
-        zValueLabel: function (_) {
-            return '';
-        },
-        xLabel: 'left/right',
-        yLabel: 'front/back',
-        zLabel: 'up/down',
+        showXAxis: false,
+        showYAxis: false,
+        showZAxis: false,
         xMin: 0.0,
         xMax: 1.0,
         yMin: 0.0,
@@ -28,9 +19,9 @@
         zMin: 0.0,
         zMax: 1.0,
         cameraPosition: {
-            horizontal: 0.3,
-            vertical: 0.7,
-            distance: 1.65
+            horizontal: -0.2,
+            vertical: 0.25,
+            distance: 1.5
         }
     };
 
