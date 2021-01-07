@@ -70,7 +70,7 @@ let lessonCategories: LessonCategory list =
        false,
        false)
       ("⊕ for One of Three Qubits",
-       2,
+       3,
        [ Quantum.Gate.XGate 0
          Quantum.Gate.XGate 1
          Quantum.Gate.XGate 2 ],
@@ -85,7 +85,7 @@ let lessonCategories: LessonCategory list =
        false,
        true)
       ("Z for One of Three Qubits",
-       2,
+       3,
        [ Quantum.Gate.ZGate 0
          Quantum.Gate.ZGate 1
          Quantum.Gate.ZGate 2 ],
@@ -100,7 +100,7 @@ let lessonCategories: LessonCategory list =
        false,
        true)
       ("Y for One of Three Qubits",
-       2,
+       3,
        [ Quantum.Gate.YGate 0
          Quantum.Gate.YGate 1
          Quantum.Gate.YGate 2 ],
@@ -115,7 +115,7 @@ let lessonCategories: LessonCategory list =
        false,
        true)
       ("H for One of Three Qubits",
-       2,
+       3,
        [ Quantum.Gate.HGate 0
          Quantum.Gate.HGate 1
          Quantum.Gate.HGate 2 ],

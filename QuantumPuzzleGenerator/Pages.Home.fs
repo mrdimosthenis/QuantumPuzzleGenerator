@@ -19,7 +19,7 @@ let learnBtn (dispatch: Model.Msg -> unit) =
         (text = "Interactive Learning",
          command =
              fun () ->
-                 Model.Page.LearnPage
+                 Model.Page.LessonCategoriesPage
                  |> Model.SelectPage
                  |> dispatch)
 

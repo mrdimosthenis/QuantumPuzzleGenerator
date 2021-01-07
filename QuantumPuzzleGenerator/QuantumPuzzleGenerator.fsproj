@@ -86,6 +86,7 @@
     <Compile Include="Model.fs" />
     <Compile Include="CircuitDrawing.fs" />
     <Compile Include="Pages.Home.fs" />
+    <Compile Include="Pages.LessonCategories.fs" />
     <Compile Include="Pages.Learn.fs" />
     <Compile Include="Pages.Play.fs" />
     <Compile Include="QuantumPuzzleGenerator.fs" />

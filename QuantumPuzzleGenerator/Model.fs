@@ -3,14 +3,13 @@
 open Fabulous
 open FSharpx.Collections
 
-open QuantumPuzzleMechanics
-
 // types
 
 type Page =
     | HomePage
-    | PlayPage
+    | LessonCategoriesPage
     | LearnPage
+    | PlayPage
 
 type Settings =
     { FontScale: float
@@ -19,11 +18,14 @@ type Settings =
 
 type Model =
     { SelectedPage: Page
+      Lesson: Lesson.Lesson
       Puzzle: Puzzle.Puzzle
       Settings: Settings }
 
 type Msg =
     | SelectPage of Page
+    | SelectLesson of int
+    | LessonGateClick of int
     | PuzzleGateClick of int
     | RegeneratePuzzle
     | NextPuzzle
@@ -32,14 +34,14 @@ type Msg =
 // constructor
 
 let initModel (levelIndex: int) (solvedPuzzlesInLevel: int): Model =
+    let lesson = Lesson.initLesson 0
 
     let puzzle =
         Puzzle.initPuzzle levelIndex solvedPuzzlesInLevel
 
     { SelectedPage = HomePage
-
+      Lesson = lesson
       Puzzle = puzzle
-
       Settings =
           { FontScale = 1.0
             PlotScale = 1.0
@@ -50,9 +52,27 @@ let initModel (levelIndex: int) (solvedPuzzlesInLevel: int): Model =
 let update (msg: Msg) (model: Model) =
     match msg with
     | SelectPage page ->
-        let newModel = { model with SelectedPage = page }
 
-        newModel, Cmd.none
+        { model with SelectedPage = page }, Cmd.none
+        
+    | SelectLesson index ->
+        let lesson = Lesson.initLesson index
+
+        { model with
+            Lesson = lesson
+            SelectedPage = LearnPage }, Cmd.none
+
+    | LessonGateClick index ->
+        let gateSelection =
+            model.Lesson.GateSelection
+            |> List.indexed
+            |> List.map (fun (i, b) -> if i = index then not b else b)
+
+        let lesson =
+            { model.Lesson with
+                  GateSelection = gateSelection }
+
+        { model with Lesson = lesson }, Cmd.none
 
     | PuzzleGateClick index ->
         let gateSelection =

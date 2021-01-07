@@ -27,6 +27,7 @@ module App =
         let page =
             match model.SelectedPage with
             | Model.Page.HomePage -> Pages.Home.stackLayout model dispatch
+            | Model.Page.LessonCategoriesPage -> Pages.LessonCategories.stackLayout model dispatch
             | Model.Page.LearnPage -> Pages.Learn.stackLayout model dispatch
             | Model.Page.PlayPage -> Pages.Play.stackLayout model dispatch
 

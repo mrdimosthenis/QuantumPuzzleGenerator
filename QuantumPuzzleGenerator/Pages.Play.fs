@@ -63,7 +63,7 @@ let regeneratePuzzleOrLevelBtn (currentQState: Matrix.Matrix)
     | true when puzzleIndex >= Constants.numOfPuzzlesPerLevel - 1 -> nextLevelBtn
     | true -> nextPuzzleBtn
 
-let backBtn (dispatch: Model.Msg -> unit) =
+let backBtn (dispatch: Model.Msg -> unit): ViewElement =
     View.Button
         (text = "Back",
          command =
@@ -87,6 +87,10 @@ let stackLayout (model: Model.Model) (dispatch: Model.Msg -> unit): ViewElement 
 
             Matrix.standardProduct gateMatrix qState) model.Puzzle.InitQState
 
+    let circuit =
+        CircuitDrawing.stackLayout model.Puzzle.Level.NumOfQubits model.Puzzle.Gates model.Puzzle.GateSelection
+            model.Settings.CircuitScale (fun i -> i |> Model.Msg.PuzzleGateClick |> dispatch)
+
     let currentQStatePlot =
         QStatePlotting.webView model.Settings.PlotScale model.Puzzle.Level.NumOfQubits currentQState
 
@@ -97,8 +101,7 @@ let stackLayout (model: Model.Model) (dispatch: Model.Msg -> unit): ViewElement 
              [ levelLbl model
                puzzleLbl model
                goalQStatePlot
-               CircuitDrawing.stackLayout model.Puzzle.Level.NumOfQubits model.Puzzle.Gates model.Puzzle.GateSelection
-                   model.Settings.CircuitScale (fun i -> i |> Model.Msg.PuzzleGateClick |> dispatch)
+               circuit
                currentQStatePlot
                regeneratePuzzleOrLevelBtn
                    currentQState
