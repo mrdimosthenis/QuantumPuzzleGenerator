@@ -5,7 +5,7 @@ open Xamarin.Essentials
 // keys
 
 let levelIndexKey: string = "levelIndex"
-let puzzleIndexKey: string = "puzzleIndex"
+let solvedPuzzlesInLevelKey: string = "solvedPuzzlesInLevel"
 
 // functions
 

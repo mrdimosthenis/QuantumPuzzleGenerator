@@ -18,17 +18,16 @@ type Settings =
       CircuitScale: float }
 
 type Puzzle =
-    { InitQState: Matrix.Matrix
+    { Level: Level.Level
+      InitQState: Matrix.Matrix
       TargetQState: Matrix.Matrix
       Gates: Quantum.Gate.Gate list }
 
 type Model =
     { SelectedPage: Page
 
-      Level: Level.Level
-
       Puzzle: Puzzle
-      PuzzleIndex: int
+      SolvedPuzzlesInLevel: int
 
       GateSelection: bool list
 
@@ -66,11 +65,12 @@ let initPuzzle (level: Level.Level): Puzzle =
     let gates =
         gatesRev |> LazyList.rev |> LazyList.toList
 
-    { InitQState = initQState
+    { Level = level
+      InitQState = initQState
       TargetQState = targetQState
       Gates = gates }
 
-let initModel (levelIndex: int) (puzzleIndex: int): Model =
+let initModel (levelIndex: int) (solvedPuzzlesInLevel: int): Model =
 
     let level = List.item levelIndex Level.levels
 
@@ -80,10 +80,8 @@ let initModel (levelIndex: int) (puzzleIndex: int): Model =
 
     { SelectedPage = HomePage
 
-      Level = level
-
       Puzzle = puzzle
-      PuzzleIndex = puzzleIndex
+      SolvedPuzzlesInLevel = solvedPuzzlesInLevel
 
       GateSelection = gateSelection
 
@@ -114,7 +112,7 @@ let update (msg: Msg) (model: Model) =
         newModel, Cmd.none
 
     | Regenerate ->
-        let puzzle = initPuzzle model.Level
+        let puzzle = initPuzzle model.Puzzle.Level
         let gateSelection = List.replicate puzzle.Gates.Length false
 
         let newModel =
@@ -125,35 +123,36 @@ let update (msg: Msg) (model: Model) =
         newModel, Cmd.none
 
     | NextPuzzle ->
-        let puzzle = initPuzzle model.Level
-        let puzzleIndex = model.PuzzleIndex + 1
+        let puzzle = initPuzzle model.Puzzle.Level
+        let solvedPuzzlesInLevel = model.SolvedPuzzlesInLevel + 1
         let gateSelection = List.replicate puzzle.Gates.Length false
 
-        Preferences.setInt Preferences.puzzleIndexKey puzzleIndex
+        Preferences.setInt Preferences.solvedPuzzlesInLevelKey solvedPuzzlesInLevel
 
         let newModel =
             { model with
                   Puzzle = puzzle
-                  PuzzleIndex = puzzleIndex
+                  SolvedPuzzlesInLevel = solvedPuzzlesInLevel
                   GateSelection = gateSelection }
 
         newModel, Cmd.none
 
     | NextLevel ->
-        let levelIndex = model.Level.Index + 1
-        let level = List.item levelIndex Level.levels
-        let puzzle = initPuzzle level
-        let puzzleIndex = 0
+        let levelIndex = model.Puzzle.Level.Index + 1
+
+        let puzzle =
+            Level.levels |> List.item levelIndex |> initPuzzle
+
+        let solvedPuzzlesInLevel = 0
         let gateSelection = List.replicate puzzle.Gates.Length false
 
         Preferences.setInt Preferences.levelIndexKey levelIndex
-        Preferences.setInt Preferences.puzzleIndexKey puzzleIndex
+        Preferences.setInt Preferences.solvedPuzzlesInLevelKey solvedPuzzlesInLevel
 
         let newModel =
             { model with
-                  Level = level
                   Puzzle = puzzle
-                  PuzzleIndex = puzzleIndex
+                  SolvedPuzzlesInLevel = solvedPuzzlesInLevel
                   GateSelection = gateSelection }
 
         newModel, Cmd.none

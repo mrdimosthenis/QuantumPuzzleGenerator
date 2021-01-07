@@ -8,7 +8,7 @@ open QuantumPuzzleMechanics
 open QuantumPuzzleGenerator
 
 let levelLbl (model: Model.Model): ViewElement =
-    let displayedLevel = model.Level.Index + 1
+    let displayedLevel = model.Puzzle.Level.Index + 1
 
     View.Label
         (text = sprintf "Level: %i" displayedLevel,
@@ -18,10 +18,10 @@ let levelLbl (model: Model.Model): ViewElement =
          verticalOptions = LayoutOptions.Center)
 
 let puzzleLbl (model: Model.Model): ViewElement =
-    let displayedPuzzle = model.PuzzleIndex + 1
+    let displayedPuzzle = model.SolvedPuzzlesInLevel + 1
 
     let text =
-        if model.Level.Index < Level.levels.Length - 1
+        if model.Puzzle.Level.Index < Level.levels.Length - 1
         then sprintf "Puzzle: %i/%i" displayedPuzzle Constants.numOfPuzzlesPerLevel
         else sprintf "Puzzle: %i" displayedPuzzle
 
@@ -73,7 +73,7 @@ let backBtn (dispatch: Model.Msg -> unit) =
 let stackLayout (model: Model.Model) (dispatch: Model.Msg -> unit): ViewElement =
     let goalQStatePlot =
         model.Puzzle.TargetQState
-        |> QStatePlotting.webView model.Settings.PlotScale model.Level.NumOfQubits
+        |> QStatePlotting.webView model.Settings.PlotScale model.Puzzle.Level.NumOfQubits
 
     let currentQState =
         List.zip model.Puzzle.Gates model.GateSelection
@@ -81,12 +81,12 @@ let stackLayout (model: Model.Model) (dispatch: Model.Msg -> unit): ViewElement 
         |> List.map fst
         |> List.fold (fun qState gate ->
             let gateMatrix =
-                Quantum.Gate.matrix model.Level.NumOfQubits gate
+                Quantum.Gate.matrix model.Puzzle.Level.NumOfQubits gate
 
             Matrix.standardProduct gateMatrix qState) model.Puzzle.InitQState
 
     let currentQStatePlot =
-        QStatePlotting.webView model.Settings.PlotScale model.Level.NumOfQubits currentQState
+        QStatePlotting.webView model.Settings.PlotScale model.Puzzle.Level.NumOfQubits currentQState
 
     View.StackLayout
         (horizontalOptions = LayoutOptions.Center,
@@ -100,7 +100,7 @@ let stackLayout (model: Model.Model) (dispatch: Model.Msg -> unit): ViewElement 
                regeneratePuzzleOrLevelBtn
                    currentQState
                    model.Puzzle.TargetQState
-                   model.Level.Index
-                   model.PuzzleIndex
+                   model.Puzzle.Level.Index
+                   model.SolvedPuzzlesInLevel
                    dispatch
                backBtn dispatch ])

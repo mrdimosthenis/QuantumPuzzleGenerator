@@ -32,21 +32,21 @@ let gateImage (numOfQubits: int) (gate: Quantum.Gate.Gate): Image.Value =
 
 let stackLayout (model: Model.Model) (dispatch: Model.Msg -> unit): ViewElement =
     let gateWidth =
-        model.Level.NumOfGates
+        model.Puzzle.Level.NumOfGates
         |> float
         |> (/) Constants.deviceWidth
         |> (*) 0.8
         |> (*) model.Settings.CircuitScale
 
     let gateHeight =
-        model.Level.NumOfQubits |> float |> (*) gateWidth
+        model.Puzzle.Level.NumOfQubits |> float |> (*) gateWidth
 
     let children =
         List.zip model.Puzzle.Gates model.GateSelection
         |> List.indexed
         |> List.map (fun (i, (g, b)) ->
             View.ImageButton
-                (source = gateImage model.Level.NumOfQubits g,
+                (source = gateImage model.Puzzle.Level.NumOfQubits g,
                  width = gateWidth,
                  height = gateHeight,
                  backgroundColor = (if b then Color.YellowGreen else Color.LightBlue),

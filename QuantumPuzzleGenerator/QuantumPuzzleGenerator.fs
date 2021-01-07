@@ -15,13 +15,13 @@ module App =
         |> Preferences.tryGetInt
         |> Option.defaultValue 0
 
-    let puzzleLevelIndex =
-        Preferences.puzzleIndexKey
+    let solvedPuzzlesInLevel =
+        Preferences.solvedPuzzlesInLevelKey
         |> Preferences.tryGetInt
         |> Option.defaultValue 0
 
     let init () =
-        Model.initModel initLevelIndex puzzleLevelIndex, Cmd.none
+        Model.initModel initLevelIndex solvedPuzzlesInLevel, Cmd.none
 
     let view (model: Model.Model) (dispatch: Model.Msg -> unit) =
         let page =
