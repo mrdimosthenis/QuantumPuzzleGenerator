@@ -18,7 +18,7 @@ let levelLbl (model: Model.Model): ViewElement =
          verticalOptions = LayoutOptions.Center)
 
 let puzzleLbl (model: Model.Model): ViewElement =
-    let displayedPuzzle = model.SolvedPuzzlesInLevel + 1
+    let displayedPuzzle = model.Puzzle.SolvedPuzzlesInLevel + 1
 
     let text =
         if model.Puzzle.Level.Index < Level.levels.Length - 1
@@ -76,7 +76,7 @@ let stackLayout (model: Model.Model) (dispatch: Model.Msg -> unit): ViewElement 
         |> QStatePlotting.webView model.Settings.PlotScale model.Puzzle.Level.NumOfQubits
 
     let currentQState =
-        List.zip model.Puzzle.Gates model.GateSelection
+        List.zip model.Puzzle.Gates model.Puzzle.GateSelection
         |> List.filter snd
         |> List.map fst
         |> List.fold (fun qState gate ->
@@ -101,6 +101,6 @@ let stackLayout (model: Model.Model) (dispatch: Model.Msg -> unit): ViewElement 
                    currentQState
                    model.Puzzle.TargetQState
                    model.Puzzle.Level.Index
-                   model.SolvedPuzzlesInLevel
+                   model.Puzzle.SolvedPuzzlesInLevel
                    dispatch
                backBtn dispatch ])

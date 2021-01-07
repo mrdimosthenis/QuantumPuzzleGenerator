@@ -19,18 +19,15 @@ type Settings =
 
 type Puzzle =
     { Level: Level.Level
+      SolvedPuzzlesInLevel: int
       InitQState: Matrix.Matrix
       TargetQState: Matrix.Matrix
-      Gates: Quantum.Gate.Gate list }
+      Gates: Quantum.Gate.Gate list
+      GateSelection: bool list }
 
 type Model =
     { SelectedPage: Page
-
       Puzzle: Puzzle
-      SolvedPuzzlesInLevel: int
-
-      GateSelection: bool list
-
       Settings: Settings }
 
 type Msg =
@@ -42,7 +39,9 @@ type Msg =
 
 // initialization
 
-let initPuzzle (level: Level.Level): Puzzle =
+let initPuzzle (levelIndex: int) (solvedPuzzlesInLevel: int): Puzzle =
+    let level = List.item levelIndex Level.levels
+
     let (gatesRev, qStates) =
         Selection.selectGatesAndQStates
             Constants.random
@@ -65,25 +64,23 @@ let initPuzzle (level: Level.Level): Puzzle =
     let gates =
         gatesRev |> LazyList.rev |> LazyList.toList
 
+    let gateSelection = List.replicate gates.Length false
+
     { Level = level
+      SolvedPuzzlesInLevel = solvedPuzzlesInLevel
       InitQState = initQState
       TargetQState = targetQState
-      Gates = gates }
+      Gates = gates
+      GateSelection = gateSelection }
 
 let initModel (levelIndex: int) (solvedPuzzlesInLevel: int): Model =
 
-    let level = List.item levelIndex Level.levels
-
-    let puzzle = initPuzzle level
-
-    let gateSelection = List.replicate puzzle.Gates.Length false
+    let puzzle =
+        initPuzzle levelIndex solvedPuzzlesInLevel
 
     { SelectedPage = HomePage
 
       Puzzle = puzzle
-      SolvedPuzzlesInLevel = solvedPuzzlesInLevel
-
-      GateSelection = gateSelection
 
       Settings =
           { FontScale = 1.0
@@ -100,59 +97,41 @@ let update (msg: Msg) (model: Model) =
         newModel, Cmd.none
 
     | GateClick index ->
-        let newGateSelection =
-            model.GateSelection
+        let gateSelection =
+            model.Puzzle.GateSelection
             |> List.indexed
             |> List.map (fun (i, b) -> if i = index then not b else b)
 
-        let newModel =
-            { model with
-                  GateSelection = newGateSelection }
-
-        newModel, Cmd.none
-
-    | Regenerate ->
-        let puzzle = initPuzzle model.Puzzle.Level
-        let gateSelection = List.replicate puzzle.Gates.Length false
-
-        let newModel =
-            { model with
-                  Puzzle = puzzle
+        let puzzle =
+            { model.Puzzle with
                   GateSelection = gateSelection }
 
-        newModel, Cmd.none
+        { model with Puzzle = puzzle }, Cmd.none
+
+    | Regenerate ->
+        let puzzle =
+            initPuzzle model.Puzzle.Level.Index model.Puzzle.SolvedPuzzlesInLevel
+
+        { model with Puzzle = puzzle }, Cmd.none
 
     | NextPuzzle ->
-        let puzzle = initPuzzle model.Puzzle.Level
-        let solvedPuzzlesInLevel = model.SolvedPuzzlesInLevel + 1
-        let gateSelection = List.replicate puzzle.Gates.Length false
+        let solvedPuzzlesInLevel = model.Puzzle.SolvedPuzzlesInLevel + 1
 
         Preferences.setInt Preferences.solvedPuzzlesInLevelKey solvedPuzzlesInLevel
 
-        let newModel =
-            { model with
-                  Puzzle = puzzle
-                  SolvedPuzzlesInLevel = solvedPuzzlesInLevel
-                  GateSelection = gateSelection }
+        let puzzle =
+            initPuzzle model.Puzzle.Level.Index solvedPuzzlesInLevel
 
-        newModel, Cmd.none
+        { model with Puzzle = puzzle }, Cmd.none
 
     | NextLevel ->
         let levelIndex = model.Puzzle.Level.Index + 1
-
-        let puzzle =
-            Level.levels |> List.item levelIndex |> initPuzzle
-
         let solvedPuzzlesInLevel = 0
-        let gateSelection = List.replicate puzzle.Gates.Length false
 
         Preferences.setInt Preferences.levelIndexKey levelIndex
         Preferences.setInt Preferences.solvedPuzzlesInLevelKey solvedPuzzlesInLevel
 
-        let newModel =
-            { model with
-                  Puzzle = puzzle
-                  SolvedPuzzlesInLevel = solvedPuzzlesInLevel
-                  GateSelection = gateSelection }
+        let puzzle =
+            initPuzzle levelIndex solvedPuzzlesInLevel
 
-        newModel, Cmd.none
+        { model with Puzzle = puzzle }, Cmd.none
