@@ -1,5 +1,6 @@
 ﻿module QuantumPuzzleGenerator.CircuitDrawing
 
+open FSharpx.Collections
 open Fabulous
 open Fabulous.XamarinForms
 open Xamarin.Forms
@@ -30,27 +31,33 @@ let gateImage (numOfQubits: int) (gate: Quantum.Gate.Gate): Image.Value =
 
     Resources.gateImage invertedGate numOfQubits
 
-let stackLayout (model: Model.Model) (dispatch: Model.Msg -> unit): ViewElement =
+let stackLayout
+    (numOfQubits: int)
+    (gates: Quantum.Gate.Gate list)
+    (gateSelection: bool list)
+    (circuitScaleSetting: float)
+    (gateClickCommand: int -> unit)
+    : ViewElement =
     let gateWidth =
-        model.Puzzle.Level.NumOfGates
+        gates.Length
         |> float
         |> (/) Constants.deviceWidth
         |> (*) 0.8
-        |> (*) model.Settings.CircuitScale
+        |> (*) circuitScaleSetting
 
     let gateHeight =
-        model.Puzzle.Level.NumOfQubits |> float |> (*) gateWidth
+        numOfQubits |> float |> (*) gateWidth
 
     let children =
-        List.zip model.Puzzle.Gates model.Puzzle.GateSelection
+        List.zip gates gateSelection
         |> List.indexed
         |> List.map (fun (i, (g, b)) ->
             View.ImageButton
-                (source = gateImage model.Puzzle.Level.NumOfQubits g,
+                (source = gateImage numOfQubits g,
                  width = gateWidth,
                  height = gateHeight,
                  backgroundColor = (if b then Color.YellowGreen else Color.LightBlue),
-                 command = fun () -> i |> Model.GateClick |> dispatch))
+                 command = fun () -> gateClickCommand i))
 
     View.StackLayout
         (orientation = StackOrientation.Horizontal,

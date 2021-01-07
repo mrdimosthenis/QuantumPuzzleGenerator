@@ -24,8 +24,8 @@ type Model =
 
 type Msg =
     | SelectPage of Page
-    | GateClick of int
-    | Regenerate
+    | PuzzleGateClick of int
+    | RegeneratePuzzle
     | NextPuzzle
     | NextLevel
 
@@ -54,7 +54,7 @@ let update (msg: Msg) (model: Model) =
 
         newModel, Cmd.none
 
-    | GateClick index ->
+    | PuzzleGateClick index ->
         let gateSelection =
             model.Puzzle.GateSelection
             |> List.indexed
@@ -66,7 +66,7 @@ let update (msg: Msg) (model: Model) =
 
         { model with Puzzle = puzzle }, Cmd.none
 
-    | Regenerate ->
+    | RegeneratePuzzle ->
         let puzzle =
             Puzzle.initPuzzle model.Puzzle.Level.Index model.Puzzle.SolvedPuzzlesInLevel
 

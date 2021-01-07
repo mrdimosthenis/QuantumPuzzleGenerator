@@ -40,7 +40,9 @@ let regeneratePuzzleOrLevelBtn (currentQState: Matrix.Matrix)
                                : ViewElement =
     let regenerateBtn =
         View.Button
-            (text = "Regenerate", image = Resources.image "icons.refresh", command = fun () -> dispatch Model.Regenerate)
+            (text = "Regenerate",
+             image = Resources.image "icons.refresh",
+             command = fun () -> dispatch Model.RegeneratePuzzle)
 
     let nextPuzzleBtn =
         View.Button
@@ -95,7 +97,8 @@ let stackLayout (model: Model.Model) (dispatch: Model.Msg -> unit): ViewElement 
              [ levelLbl model
                puzzleLbl model
                goalQStatePlot
-               CircuitDrawing.stackLayout model dispatch
+               CircuitDrawing.stackLayout model.Puzzle.Level.NumOfQubits model.Puzzle.Gates model.Puzzle.GateSelection
+                   model.Settings.CircuitScale (fun i -> i |> Model.Msg.PuzzleGateClick |> dispatch)
                currentQStatePlot
                regeneratePuzzleOrLevelBtn
                    currentQState
