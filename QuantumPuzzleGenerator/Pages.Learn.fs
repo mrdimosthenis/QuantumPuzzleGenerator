@@ -32,6 +32,16 @@ let circuit (model: Model.Model) (dispatch: Model.Msg -> unit): ViewElement =
     CircuitDrawing.stackLayout model.Lesson.LessonCategory.NumOfQubits model.Lesson.LessonCategory.Gates
         model.Lesson.GateSelection model.Settings.CircuitScale (fun i -> i |> Model.Msg.LessonGateClick |> dispatch)
 
+let regenerateBtn (model: Model.Model) (dispatch: Model.Msg -> unit): ViewElement =
+    View.Button
+        (text = "Regenerate",
+         image = Resources.image "icons.refresh",
+         command =
+             fun () ->
+                 model.Lesson.LessonCategory.Index
+                 |> Model.SelectLesson
+                 |> dispatch)
+
 let backBtn (dispatch: Model.Msg -> unit) =
     View.Button
         (text = "Back",
@@ -43,16 +53,17 @@ let backBtn (dispatch: Model.Msg -> unit) =
 
 let stackLayout (model: Model.Model) (dispatch: Model.Msg -> unit): ViewElement =
     let qStateForColorCircle =
-        if model.Lesson.LessonCategory.NumOfQubits = 1
-            then List.zip model.Lesson.LessonCategory.Gates model.Lesson.GateSelection
-                 |> List.filter snd
-                 |> List.map fst
-                 |> List.fold (fun qState gate ->
-                     let gateMatrix =
-                         Quantum.Gate.matrix model.Lesson.LessonCategory.NumOfQubits gate
-         
-                     Matrix.standardProduct gateMatrix qState) model.Lesson.QState
-            else Matrix.zero 1 2
+        if model.Lesson.LessonCategory.NumOfQubits = 1 then
+            List.zip model.Lesson.LessonCategory.Gates model.Lesson.GateSelection
+            |> List.filter snd
+            |> List.map fst
+            |> List.fold (fun qState gate ->
+                let gateMatrix =
+                    Quantum.Gate.matrix model.Lesson.LessonCategory.NumOfQubits gate
+
+                Matrix.standardProduct gateMatrix qState) model.Lesson.QState
+        else
+            Matrix.zero 1 2
 
     let children =
         [ [ lessonLbl model ]
@@ -63,6 +74,7 @@ let stackLayout (model: Model.Model) (dispatch: Model.Msg -> unit): ViewElement 
           if model.Lesson.LessonCategory.IsHueDisplayed
           then [ ColorCircle.webView model.Settings.ColorCircleScale qStateForColorCircle ]
           else []
+          [ regenerateBtn model dispatch ]
           [ backBtn dispatch ] ]
         |> List.concat
 

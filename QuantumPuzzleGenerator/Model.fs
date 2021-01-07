@@ -56,13 +56,16 @@ let update (msg: Msg) (model: Model) =
     | SelectPage page ->
 
         { model with SelectedPage = page }, Cmd.none
-        
+
     | SelectLesson index ->
         let lesson = Lesson.initLesson index
 
-        { model with
-            Lesson = lesson
-            SelectedPage = LearnPage }, Cmd.none
+        let newModel =
+            { model with
+                  Lesson = lesson
+                  SelectedPage = LearnPage }
+
+        newModel, Cmd.none
 
     | LessonGateClick index ->
         let gateSelection =
