@@ -8,6 +8,7 @@
   <ItemGroup>
     <EmbeddedResource Include="resources\text_files\vis_graph3d_601.js" />
     <EmbeddedResource Include="resources\text_files\single_plot.js" />
+    <EmbeddedResource Include="resources\text_files\color_circle.js" />
     <EmbeddedResource Include="resources\images\gates\z32.png" />
     <EmbeddedResource Include="resources\images\gates\z31.png" />
     <EmbeddedResource Include="resources\images\gates\z30.png" />
@@ -73,7 +74,6 @@
     <EmbeddedResource Include="resources\images\icons\refresh.png" />
     <EmbeddedResource Include="resources\images\icons\zoom_out.png" />
     <EmbeddedResource Include="resources\images\icons\zoom_in.png" />
-    <EmbeddedResource Include="resources\images\hue.png" />
     <Compile Include="Constants.fs" />
     <Compile Include="Resources.fs" />
     <Compile Include="Preferences.fs" />
@@ -83,6 +83,7 @@
     <Compile Include="Level.fs" />
     <Compile Include="Puzzle.fs" />
     <Compile Include="QStatePlotting.fs" />
+    <Compile Include="ColorCircle.fs" />
     <Compile Include="Model.fs" />
     <Compile Include="CircuitDrawing.fs" />
     <Compile Include="Pages.Home.fs" />

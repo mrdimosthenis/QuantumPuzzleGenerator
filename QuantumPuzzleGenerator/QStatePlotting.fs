@@ -8,10 +8,10 @@ open Fabulous
 open Fabulous.XamarinForms
 open Xamarin
 open FSharpx.Collections
-
-open QuantumPuzzleMechanics
 open Newtonsoft.Json
 open Newtonsoft.Json.Serialization
+
+open QuantumPuzzleMechanics
 
 // types
 

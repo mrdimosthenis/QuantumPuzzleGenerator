@@ -14,7 +14,8 @@ type Page =
 type Settings =
     { FontScale: float
       PlotScale: float
-      CircuitScale: float }
+      CircuitScale: float
+      ColorCircleScale: float }
 
 type Model =
     { SelectedPage: Page
@@ -45,7 +46,8 @@ let initModel (levelIndex: int) (solvedPuzzlesInLevel: int): Model =
       Settings =
           { FontScale = 1.0
             PlotScale = 1.0
-            CircuitScale = 1.0 } }
+            CircuitScale = 1.0
+            ColorCircleScale = 1.0 } }
 
 // update function
 
