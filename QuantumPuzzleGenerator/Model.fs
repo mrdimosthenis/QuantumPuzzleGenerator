@@ -17,17 +17,9 @@ type Settings =
       PlotScale: float
       CircuitScale: float }
 
-type Puzzle =
-    { Level: Level.Level
-      SolvedPuzzlesInLevel: int
-      InitQState: Matrix.Matrix
-      TargetQState: Matrix.Matrix
-      Gates: Quantum.Gate.Gate list
-      GateSelection: bool list }
-
 type Model =
     { SelectedPage: Page
-      Puzzle: Puzzle
+      Puzzle: Puzzle.Puzzle
       Settings: Settings }
 
 type Msg =
@@ -37,46 +29,12 @@ type Msg =
     | NextPuzzle
     | NextLevel
 
-// initialization
-
-let initPuzzle (levelIndex: int) (solvedPuzzlesInLevel: int): Puzzle =
-    let level = List.item levelIndex Level.levels
-
-    let (gatesRev, qStates) =
-        Selection.selectGatesAndQStates
-            Constants.random
-            level.MaxGateType
-            level.NumOfGates
-            level.NumOfQubits
-            level.IsAbsoluteInitQState
-            Constants.differenceThreshold
-
-    let (initQState, otherQStates) =
-        qStates |> LazyList.rev |> LazyList.uncons
-
-    let otherQStatesLength = LazyList.length otherQStates
-
-    let randomQStatesIndex =
-        Generator.nextInt Constants.random otherQStatesLength ()
-
-    let targetQState = Seq.item randomQStatesIndex otherQStates
-
-    let gates =
-        gatesRev |> LazyList.rev |> LazyList.toList
-
-    let gateSelection = List.replicate gates.Length false
-
-    { Level = level
-      SolvedPuzzlesInLevel = solvedPuzzlesInLevel
-      InitQState = initQState
-      TargetQState = targetQState
-      Gates = gates
-      GateSelection = gateSelection }
+// constructor
 
 let initModel (levelIndex: int) (solvedPuzzlesInLevel: int): Model =
 
     let puzzle =
-        initPuzzle levelIndex solvedPuzzlesInLevel
+        Puzzle.initPuzzle levelIndex solvedPuzzlesInLevel
 
     { SelectedPage = HomePage
 
@@ -110,7 +68,7 @@ let update (msg: Msg) (model: Model) =
 
     | Regenerate ->
         let puzzle =
-            initPuzzle model.Puzzle.Level.Index model.Puzzle.SolvedPuzzlesInLevel
+            Puzzle.initPuzzle model.Puzzle.Level.Index model.Puzzle.SolvedPuzzlesInLevel
 
         { model with Puzzle = puzzle }, Cmd.none
 
@@ -120,7 +78,7 @@ let update (msg: Msg) (model: Model) =
         Preferences.setInt Preferences.solvedPuzzlesInLevelKey solvedPuzzlesInLevel
 
         let puzzle =
-            initPuzzle model.Puzzle.Level.Index solvedPuzzlesInLevel
+            Puzzle.initPuzzle model.Puzzle.Level.Index solvedPuzzlesInLevel
 
         { model with Puzzle = puzzle }, Cmd.none
 
@@ -132,6 +90,6 @@ let update (msg: Msg) (model: Model) =
         Preferences.setInt Preferences.solvedPuzzlesInLevelKey solvedPuzzlesInLevel
 
         let puzzle =
-            initPuzzle levelIndex solvedPuzzlesInLevel
+            Puzzle.initPuzzle levelIndex solvedPuzzlesInLevel
 
         { model with Puzzle = puzzle }, Cmd.none
