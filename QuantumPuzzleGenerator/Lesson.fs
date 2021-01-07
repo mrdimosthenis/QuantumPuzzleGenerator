@@ -4,91 +4,25 @@ open QuantumPuzzleMechanics
 
 // types
 
-type Category =
-    { Index: int
-      Title: string
-      Description: string
-      NumOfQubits: int
-      Gates: Quantum.Gate.Gate list
-      IsInAbsoluteQState: bool
-      IsHueDisplayed: bool }
-
 type Lesson =
-    { Category: Category
+    { LessonCategory: LessonCategory.LessonCategory
       QState: Matrix.Matrix
       GateSelection: bool list }
 
 // constructor
 
-let category (index: int)
-             (title: string)
-             (description: string)
-             (numOfQubits: int)
-             (gates: Quantum.Gate.Gate list)
-             (isInAbsoluteQState: bool)
-             (isHueDisplayed: bool)
-             : Category =
-    { Index = index
-      Title = title
-      Description = description
-      NumOfQubits = numOfQubits
-      Gates = gates
-      IsInAbsoluteQState = isInAbsoluteQState
-      IsHueDisplayed = isHueDisplayed }
+let initLesson (categoryIndex: int): Lesson =
+    let category =
+        List.item categoryIndex LessonCategory.lessonCategories
 
-// constants
+    let qState =
+        if category.IsInAbsoluteQState
+        then Generator.nextAbsolutQState Constants.random category.NumOfQubits ()
+        else Generator.nextQState Constants.random category.NumOfQubits ()
 
-let descriptions: string list =
-    [ ""
-      ""
-      ""
-      ""
-      ""
-      ""
-      ""
-      ""
-      ""
-      ""
-      ""
-      ""
-      ""
-      ""
-      ""
-      ""
-      ""
-      ""
-      ""
-      ""
-      ""
-      ""
-      ""
-      ""
-      ""
-      ""
-      ""
-      ""
-      ""
-      ""
-      ""
-      ""
-      ""
-      ""
-      ""
-      ""
-      ""
-      ""
-      "" ]
+    let gateSelection =
+        List.replicate category.Gates.Length false
 
-let categories: Category list =
-    // Title NumOfQubits Gates IsInAbsoluteQState IsHueDisplayed
-    [ ("", 1, [], true, false)
-      
-      
-      
-      
-      
-      
-       ]
-    |> List.indexed
-    |> List.map2 (fun description (i, (title, numOfQubits, gates, isInAbsoluteQState, isHueDisplayed)) ->
-        category i title description numOfQubits gates isInAbsoluteQState isHueDisplayed) descriptions
+    { LessonCategory = category
+      QState = qState
+      GateSelection = gateSelection }

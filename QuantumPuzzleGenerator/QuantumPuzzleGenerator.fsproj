@@ -77,6 +77,7 @@
     <Compile Include="Constants.fs" />
     <Compile Include="Resources.fs" />
     <Compile Include="Preferences.fs" />
+    <Compile Include="LessonCategory.fs" />
     <Compile Include="Lesson.fs" />
     <Compile Include="Level.fs" />
     <Compile Include="Selection.fs" />
