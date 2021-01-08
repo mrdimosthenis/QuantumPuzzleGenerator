@@ -34,26 +34,33 @@ let lessonCategory (index: int)
 // constants
 
 let descriptions: string list =
-    [ ""
-      ""
-      ""
-      ""
-      ""
-      ""
-      ""
-      ""
-      ""
-      ""
-      ""
-      ""
-      ""
-      ""
-      ""
-      ""
-      ""
-      ""
-      ""
-      "" ]
+    [ """A qubit is like a bit. When we measure it, it is either ZERO or ONE. The outcomes of a measured qubit are represented with black and white disks.
+When the qubit is ZERO, a black disk is placed on the left and a white disk is placed on the right.
+When the qubit is ONE, a black disk is placed on the right and a white disk is placed on the left."""
+      """Before we measure a qubit, we don't know if it is going to be ZERO or ONE. Sometimes though, we know the probability of the outcomes. The outcomes of an unmeasured qubit are represented with gray disks.
+When the qubit is more likely to be ZERO, a dark gray disk is placed on the left and a light gray disk is placed on the right.
+When the qubit is more likely to be ONE, a dark gray disk is placed on the right and a light gray disk is placed on the left."""
+      """For two qubits, we have four outcomes: ZER0-ZER0, ZERO-ONE, ONE-ZERO and ONE-ONE.
+The disks on the left represent the outcomes of the first qubit to be ZERO.
+The disks on the right represent the outcomes of the first qubit to be ONE.
+The disks on the front represent the outcomes of the second qubit to be ZERO.
+The disks on the back represent the outcomes of the second qubit to be ONE."""
+      """For three qubits, we have eight outcomes: ZER0-ZER0-ZERO, ZER0-ZER0-ONE, ZER0-ONE-ZERO, ZER0-ONE-ONE, ONE-ZER0-ZERO, ONE-ZER0-ONE, ONE-ONE-ZERO and ONE-ONE-ONE.
+The disks on the bottom represent the outcomes of the third qubit to be ZERO.
+The disks on the top represent the outcomes of the third qubit to be ONE."""
+      """We can change the probability of the outcomes by making a qubit to get through a gate. The ⊕ gate turns ONE into ZERO and vise versa. Click the gate bellow to see it happen!"""
+      """When a qubit gets through the ⊕ gate, the place of the disks is switched, in the representation. Click the regenerate button and the gate bellow to see it happen multiple times."""
+      """For two qubits, when the first one gets through the ⊕ gate, the left disks are exchanged with the right ones. When the second qubit gets through the ⊕ gate, the front disks are exchanged with the ones that are placed at the back."""
+      """For three qubits, when the third one gets through the ⊕ gate, the top disks are exchanged with the bottom ones."""
+      """When a qubit gets through the Z gate, its relative phase changes. We don't need to know what the relative phase is to solve the puzzles. We can see that only the color of the right circle changes. When the Z gate is clicked, the gray line points to the opposite direction, in the colored clock bellow."""
+      """For two qubits, when the first one gets through the Z gate, the color of the right circles change. When the second qubit gets through the Z gate, the color of the back circles change."""
+      """For three qubits, when the third one gets through the Z gate, the color of the top circles change."""
+      """The Y gate turns ONE into ZERO and vise versa. It also changes the color of the circles."""
+      """By comparing the colored clock instances we could find a pattern of how the color changes. It involves an angle bisector, two supplementary angles and the right-hand rule. Do you see it?"""
+      """The gate H inverts the certainty of the outcomes. Black and white disks turn into gray."""
+      """The more certain we are about the outcomes, the more uncertain we are, after the qubit gets through the H gate."""
+      """The Swap gate exchanges the disks and the circles that are placed in a diagonal."""
+      """Compared to a simple one, the controlled gate affects the half of the disks and circles.""" ]
 
 let lessonCategories: LessonCategory list =
     // Title NumOfQubits Gates IsInAbsoluteQState IsHueDisplayedOpt
@@ -95,38 +102,15 @@ let lessonCategories: LessonCategory list =
 
       ("Gate Y, Absolute State", 1, [ Quantum.Gate.YGate 0 ], true, None)
       ("Gate Y, Random State", 1, [ Quantum.Gate.YGate 0 ], false, Some true)
-      ("Gate Y, Two Qubits",
-       2,
-       [ Quantum.Gate.YGate 1
-         Quantum.Gate.YGate 0 ],
-       false,
-       Some false)
 
-      ("Gate H, Absolute State", 1, [ Quantum.Gate.HGate 0 ], true, Some true)
+      ("Gate H, Absolute State", 1, [ Quantum.Gate.HGate 0 ], true, None)
       ("Gate H, Random State", 1, [ Quantum.Gate.HGate 0 ], false, Some true)
 
       ("Gate Swap, Two Qubits", 2, [ Quantum.Gate.SwapGate(1, 0) ], false, None)
-      ("Gate Swap, Three Qubits",
-       3,
-       [ Quantum.Gate.SwapGate(1, 2)
-         Quantum.Gate.SwapGate(0, 2)
-         Quantum.Gate.SwapGate(0, 1) ],
-       false,
-       None)
 
       ("Controlled ⊕ Gate, Two Qubits",
        2,
        [ Quantum.Gate.CXGate(1, 0)
-         Quantum.Gate.CXGate(0, 1) ],
-       false,
-       None)
-      ("Controlled ⊕ Gate, Three Qubits",
-       3,
-       [ Quantum.Gate.CXGate(2, 1)
-         Quantum.Gate.CXGate(1, 2)
-         Quantum.Gate.CXGate(2, 0)
-         Quantum.Gate.CXGate(0, 2)
-         Quantum.Gate.CXGate(1, 0)
          Quantum.Gate.CXGate(0, 1) ],
        false,
        None) ]

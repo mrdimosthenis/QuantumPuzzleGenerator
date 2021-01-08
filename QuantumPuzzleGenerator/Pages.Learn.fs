@@ -7,12 +7,18 @@ open Xamarin.Forms
 
 open QuantumPuzzleMechanics
 open QuantumPuzzleGenerator
-open Xamarin.Forms.Shapes
 
-let lessonLbl (model: Model.Model): ViewElement =
+let titleLbl (model: Model.Model): ViewElement =
     View.Label
         (text = model.Lesson.LessonCategory.Title,
          horizontalTextAlignment = TextAlignment.Center,
+         verticalTextAlignment = TextAlignment.Center,
+         horizontalOptions = LayoutOptions.Center,
+         verticalOptions = LayoutOptions.Center)
+        
+let descriptionLbl (model: Model.Model): ViewElement =
+    View.Label
+        (text = model.Lesson.LessonCategory.Description,
          verticalTextAlignment = TextAlignment.Center,
          horizontalOptions = LayoutOptions.Center,
          verticalOptions = LayoutOptions.Center)
@@ -70,7 +76,8 @@ let stackLayout (model: Model.Model) (dispatch: Model.Msg -> unit): ViewElement 
         | None -> []
 
     let children =
-        [ [ lessonLbl model ]
+        [ [ titleLbl model ]
+          [ descriptionLbl model ]
           [ qStatePlot model ]
           if model.Lesson.LessonCategory.Gates.IsEmpty
           then []

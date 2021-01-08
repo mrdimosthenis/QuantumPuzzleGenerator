@@ -42,7 +42,7 @@ let stackLayout
         gates.Length
         |> float
         |> (/) Constants.deviceWidth
-        |> (*) 0.8
+        |> (*) 0.5
         |> (*) circuitScaleSetting
 
     let gateHeight =
