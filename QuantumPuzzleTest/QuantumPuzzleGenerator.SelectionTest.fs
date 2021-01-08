@@ -125,34 +125,34 @@ let ``Select puzzle for level 8`` () = numOfDiffQStates 7 |> should equal 8
 let ``Select puzzle for level 9`` () = numOfDiffQStates 8 |> should equal 8
 
 [<Fact>]
-let ``Select puzzle for level 10`` () = numOfDiffQStates 9 |> should equal 8
+let ``Select puzzle for level 10`` () = numOfDiffQStates 9 |> should equal 16
 
 [<Fact>]
-let ``Select puzzle for level 11`` () = numOfDiffQStates 10 |> should equal 8
+let ``Select puzzle for level 11`` () = numOfDiffQStates 10 |> should equal 32
 
 [<Fact>]
-let ``Select puzzle for level 12`` () = numOfDiffQStates 11 |> should equal 8
+let ``Select puzzle for level 12`` () = numOfDiffQStates 11 |> should equal 64
 
 [<Fact>]
-let ``Select puzzle for level 13`` () = numOfDiffQStates 12 |> should equal 16
+let ``Select puzzle for level 13`` () = numOfDiffQStates 12 |> should equal 128
 
 [<Fact>]
-let ``Select puzzle for level 14`` () = numOfDiffQStates 13 |> should equal 16
+let ``Select puzzle for level 14`` () = numOfDiffQStates 13 |> should equal 8
 
 [<Fact>]
-let ``Select puzzle for level 15`` () = numOfDiffQStates 14 |> should equal 32
+let ``Select puzzle for level 15`` () = numOfDiffQStates 14 |> should equal 8
 
 [<Fact>]
-let ``Select puzzle for level 16`` () = numOfDiffQStates 15 |> should equal 32
+let ``Select puzzle for level 16`` () = numOfDiffQStates 15 |> should equal 8
 
 [<Fact>]
-let ``Select puzzle for level 17`` () = numOfDiffQStates 16 |> should equal 64
+let ``Select puzzle for level 17`` () = numOfDiffQStates 16 |> should equal 16
 
 [<Fact>]
-let ``Select puzzle for level 18`` () = numOfDiffQStates 17 |> should equal 64
+let ``Select puzzle for level 18`` () = numOfDiffQStates 17 |> should equal 32
 
 [<Fact>]
-let ``Select puzzle for level 19`` () = numOfDiffQStates 18 |> should equal 128
+let ``Select puzzle for level 19`` () = numOfDiffQStates 18 |> should equal 64
 
 [<Fact>]
 let ``Select puzzle for level 20`` () = numOfDiffQStates 19 |> should equal 128

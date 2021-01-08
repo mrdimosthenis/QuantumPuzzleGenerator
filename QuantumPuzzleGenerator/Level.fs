@@ -30,29 +30,29 @@ let level (index: int)
 let levels: Level list =
     // NumOfQubits MaxGateType NumOfGates IsAbsoluteInitQState
     [ (1, Quantum.Gate.SingleQubit, 2, true)
+      
       (1, Quantum.Gate.SingleQubit, 2, false)
       
-      (1, Quantum.Gate.SingleQubit, 3, false)
-      
-      (2, Quantum.Gate.SingleQubit, 3, false)
+      (2, Quantum.Gate.SingleQubit, 3, true)
+      (2, Quantum.Gate.DoubleQubit, 3, true)
 
-      (2, Quantum.Gate.SingleQubit, 4, true)
       (2, Quantum.Gate.SingleQubit, 4, false)
+      (2, Quantum.Gate.DoubleQubit, 4, false)
 
       (3, Quantum.Gate.SingleQubit, 3, true)
-      (3, Quantum.Gate.SingleQubit, 3, false)
       (3, Quantum.Gate.DoubleQubit, 3, true)
-      (3, Quantum.Gate.DoubleQubit, 3, false)
       (3, Quantum.Gate.TripleQubit, 3, true)
-      (3, Quantum.Gate.TripleQubit, 3, false)
-
       (3, Quantum.Gate.TripleQubit, 4, true)
-      (3, Quantum.Gate.TripleQubit, 4, false)
       (3, Quantum.Gate.TripleQubit, 5, true)
-      (3, Quantum.Gate.TripleQubit, 5, false)
       (3, Quantum.Gate.TripleQubit, 6, true)
-      (3, Quantum.Gate.TripleQubit, 6, false)
       (3, Quantum.Gate.TripleQubit, 7, true)
+      
+      (3, Quantum.Gate.SingleQubit, 3, false)
+      (3, Quantum.Gate.DoubleQubit, 3, false)
+      (3, Quantum.Gate.TripleQubit, 3, false)
+      (3, Quantum.Gate.TripleQubit, 4, false)
+      (3, Quantum.Gate.TripleQubit, 5, false)
+      (3, Quantum.Gate.TripleQubit, 6, false)
       (3, Quantum.Gate.TripleQubit, 7, false) ]
     |> List.indexed
     |> List.map (fun (i, (numOfQubits, maxGateType, numOfGates, isAbsoluteInitQState)) ->
