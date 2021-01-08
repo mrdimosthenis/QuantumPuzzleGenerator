@@ -1,34 +1,26 @@
 ﻿module QuantumPuzzleGenerator.Pages.LessonCategories
 
-open FSharpx.Collections
 open Fabulous
-open Fabulous.XamarinForms
-open Xamarin.Forms
 
 open QuantumPuzzleGenerator
 
 let lessonButtons (dispatch: Model.Msg -> unit): ViewElement list =
-        List.map (fun (category: LessonCategory.LessonCategory) ->
-            View.Button
-                (text = category.Title,
-                 command =
-                     fun () ->
-                         category.Index
-                         |> Model.SelectLesson
-                         |> dispatch)) LessonCategory.lessonCategories
+    List.map (fun (category: LessonCategory.LessonCategory) ->
+        fun () -> category.Index |> Model.SelectLesson |> dispatch
+        |> UIComponents.button category.Title None) LessonCategory.lessonCategories
 
 let backBtn (dispatch: Model.Msg -> unit): ViewElement =
-    View.Button
-        (text = "Back",
-         command =
-             fun () ->
-                 Model.Page.HomePage
-                 |> Model.SelectPage
-                 |> dispatch)
+    let imageNameOpt = Some "icons.home"
+
+    fun () ->
+        Model.Page.HomePage
+        |> Model.SelectPage
+        |> dispatch
+    |> UIComponents.button "Back" imageNameOpt
 
 let stackLayout (model: Model.Model) (dispatch: Model.Msg -> unit): ViewElement =
-    let children = List.append (lessonButtons dispatch) [ backBtn dispatch ]
-    View.StackLayout
-        (horizontalOptions = LayoutOptions.Center,
-         verticalOptions = LayoutOptions.Center,
-         children = children )
+    [ [ UIComponents.label UIComponents.Title "Interactive Learning" ]
+      lessonButtons dispatch
+      [ backBtn dispatch ] ]
+    |> List.concat
+    |> UIComponents.stackLayout

@@ -31,7 +31,10 @@ module App =
             | Model.Page.LearnPage -> Pages.Learn.stackLayout model dispatch
             | Model.Page.PlayPage -> Pages.Play.stackLayout model dispatch
 
-        View.ContentPage(content = View.ScrollView(verticalOptions = LayoutOptions.Start, content = page))
+        View.ContentPage
+            (content =
+                View.ScrollView
+                    (backgroundColor = Constants.backgroundColor, content = page))
 
     // Note, this declaration is needed if you enable LiveUpdate
     let program =

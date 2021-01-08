@@ -16,3 +16,5 @@ let deviceWidth: float =
     |> min Device.info.PixelScreenSize.Height
     |> (*) 0.5
     
+let backgroundColor = Color.White
+    

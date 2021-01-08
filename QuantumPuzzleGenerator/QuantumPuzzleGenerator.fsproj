@@ -75,6 +75,9 @@
     <EmbeddedResource Include="resources\images\icons\refresh.png" />
     <EmbeddedResource Include="resources\images\icons\zoom_out.png" />
     <EmbeddedResource Include="resources\images\icons\zoom_in.png" />
+    <EmbeddedResource Include="resources\images\icons\puzzle.png" />
+    <EmbeddedResource Include="resources\images\icons\library.png" />
+    <EmbeddedResource Include="resources\images\icons\home.png" />
     <Compile Include="Constants.fs" />
     <Compile Include="Resources.fs" />
     <Compile Include="Preferences.fs" />
@@ -87,6 +90,7 @@
     <Compile Include="ColorCircle.fs" />
     <Compile Include="Model.fs" />
     <Compile Include="CircuitDrawing.fs" />
+    <Compile Include="UIComponents.fs" />
     <Compile Include="Pages.Home.fs" />
     <Compile Include="Pages.LessonCategories.fs" />
     <Compile Include="Pages.Learn.fs" />
