@@ -6,7 +6,7 @@ var CY = canvas.height / 2
 
 for (var i = 0; i < 360; i += 0.1) {
     var initNominator = i * (2*Math.PI)
-    var modifiedNominator = initNominator + 1090;
+    var modifiedNominator = initNominator + 1115;
     var rad = modifiedNominator / 360;
     graphics.strokeStyle = "hsla(" + i + ", 100%, 50%, 1.0)";
     graphics.beginPath();
