@@ -52,8 +52,9 @@ let backBtn (dispatch: Model.Msg -> unit) =
                  |> dispatch)
 
 let stackLayout (model: Model.Model) (dispatch: Model.Msg -> unit): ViewElement =
-    let qStateForColorCircle =
-        if model.Lesson.LessonCategory.NumOfQubits = 1 then
+    let colorCircle =
+        match model.Lesson.LessonCategory.IsHueDisplayedOpt with
+        | Some true ->
             List.zip model.Lesson.LessonCategory.Gates model.Lesson.GateSelection
             |> List.filter snd
             |> List.map fst
@@ -62,8 +63,11 @@ let stackLayout (model: Model.Model) (dispatch: Model.Msg -> unit): ViewElement 
                     Quantum.Gate.matrix model.Lesson.LessonCategory.NumOfQubits gate
 
                 Matrix.standardProduct gateMatrix qState) model.Lesson.QState
-        else
-            Matrix.zero 1 2
+            |> Some
+            |> ColorCircle.webView model.Settings.ColorCircleScale
+            |> List.singleton
+        | Some false -> [ ColorCircle.webView model.Settings.ColorCircleScale None ]
+        | None -> []
 
     let children =
         [ [ lessonLbl model ]
@@ -71,9 +75,7 @@ let stackLayout (model: Model.Model) (dispatch: Model.Msg -> unit): ViewElement 
           if model.Lesson.LessonCategory.Gates.IsEmpty
           then []
           else [ circuit model dispatch ]
-          if model.Lesson.LessonCategory.IsHueDisplayed
-          then [ ColorCircle.webView model.Settings.ColorCircleScale qStateForColorCircle ]
-          else []
+          colorCircle
           [ regenerateBtn model dispatch ]
           [ backBtn dispatch ] ]
         |> List.concat

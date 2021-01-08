@@ -8,7 +8,8 @@
   <ItemGroup>
     <EmbeddedResource Include="resources\text_files\vis_graph3d_601.js" />
     <EmbeddedResource Include="resources\text_files\single_plot.js" />
-    <EmbeddedResource Include="resources\text_files\color_circle.js" />
+    <EmbeddedResource Include="resources\text_files\color_circle_main.js" />
+    <EmbeddedResource Include="resources\text_files\color_circle_lines.js" />
     <EmbeddedResource Include="resources\images\gates\z32.png" />
     <EmbeddedResource Include="resources\images\gates\z31.png" />
     <EmbeddedResource Include="resources\images\gates\z30.png" />

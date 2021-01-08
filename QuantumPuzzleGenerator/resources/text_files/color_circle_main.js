@@ -1,11 +1,6 @@
 ﻿var canvas = document.getElementById("myCanvas");
 var graphics = canvas.getContext("2d");
 
-var x1 = generatedByQuantumPuzzles.x1;
-var y1 = generatedByQuantumPuzzles.y1;
-var x2 = generatedByQuantumPuzzles.x2;
-var y2 = generatedByQuantumPuzzles.y2;
-
 var CX = canvas.width / 2
 var CY = canvas.height / 2
 
@@ -25,17 +20,3 @@ graphics.fillStyle = 'white';
 graphics.beginPath();
 graphics.arc(CX, CY, CX * 0.8, 0, 2 * Math.PI);
 graphics.fill();
-
-graphics.beginPath();
-graphics.lineWidth = 8;
-graphics.strokeStyle = "black";
-graphics.lineCap = "round";
-graphics.moveTo(CX, CY);
-graphics.lineTo(CX + CX * x1, CY + CY * y1);
-graphics.stroke();
-
-graphics.beginPath();
-graphics.lineWidth = 4;
-graphics.moveTo(CX, CY);
-graphics.lineTo(CX + CX * x2, CY + CY * y2);
-graphics.stroke();

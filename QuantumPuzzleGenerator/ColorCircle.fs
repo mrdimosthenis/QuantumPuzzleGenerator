@@ -37,15 +37,30 @@ let generatedByQuantumPuzzles (qState: Matrix.Matrix): string =
     serializerSettings.ContractResolver <- CamelCasePropertyNamesContractResolver()
     JsonConvert.SerializeObject(content, serializerSettings)
 
-let singlePlotHtmlString (size: float) (qState: Matrix.Matrix): string =
+let singlePlotHtmlString (size: float) (qStateOpt: Matrix.Matrix option): string =
     let canvasSize = size |> Math.Round |> int
 
-    let dataJs =
-        qState
-        |> generatedByQuantumPuzzles
-        |> sprintf "var generatedByQuantumPuzzles = %s;"
+    let jsScripts =
+        match qStateOpt with
+        | Some qState ->
+            [ qState
+              |> generatedByQuantumPuzzles
+              |> sprintf "var generatedByQuantumPuzzles = %s;"
+              Resources.text "color_circle_main.js"
+              Resources.text "color_circle_lines.js" ]
+        | None -> [ Resources.text "color_circle_main.js" ]
+        |> List.map (fun jsString ->
+            script [ Type "text/javascript" ] [
+                RawText jsString
+            ])
 
-    let circleJs = Resources.text "color_circle.js"
+    let htmlBody =
+        List.append
+            [ canvas [ Id "myCanvas"
+                       HTMLAttr.Width canvasSize
+                       HTMLAttr.Height canvasSize ] [] ]
+            jsScripts
+
 
     html [] [
         head [] [
@@ -54,28 +69,18 @@ let singlePlotHtmlString (size: float) (qState: Matrix.Matrix): string =
             Standard.style [] [
                 RawText "* { margin: 0; }"
             ]
-            script [ Type "text/javascript" ] [
-                RawText dataJs
-            ]
         ]
-        body [] [
-            canvas [ Id "myCanvas"
-                     HTMLAttr.Width canvasSize
-                     HTMLAttr.Height canvasSize ] []
-            script [ Type "text/javascript" ] [
-                RawText circleJs
-            ]
-        ]
+        body [] htmlBody
     ]
     |> ReactServer.renderToString
 
-let webView (colorCircleScale: float) (qState: Matrix.Matrix): ViewElement =
+let webView (colorCircleScale: float) (qStateOpt: Matrix.Matrix option): ViewElement =
     let size =
         Constants.deviceWidth
         |> (*) 0.75
         |> (*) colorCircleScale
 
-    let htmlString = singlePlotHtmlString size qState
+    let htmlString = singlePlotHtmlString size qStateOpt
 
     View.WebView
         (source = Xamarin.Forms.HtmlWebViewSource(Html = htmlString),
