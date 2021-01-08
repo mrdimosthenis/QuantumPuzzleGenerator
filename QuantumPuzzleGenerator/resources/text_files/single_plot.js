@@ -19,8 +19,8 @@
         zMin: 0.0,
         zMax: 1.0,
         cameraPosition: {
-            horizontal: -0.2,
-            vertical: 0.25,
+            horizontal: -0.5,
+            vertical: 0.175,
             distance: 1.5
         }
     };
