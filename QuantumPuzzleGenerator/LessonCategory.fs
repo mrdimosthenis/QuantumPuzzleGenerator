@@ -62,14 +62,15 @@ let lessonCategories: LessonCategory list =
       ("Two Qubits", 2, [], false, None)
       ("Three Qubits", 3, [], false, None)
 
-      ("⊕ for One Qubit", 1, [ Quantum.Gate.XGate 0 ], false, None)
-      ("⊕ for One of Two Qubits",
+      ("Gate ⊕, Absolute State", 1, [ Quantum.Gate.XGate 0 ], true, None)
+      ("Gate ⊕, Random State", 1, [ Quantum.Gate.XGate 0 ], false, None)
+      ("Gate ⊕, Two Qubits",
        2,
        [ Quantum.Gate.XGate 1
          Quantum.Gate.XGate 0 ],
        false,
        None)
-      ("⊕ for One of Three Qubits",
+      ("Gate ⊕, Three Qubits",
        3,
        [ Quantum.Gate.XGate 2
          Quantum.Gate.XGate 1
@@ -77,14 +78,14 @@ let lessonCategories: LessonCategory list =
        false,
        None)
 
-      ("Z for One Qubit", 1, [ Quantum.Gate.ZGate 0 ], false, Some true)
-      ("Z for One of Two Qubits",
+      ("Gate Z, One Qubit", 1, [ Quantum.Gate.ZGate 0 ], false, Some true)
+      ("Gate Z, Two Qubits",
        2,
        [ Quantum.Gate.ZGate 1
          Quantum.Gate.ZGate 0 ],
        false,
        Some false)
-      ("Z for One of Three Qubits",
+      ("Gate Z, Three Qubits",
        3,
        [ Quantum.Gate.ZGate 2
          Quantum.Gate.ZGate 1
@@ -92,38 +93,20 @@ let lessonCategories: LessonCategory list =
        false,
        Some false)
 
-      ("Y for One Qubit", 1, [ Quantum.Gate.YGate 0 ], false, Some true)
-      ("Y for One of Two Qubits",
+      ("Gate Y, Absolute State", 1, [ Quantum.Gate.YGate 0 ], true, None)
+      ("Gate Y, Random State", 1, [ Quantum.Gate.YGate 0 ], false, Some true)
+      ("Gate Y, Two Qubits",
        2,
        [ Quantum.Gate.YGate 1
          Quantum.Gate.YGate 0 ],
        false,
        Some false)
-      ("Y for One of Three Qubits",
-       3,
-       [ Quantum.Gate.YGate 2
-         Quantum.Gate.YGate 1
-         Quantum.Gate.YGate 0 ],
-       false,
-       Some false)
 
-      ("H for One Qubit", 1, [ Quantum.Gate.HGate 0 ], false, Some true)
-      ("H for One of Two Qubits",
-       2,
-       [ Quantum.Gate.HGate 1
-         Quantum.Gate.HGate 0 ],
-       false,
-       Some false)
-      ("H for One of Three Qubits",
-       3,
-       [ Quantum.Gate.HGate 2
-         Quantum.Gate.HGate 1
-         Quantum.Gate.HGate 0 ],
-       false,
-       Some false)
+      ("Gate H, Absolute State", 1, [ Quantum.Gate.HGate 0 ], true, Some true)
+      ("Gate H, Random State", 1, [ Quantum.Gate.HGate 0 ], false, Some true)
 
-      ("Swap for Two Qubits", 2, [ Quantum.Gate.SwapGate(1, 0) ], false, None)
-      ("Swap for Two of Three Qubits",
+      ("Gate Swap, Two Qubits", 2, [ Quantum.Gate.SwapGate(1, 0) ], false, None)
+      ("Gate Swap, Three Qubits",
        3,
        [ Quantum.Gate.SwapGate(1, 2)
          Quantum.Gate.SwapGate(0, 2)
@@ -131,13 +114,13 @@ let lessonCategories: LessonCategory list =
        false,
        None)
 
-      ("Controlled ⊕ for Two Qubits",
+      ("Controlled ⊕ Gate, Two Qubits",
        2,
        [ Quantum.Gate.CXGate(1, 0)
          Quantum.Gate.CXGate(0, 1) ],
        false,
        None)
-      ("Controlled ⊕ for Two of Three Qubits",
+      ("Controlled ⊕ Gate, Three Qubits",
        3,
        [ Quantum.Gate.CXGate(2, 1)
          Quantum.Gate.CXGate(1, 2)
