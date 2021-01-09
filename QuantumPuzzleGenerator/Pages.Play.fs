@@ -8,14 +8,10 @@ open QuantumPuzzleMechanics
 open QuantumPuzzleGenerator
 
 let levelLbl (model: Model.Model): ViewElement =
-    let displayedLevel = model.Puzzle.Level.Index + 1
-
-    View.Label
-        (text = sprintf "Level: %i" displayedLevel,
-         horizontalTextAlignment = TextAlignment.Center,
-         verticalTextAlignment = TextAlignment.Center,
-         horizontalOptions = LayoutOptions.Center,
-         verticalOptions = LayoutOptions.Center)
+    model.Puzzle.Level.Index
+    |> (+) 1
+    |> sprintf "Level: %i"
+    |> UIComponents.label UIComponents.Title
 
 let puzzleLbl (model: Model.Model): ViewElement =
     let displayedPuzzle = model.Puzzle.SolvedPuzzlesInLevel + 1
@@ -25,12 +21,7 @@ let puzzleLbl (model: Model.Model): ViewElement =
         then sprintf "Puzzle: %i/%i" displayedPuzzle Constants.numOfPuzzlesPerLevel
         else sprintf "Puzzle: %i" displayedPuzzle
 
-    View.Label
-        (text = text,
-         horizontalTextAlignment = TextAlignment.Center,
-         verticalTextAlignment = TextAlignment.Center,
-         horizontalOptions = LayoutOptions.Center,
-         verticalOptions = LayoutOptions.Center)
+    UIComponents.label UIComponents.Title text
 
 let regeneratePuzzleOrLevelBtn (currentQState: Matrix.Matrix)
                                (targetQState: Matrix.Matrix)
@@ -39,22 +30,22 @@ let regeneratePuzzleOrLevelBtn (currentQState: Matrix.Matrix)
                                (dispatch: Model.Msg -> unit)
                                : ViewElement =
     let regenerateBtn =
-        View.Button
-            (text = "Regenerate",
-             image = Resources.image "icons.refresh",
-             command = fun () -> dispatch Model.RegeneratePuzzle)
+        let imageNameOpt = Some "icons.refresh"
+
+        fun () -> dispatch Model.RegeneratePuzzle
+        |> UIComponents.button "Regenerate" imageNameOpt
 
     let nextPuzzleBtn =
-        View.Button
-            (text = "Next Puzzle",
-             image = Resources.image "icons.play_light",
-             command = fun () -> dispatch Model.NextPuzzle)
+        let imageNameOpt = Some "icons.play_light"
+
+        fun () -> dispatch Model.NextPuzzle
+        |> UIComponents.button "Next Puzzle" imageNameOpt
 
     let nextLevelBtn =
-        View.Button
-            (text = "Next Level",
-             image = Resources.image "icons.play_dark",
-             command = fun () -> dispatch Model.NextLevel)
+        let imageNameOpt = Some "icons.play_dark"
+
+        fun () -> dispatch Model.NextLevel
+        |> UIComponents.button "Next Level" imageNameOpt
 
     match Matrix.almostEqual Constants.differenceThreshold currentQState targetQState with
     | false -> regenerateBtn
@@ -64,13 +55,13 @@ let regeneratePuzzleOrLevelBtn (currentQState: Matrix.Matrix)
     | true -> nextPuzzleBtn
 
 let backBtn (dispatch: Model.Msg -> unit): ViewElement =
-    View.Button
-        (text = "Back",
-         command =
-             fun () ->
-                 Model.Page.HomePage
-                 |> Model.SelectPage
-                 |> dispatch)
+    let imageNameOpt = Some "icons.home"
+
+    fun () ->
+        Model.Page.HomePage
+        |> Model.SelectPage
+        |> dispatch
+    |> UIComponents.button "Back" imageNameOpt
 
 let stackLayout (model: Model.Model) (dispatch: Model.Msg -> unit): ViewElement =
     let goalQStatePlot =
@@ -94,19 +85,19 @@ let stackLayout (model: Model.Model) (dispatch: Model.Msg -> unit): ViewElement 
     let currentQStatePlot =
         QStatePlotting.webView model.Settings.PlotScale model.Puzzle.Level.NumOfQubits currentQState
 
-    View.StackLayout
-        (horizontalOptions = LayoutOptions.Center,
-         verticalOptions = LayoutOptions.Center,
-         children =
-             [ levelLbl model
-               puzzleLbl model
-               goalQStatePlot
-               circuit
-               currentQStatePlot
-               regeneratePuzzleOrLevelBtn
-                   currentQState
-                   model.Puzzle.TargetQState
-                   model.Puzzle.Level.Index
-                   model.Puzzle.SolvedPuzzlesInLevel
-                   dispatch
-               backBtn dispatch ])
+    let regeneratePuzzleOrLevel =
+        regeneratePuzzleOrLevelBtn
+            currentQState
+            model.Puzzle.TargetQState
+            model.Puzzle.Level.Index
+            model.Puzzle.SolvedPuzzlesInLevel
+            dispatch
+
+    [ levelLbl model
+      puzzleLbl model
+      goalQStatePlot
+      circuit
+      currentQStatePlot
+      UIComponents.horizontalStackLayout [ backBtn dispatch
+                                           regeneratePuzzleOrLevel ] ]
+    |> UIComponents.stackLayout

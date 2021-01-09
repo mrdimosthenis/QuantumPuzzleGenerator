@@ -78,6 +78,8 @@
     <EmbeddedResource Include="resources\images\icons\puzzle.png" />
     <EmbeddedResource Include="resources\images\icons\library.png" />
     <EmbeddedResource Include="resources\images\icons\home.png" />
+    <EmbeddedResource Include="resources\images\icons\right.png" />
+    <EmbeddedResource Include="resources\images\icons\left.png" />
     <EmbeddedResource Include="resources\images\logo.png" />
     <Compile Include="Constants.fs" />
     <Compile Include="Resources.fs" />
