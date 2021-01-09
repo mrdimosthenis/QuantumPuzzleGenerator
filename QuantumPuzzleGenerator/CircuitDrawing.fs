@@ -31,13 +31,41 @@ let gateImage (numOfQubits: int) (gate: Quantum.Gate.Gate): Image.Value =
 
     Resources.gateImage invertedGate numOfQubits
 
-let stackLayout
-    (numOfQubits: int)
-    (gates: Quantum.Gate.Gate list)
-    (gateSelection: bool list)
-    (circuitScaleSetting: float)
-    (gateClickCommand: int -> unit)
-    : ViewElement =
+let headerHorizontalLayout (dispatch: Model.Msg -> unit): ViewElement =
+    let title =
+        UIComponents.label UIComponents.Title "Circuit"
+
+    let decreaseScaleBtn =
+        let imageNameOpt = Some "icons.zoom_out"
+
+        fun () ->
+            Settings.Circuit
+            |> Model.DecreaseScale
+            |> dispatch
+        |> UIComponents.button "" imageNameOpt
+
+    let increaseScaleBtn =
+        let imageNameOpt = Some "icons.zoom_in"
+
+        fun () ->
+            Settings.Circuit
+            |> Model.IncreaseScale
+            |> dispatch
+        |> UIComponents.button "" imageNameOpt
+
+    UIComponents.horizontalStackLayout [ decreaseScaleBtn
+                                         title
+                                         increaseScaleBtn ]
+
+let stackLayout (numOfQubits: int)
+                (gates: Quantum.Gate.Gate list)
+                (gateSelection: bool list)
+                (circuitScaleSetting: float)
+                (gateClickCommand: int -> Model.Msg)
+                (dispatch: Model.Msg -> unit)
+                : ViewElement =
+    let headerLayout = headerHorizontalLayout dispatch
+    
     let gateWidth =
         gates.Length
         |> float
@@ -57,11 +85,15 @@ let stackLayout
                  width = gateWidth,
                  height = gateHeight,
                  backgroundColor = (if b then Color.YellowGreen else Color.LightBlue),
-                 command = fun () -> gateClickCommand i))
+                 command = fun () -> i |> gateClickCommand |> dispatch))
 
-    View.StackLayout
-        (orientation = StackOrientation.Horizontal,
-         horizontalOptions = LayoutOptions.Center,
-         verticalOptions = LayoutOptions.Center,
-         spacing = 0.0,
-         children = children)
+    let circuitStack =
+        View.StackLayout
+            (orientation = StackOrientation.Horizontal,
+             horizontalOptions = LayoutOptions.Center,
+             verticalOptions = LayoutOptions.Center,
+             spacing = 0.0,
+             children = children)
+
+    UIComponents.stackLayout [ headerLayout
+                               circuitStack ]

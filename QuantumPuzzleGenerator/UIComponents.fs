@@ -30,8 +30,15 @@ let label (labelType: LabelType) (text: string): ViewElement =
              verticalOptions = LayoutOptions.Center)
 
 let button (text: string) (imageNameOpt: string option) (command: unit -> unit): ViewElement =
-    match imageNameOpt with
-    | Some imageName ->
+    match (text, imageNameOpt) with
+    | ("", Some imageName) ->
+        View.ImageButton
+            (backgroundColor = Color.Transparent,
+             width = 30.0,
+             height = 30.0,
+             command = command,
+             source = Resources.image imageName)
+    | (_, Some imageName) ->
         View.Button
             (text = text,
              textTransform = TextTransform.None,
@@ -40,7 +47,7 @@ let button (text: string) (imageNameOpt: string option) (command: unit -> unit):
              borderColor = Color.Black,
              command = command,
              image = Resources.image imageName)
-    | None ->
+    | (_, None) ->
         View.Button
             (text = text,
              textTransform = TextTransform.None,

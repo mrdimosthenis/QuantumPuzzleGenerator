@@ -1,8 +1,6 @@
 ﻿module QuantumPuzzleGenerator.Pages.Play
 
 open Fabulous
-open Fabulous.XamarinForms
-open Xamarin.Forms
 
 open QuantumPuzzleMechanics
 open QuantumPuzzleGenerator
@@ -65,8 +63,12 @@ let backBtn (dispatch: Model.Msg -> unit): ViewElement =
 
 let stackLayout (model: Model.Model) (dispatch: Model.Msg -> unit): ViewElement =
     let goalQStatePlot =
-        model.Puzzle.TargetQState
-        |> QStatePlotting.webView model.Settings.PlotScale model.Puzzle.Level.NumOfQubits
+        QStatePlotting.webView
+            "Target State"
+            model.Settings.PlotScale
+            model.Puzzle.Level.NumOfQubits
+            model.Puzzle.TargetQState
+            dispatch
 
     let currentQState =
         List.zip model.Puzzle.Gates model.Puzzle.GateSelection
@@ -79,11 +81,21 @@ let stackLayout (model: Model.Model) (dispatch: Model.Msg -> unit): ViewElement 
             Matrix.standardProduct gateMatrix qState) model.Puzzle.InitQState
 
     let circuit =
-        CircuitDrawing.stackLayout model.Puzzle.Level.NumOfQubits model.Puzzle.Gates model.Puzzle.GateSelection
-            model.Settings.CircuitScale (fun i -> i |> Model.Msg.PuzzleGateClick |> dispatch)
+        CircuitDrawing.stackLayout
+            model.Puzzle.Level.NumOfQubits
+            model.Puzzle.Gates
+            model.Puzzle.GateSelection
+            model.Settings.CircuitScale
+            Model.Msg.PuzzleGateClick
+            dispatch
 
     let currentQStatePlot =
-        QStatePlotting.webView model.Settings.PlotScale model.Puzzle.Level.NumOfQubits currentQState
+        QStatePlotting.webView
+            "Current State"
+            model.Settings.PlotScale
+            model.Puzzle.Level.NumOfQubits
+            currentQState
+            dispatch
 
     let regeneratePuzzleOrLevel =
         regeneratePuzzleOrLevelBtn

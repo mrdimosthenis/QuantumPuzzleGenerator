@@ -155,15 +155,46 @@ let singlePlotHtmlString (numOfQubits: int) (qState: Matrix.Matrix): string =
     ]
     |> ReactServer.renderToString
 
-let webView (plotScale: float) (numOfQubits: int) (qState: Matrix.Matrix): ViewElement =
+let headerHorizontalLayout (title: string) (dispatch: Model.Msg -> unit): ViewElement =
+    let title =
+        UIComponents.label UIComponents.Title title
+
+    let decreaseScaleBtn =
+        let imageNameOpt = Some "icons.zoom_out"
+
+        fun () -> Settings.Plot |> Model.DecreaseScale |> dispatch
+        |> UIComponents.button "" imageNameOpt
+
+    let increaseScaleBtn =
+        let imageNameOpt = Some "icons.zoom_in"
+
+        fun () -> Settings.Plot |> Model.IncreaseScale |> dispatch
+        |> UIComponents.button "" imageNameOpt
+
+    UIComponents.horizontalStackLayout [ decreaseScaleBtn
+                                         title
+                                         increaseScaleBtn ]
+
+let webView (title: string)
+            (plotScale: float)
+            (numOfQubits: int)
+            (qState: Matrix.Matrix)
+            (dispatch: Model.Msg -> unit)
+            : ViewElement =
+    let headerLayout = headerHorizontalLayout title dispatch
+
     let size =
-        Constants.deviceWidth |> (*) 0.75 |> (*) plotScale
+        Constants.deviceWidth |> (*) 0.5 |> (*) plotScale
 
     let htmlString = singlePlotHtmlString numOfQubits qState
 
-    View.WebView
-        (source = Xamarin.Forms.HtmlWebViewSource(Html = htmlString),
-         width = size,
-         height = size,
-         horizontalOptions = Forms.LayoutOptions.Center,
-         verticalOptions = Forms.LayoutOptions.Center)
+    let plotWebView =
+        View.WebView
+            (source = Xamarin.Forms.HtmlWebViewSource(Html = htmlString),
+             width = size,
+             height = size,
+             horizontalOptions = Forms.LayoutOptions.Center,
+             verticalOptions = Forms.LayoutOptions.Center)
+
+    UIComponents.stackLayout [ headerLayout
+                               plotWebView ]

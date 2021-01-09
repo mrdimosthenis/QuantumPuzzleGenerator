@@ -74,17 +74,49 @@ let singlePlotHtmlString (size: float) (qStateOpt: Matrix.Matrix option): string
     ]
     |> ReactServer.renderToString
 
-let webView (colorCircleScale: float) (qStateOpt: Matrix.Matrix option): ViewElement =
+let headerHorizontalLayout (dispatch: Model.Msg -> unit): ViewElement =
+    let title =
+        UIComponents.label UIComponents.Title "Circle of Colors"
+
+    let decreaseScaleBtn =
+        let imageNameOpt = Some "icons.zoom_out"
+
+        fun () ->
+            Settings.ColorCircle
+            |> Model.DecreaseScale
+            |> dispatch
+        |> UIComponents.button "" imageNameOpt
+
+    let increaseScaleBtn =
+        let imageNameOpt = Some "icons.zoom_in"
+
+        fun () ->
+            Settings.ColorCircle
+            |> Model.IncreaseScale
+            |> dispatch
+        |> UIComponents.button "" imageNameOpt
+
+    UIComponents.horizontalStackLayout [ decreaseScaleBtn
+                                         title
+                                         increaseScaleBtn ]
+
+let webView (colorCircleScale: float) (qStateOpt: Matrix.Matrix option) (dispatch: Model.Msg -> unit): ViewElement =
+    let headerLayout = headerHorizontalLayout dispatch
+
     let size =
         Constants.deviceWidth
-        |> (*) 0.75
+        |> (*) 0.5
         |> (*) colorCircleScale
 
     let htmlString = singlePlotHtmlString size qStateOpt
 
-    View.WebView
-        (source = Xamarin.Forms.HtmlWebViewSource(Html = htmlString),
-         width = size,
-         height = size,
-         horizontalOptions = Forms.LayoutOptions.Center,
-         verticalOptions = Forms.LayoutOptions.Center)
+    let circleColorWebView =
+        View.WebView
+            (source = Xamarin.Forms.HtmlWebViewSource(Html = htmlString),
+             width = size,
+             height = size,
+             horizontalOptions = Forms.LayoutOptions.Center,
+             verticalOptions = Forms.LayoutOptions.Center)
+
+    UIComponents.stackLayout [ headerLayout
+                               circleColorWebView ]

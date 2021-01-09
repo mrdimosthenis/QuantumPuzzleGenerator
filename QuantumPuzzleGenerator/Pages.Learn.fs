@@ -6,7 +6,7 @@ open Fabulous
 open QuantumPuzzleMechanics
 open QuantumPuzzleGenerator
 
-let qStatePlot (model: Model.Model): ViewElement =
+let quantumState (model: Model.Model): Matrix.Matrix =
     List.zip model.Lesson.LessonCategory.Gates model.Lesson.GateSelection
     |> List.filter snd
     |> List.map fst
@@ -15,11 +15,19 @@ let qStatePlot (model: Model.Model): ViewElement =
             Quantum.Gate.matrix model.Lesson.LessonCategory.NumOfQubits gate
 
         Matrix.standardProduct gateMatrix qState) model.Lesson.QState
-    |> QStatePlotting.webView model.Settings.PlotScale model.Lesson.LessonCategory.NumOfQubits
+
+let qStatePlot (model: Model.Model) (dispatch: Model.Msg -> unit): ViewElement =
+    let qState = quantumState model
+    QStatePlotting.webView "State" model.Settings.PlotScale model.Lesson.LessonCategory.NumOfQubits qState dispatch
 
 let circuit (model: Model.Model) (dispatch: Model.Msg -> unit): ViewElement =
-    CircuitDrawing.stackLayout model.Lesson.LessonCategory.NumOfQubits model.Lesson.LessonCategory.Gates
-        model.Lesson.GateSelection model.Settings.CircuitScale (fun i -> i |> Model.Msg.LessonGateClick |> dispatch)
+    CircuitDrawing.stackLayout
+        model.Lesson.LessonCategory.NumOfQubits
+        model.Lesson.LessonCategory.Gates
+        model.Lesson.GateSelection
+        model.Settings.CircuitScale
+        Model.Msg.LessonGateClick
+        dispatch
 
 let prevLessonBtn (model: Model.Model) (dispatch: Model.Msg -> unit): ViewElement =
     let imageNameOpt = Some "icons.left"
@@ -64,21 +72,12 @@ let backBtn (dispatch: Model.Msg -> unit): ViewElement =
         |> dispatch
     |> UIComponents.button "Back" imageNameOpt
 
-let colorCircle (model: Model.Model): ViewElement list =
+let colorCircle (model: Model.Model) (dispatch: Model.Msg -> unit): ViewElement list =
     match model.Lesson.LessonCategory.IsHueDisplayedOpt with
     | Some true ->
-        List.zip model.Lesson.LessonCategory.Gates model.Lesson.GateSelection
-        |> List.filter snd
-        |> List.map fst
-        |> List.fold (fun qState gate ->
-            let gateMatrix =
-                Quantum.Gate.matrix model.Lesson.LessonCategory.NumOfQubits gate
-
-            Matrix.standardProduct gateMatrix qState) model.Lesson.QState
-        |> Some
-        |> ColorCircle.webView model.Settings.ColorCircleScale
-        |> List.singleton
-    | Some false -> [ ColorCircle.webView model.Settings.ColorCircleScale None ]
+        let qStateOpt = model |> quantumState |> Some
+        [ ColorCircle.webView model.Settings.ColorCircleScale qStateOpt dispatch ]
+    | Some false -> [ ColorCircle.webView model.Settings.ColorCircleScale None dispatch ]
     | None -> []
 
 let stackLayout (model: Model.Model) (dispatch: Model.Msg -> unit): ViewElement =
@@ -86,11 +85,11 @@ let stackLayout (model: Model.Model) (dispatch: Model.Msg -> unit): ViewElement 
                                              UIComponents.label UIComponents.Title model.Lesson.LessonCategory.Title
                                              nextLessonBtn model dispatch ] ]
       [ UIComponents.label UIComponents.Paragraph model.Lesson.LessonCategory.Description ]
-      [ qStatePlot model ]
+      [ qStatePlot model dispatch ]
       if model.Lesson.LessonCategory.Gates.IsEmpty
       then []
       else [ circuit model dispatch ]
-      colorCircle model
+      colorCircle model dispatch
       [ UIComponents.horizontalStackLayout [ backBtn dispatch
                                              regenerateBtn model dispatch ] ] ]
     |> List.concat

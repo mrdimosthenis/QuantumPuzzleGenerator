@@ -11,17 +11,11 @@ type Page =
     | LearnPage
     | PlayPage
 
-type Settings =
-    { FontScale: float
-      PlotScale: float
-      CircuitScale: float
-      ColorCircleScale: float }
-
 type Model =
     { SelectedPage: Page
       Lesson: Lesson.Lesson
       Puzzle: Puzzle.Puzzle
-      Settings: Settings }
+      Settings: Settings.Settings }
 
 type Msg =
     | SelectPage of Page
@@ -31,6 +25,8 @@ type Msg =
     | RegeneratePuzzle
     | NextPuzzle
     | NextLevel
+    | IncreaseScale of Settings.ScaleElement
+    | DecreaseScale of Settings.ScaleElement
 
 // constructor
 
@@ -40,14 +36,12 @@ let initModel (levelIndex: int) (solvedPuzzlesInLevel: int): Model =
     let puzzle =
         Puzzle.initPuzzle levelIndex solvedPuzzlesInLevel
 
+    let settings = Settings.initSettings ()
+
     { SelectedPage = HomePage
       Lesson = lesson
       Puzzle = puzzle
-      Settings =
-          { FontScale = 1.0
-            PlotScale = 1.0
-            CircuitScale = 1.0
-            ColorCircleScale = 1.0 } }
+      Settings = settings }
 
 // update function
 
@@ -118,3 +112,33 @@ let update (msg: Msg) (model: Model) =
             Puzzle.initPuzzle levelIndex solvedPuzzlesInLevel
 
         { model with Puzzle = puzzle }, Cmd.none
+
+    | IncreaseScale scaleElement ->
+        let settings =
+            match scaleElement with
+            | Settings.Plot ->
+                { model.Settings with
+                      PlotScale = Settings.increasedScaleValue model.Settings.PlotScale }
+            | Settings.Circuit ->
+                { model.Settings with
+                      CircuitScale = Settings.increasedScaleValue model.Settings.CircuitScale }
+            | Settings.ColorCircle ->
+                { model.Settings with
+                      ColorCircleScale = Settings.increasedScaleValue model.Settings.ColorCircleScale }
+
+        { model with Settings = settings }, Cmd.none
+
+    | DecreaseScale scaleElement ->
+        let settings =
+            match scaleElement with
+            | Settings.Plot ->
+                { model.Settings with
+                      PlotScale = Settings.decreasedScaleValue model.Settings.PlotScale }
+            | Settings.Circuit ->
+                { model.Settings with
+                      CircuitScale = Settings.decreasedScaleValue model.Settings.CircuitScale }
+            | Settings.ColorCircle ->
+                { model.Settings with
+                      ColorCircleScale = Settings.decreasedScaleValue model.Settings.ColorCircleScale }
+
+        { model with Settings = settings }, Cmd.none
