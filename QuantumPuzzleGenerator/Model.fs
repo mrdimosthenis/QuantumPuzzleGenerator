@@ -43,7 +43,7 @@ let initModel (): Model =
         |> Preferences.tryGetInt
         |> Option.defaultValue 0
 
-    let lesson = Lesson.initLesson initLevelIndex
+    let lesson = Lesson.initLesson 0
 
     let puzzle =
         Puzzle.initPuzzle initLevelIndex solvedPuzzlesInLevel
