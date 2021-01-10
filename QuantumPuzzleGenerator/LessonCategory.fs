@@ -48,19 +48,20 @@ The disks on the back represent the outcomes of the second qubit to be ONE."""
       """For three qubits, we have eight outcomes: ZER0-ZER0-ZERO, ZER0-ZER0-ONE, ZER0-ONE-ZERO, ZER0-ONE-ONE, ONE-ZER0-ZERO, ONE-ZER0-ONE, ONE-ONE-ZERO and ONE-ONE-ONE.
 The disks on the bottom represent the outcomes of the third qubit to be ZERO.
 The disks on the top represent the outcomes of the third qubit to be ONE."""
-      """We can change the probability of the outcomes by making a qubit to get through a gate. The ⊕ gate turns ONE into ZERO and vise versa. Click the gate bellow to see it happen!"""
-      """When a qubit gets through the ⊕ gate, the place of the disks is switched, in the representation. Click the regenerate button and the gate bellow to see it happen multiple times."""
-      """For two qubits, when the first one gets through the ⊕ gate, the left disks are exchanged with the right ones. When the second qubit gets through the ⊕ gate, the front disks are exchanged with the ones that are placed at the back."""
-      """For three qubits, when the third one gets through the ⊕ gate, the top disks are exchanged with the bottom ones."""
-      """When a qubit gets through the Z gate, its relative phase changes. We don't need to know what the relative phase is to solve the puzzles. We can see that only the color of the right circle changes. When the Z gate is clicked, the gray line points to the opposite direction, in the colored clock bellow."""
-      """For two qubits, when the first one gets through the Z gate, the color of the right circles change. When the second qubit gets through the Z gate, the color of the back circles change."""
-      """For three qubits, when the third one gets through the Z gate, the color of the top circles change."""
+      """We can change the probability of the outcomes by making a qubit pass through a gate. The ⊕ gate turns ONE into ZERO and vise versa. Click the gate bellow to see it happen!"""
+      """When a qubit gets through the ⊕ gate, the disks switch places. Click the regenerate button and the gate symbol bellow to see it happen multiple times."""
+      """For two qubits, when the first one gets through the ⊕ gate, the disks on the left switch places with the ones on the right. When the second qubit gets through the ⊕ gate, the disks on the front switch places with the ones at the back.
+The qubits pass through the gates from left to right. Consequently, the order of the gate selection doesn't matter."""
+      """For three qubits, when the third one gets through the ⊕ gate, the disks on the top switch places with the ones on the bottom."""
+      """When a qubit gets through the Z gate, its relative phase changes. We don't need to know what the relative phase is to solve the puzzles. We can see that only the color of the right circle changes. In the colored clock bellow, when the Z gate is selected, the gray line points to the opposite direction."""
+      """For two qubits, when the first one gets through the Z gate, the circles on the right change color. When the second qubit gets through the Z gate, the circles at the back change color."""
+      """For three qubits, when the third one gets through the Z gate, the circles on the top change color."""
       """The Y gate turns ONE into ZERO and vise versa. It also changes the color of the circles."""
-      """By comparing the colored clock instances we could find a pattern of how the color changes. It involves an angle bisector, two supplementary angles and the right-hand rule. Do you see it?"""
-      """The gate H inverts the certainty of the outcomes. Black and white disks turn into gray."""
-      """The more certain we are about the outcomes, the more uncertain we are, after the qubit gets through the H gate."""
+      """By comparing the colored clock instances we can find a pattern of how the color of the circles change. This process involves an angle bisector, two supplementary angles and the right-hand rule. Can you see it?"""
+      """The H gate inverts the certainty of the outcomes. Black and white disks turn into gray."""
+      """The more certain the outcomes are at the beginning, the more uncertain they become after the qubit gets through the H gate."""
       """The Swap gate exchanges the disks and the circles that are placed in a diagonal."""
-      """Compared to a simple one, the controlled gate affects the half of the disks and circles.""" ]
+      """Compared to a simple gate, the controlled one affects the half of the disks and circles.""" ]
 
 let lessonCategories: LessonCategory list =
     // Title NumOfQubits Gates IsInAbsoluteQState IsHueDisplayedOpt
