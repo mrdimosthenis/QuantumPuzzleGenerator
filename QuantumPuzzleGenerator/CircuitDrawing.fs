@@ -33,7 +33,7 @@ let gateImage (numOfQubits: int) (gate: Quantum.Gate.Gate): Image.Value =
 
 let headerHorizontalLayout (dispatch: Model.Msg -> unit): ViewElement =
     let title =
-        UIComponents.label UIComponents.Title "Gates"
+        UIComponents.label UIComponents.SimpleLabel "Gates"
 
     let decreaseScaleBtn =
         let imageNameOpt = Some "icons.zoom_out"

@@ -8,6 +8,7 @@ open Xamarin.Forms
 
 type LabelType =
     | Title
+    | SimpleLabel
     | Paragraph
 
 // functions
@@ -20,6 +21,13 @@ let label (labelType: LabelType) (text: string): ViewElement =
              horizontalTextAlignment = TextAlignment.Center,
              verticalTextAlignment = TextAlignment.Center,
              fontAttributes = FontAttributes.Bold,
+             horizontalOptions = LayoutOptions.Center,
+             verticalOptions = LayoutOptions.Center)
+    | SimpleLabel ->
+        View.Label
+            (text = text,
+             horizontalTextAlignment = TextAlignment.Center,
+             verticalTextAlignment = TextAlignment.Center,
              horizontalOptions = LayoutOptions.Center,
              verticalOptions = LayoutOptions.Center)
     | Paragraph ->

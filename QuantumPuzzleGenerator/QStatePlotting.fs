@@ -157,7 +157,7 @@ let singlePlotHtmlString (numOfQubits: int) (qState: Matrix.Matrix): string =
 
 let headerHorizontalLayout (title: string) (dispatch: Model.Msg -> unit): ViewElement =
     let title =
-        UIComponents.label UIComponents.Title title
+        UIComponents.label UIComponents.SimpleLabel title
 
     let decreaseScaleBtn =
         let imageNameOpt = Some "icons.zoom_out"

@@ -76,7 +76,7 @@ let singlePlotHtmlString (size: float) (qStateOpt: Matrix.Matrix option): string
 
 let headerHorizontalLayout (dispatch: Model.Msg -> unit): ViewElement =
     let title =
-        UIComponents.label UIComponents.Title "Circle of Colors"
+        UIComponents.label UIComponents.SimpleLabel "Circle of Colors"
 
     let decreaseScaleBtn =
         let imageNameOpt = Some "icons.zoom_out"
