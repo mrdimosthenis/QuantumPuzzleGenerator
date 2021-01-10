@@ -84,7 +84,7 @@ let stackLayout (numOfQubits: int)
                 (source = gateImage numOfQubits g,
                  width = gateWidth,
                  height = gateHeight,
-                 backgroundColor = (if b then Color.YellowGreen else Color.LightBlue),
+                 backgroundColor = (if b then Color.FromHex "#ffc46d" else Color.FromHex "#fffbf6"),
                  command = fun () -> i |> gateClickCommand |> dispatch))
 
     let circuitStack =
