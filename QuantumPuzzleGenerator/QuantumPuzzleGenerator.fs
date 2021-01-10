@@ -14,6 +14,7 @@ module App =
             | Model.Page.LessonCategoriesPage -> Pages.LessonCategories.stackLayout model dispatch
             | Model.Page.LearnPage -> Pages.Learn.stackLayout model dispatch
             | Model.Page.PlayPage -> Pages.Play.stackLayout model dispatch
+            | Model.Page.CreditsPage -> Pages.Credits.stackLayout model dispatch
 
         View.ContentPage(content = View.ScrollView(backgroundColor = Constants.backgroundColor, content = page))
 

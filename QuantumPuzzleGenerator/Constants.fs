@@ -17,4 +17,6 @@ let deviceWidth: float =
     |> (*) 0.5
     
 let backgroundColor = Color.White
+   
+let version = "1.0.0"
     

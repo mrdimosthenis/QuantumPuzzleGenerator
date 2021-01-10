@@ -80,6 +80,9 @@
     <EmbeddedResource Include="resources\images\icons\home.png" />
     <EmbeddedResource Include="resources\images\icons\right.png" />
     <EmbeddedResource Include="resources\images\icons\left.png" />
+    <EmbeddedResource Include="resources\images\icons\identity.png" />
+    <EmbeddedResource Include="resources\images\icons\profile.png" />
+    <EmbeddedResource Include="resources\images\icons\code.png" />
     <EmbeddedResource Include="resources\images\logo.png" />
     <Compile Include="Constants.fs" />
     <Compile Include="Resources.fs" />
@@ -99,6 +102,7 @@
     <Compile Include="Pages.LessonCategories.fs" />
     <Compile Include="Pages.Learn.fs" />
     <Compile Include="Pages.Play.fs" />
+    <Compile Include="Pages.Credits.fs" />
     <Compile Include="QuantumPuzzleGenerator.fs" />
   </ItemGroup>
 

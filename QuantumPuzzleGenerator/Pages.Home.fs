@@ -22,9 +22,19 @@ let playBtn (dispatch: Model.Msg -> unit): ViewElement =
         |> Model.SelectPage
         |> dispatch
     |> UIComponents.button "Puzzle Solving" imageNameOpt
+    
+let creditsBtn (dispatch: Model.Msg -> unit): ViewElement =
+    let imageNameOpt = Some "icons.identity"
+
+    fun () ->
+        Model.Page.CreditsPage
+        |> Model.SelectPage
+        |> dispatch
+    |> UIComponents.button "Credits" imageNameOpt
 
 let stackLayout (_: Model.Model) (dispatch: Model.Msg -> unit): ViewElement =
     UIComponents.stackLayout [ UIComponents.label UIComponents.Title "Quantum Puzzle Generator"
                                View.Image(source = Resources.image "logo")
                                learnBtn dispatch
-                               playBtn dispatch ]
+                               playBtn dispatch
+                               creditsBtn dispatch ]

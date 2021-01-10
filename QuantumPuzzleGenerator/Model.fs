@@ -10,6 +10,7 @@ type Page =
     | LessonCategoriesPage
     | LearnPage
     | PlayPage
+    | CreditsPage
 
 type Model =
     { SelectedPage: Page
