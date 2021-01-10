@@ -10,8 +10,11 @@ type LabelType =
     | Title
     | SimpleLabel
     | Paragraph
-
+    
 // functions
+
+let emptySpaceElem(): ViewElement =
+    View.BoxView(color = Color.Transparent, height = 5.0)
 
 let label (labelType: LabelType) (text: string): ViewElement =
     match labelType with
