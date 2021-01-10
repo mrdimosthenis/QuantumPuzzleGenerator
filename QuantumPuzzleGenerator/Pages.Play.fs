@@ -48,8 +48,7 @@ let regeneratePuzzleOrLevelBtn (currentQState: Matrix.Matrix)
     match Matrix.almostEqual Constants.differenceThreshold currentQState targetQState with
     | false -> regenerateBtn
     | true when puzzleIndex >= Constants.numOfPuzzlesPerLevel - 1
-                && levelIndex >= Level.levels.Length - 1 -> regenerateBtn
-    | true when puzzleIndex >= Constants.numOfPuzzlesPerLevel - 1 -> nextLevelBtn
+                && levelIndex < Level.levels.Length - 1 -> nextLevelBtn
     | true -> nextPuzzleBtn
 
 let backBtn (dispatch: Model.Msg -> unit): ViewElement =
