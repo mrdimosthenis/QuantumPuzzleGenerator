@@ -58,7 +58,7 @@ let button (text: string) (imageNameOpt: string option) (command: unit -> unit):
 
 let stackLayout (children: ViewElement list): ViewElement =
     View.StackLayout
-        (horizontalOptions = LayoutOptions.Center, verticalOptions = LayoutOptions.Center, children = children)
+        (horizontalOptions = LayoutOptions.Center, children = children)
 
 let horizontalStackLayout (children: ViewElement list): ViewElement =
     View.StackLayout
