@@ -11,7 +11,7 @@ open Android.OS
 open Xamarin.Forms.Platform.Android
 open QuantumPuzzleGenerator
 
-[<Activity(Label = "QuantumPuzzleGenerator.Android",
+[<Activity(Label = "Quantum Puzzle Generator",
            Icon = "@drawable/icon",
            Theme = "@style/MainTheme",
            MainLauncher = true,
