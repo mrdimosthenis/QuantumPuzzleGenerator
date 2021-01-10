@@ -45,7 +45,6 @@ let levels: Level list =
       (3, Quantum.Gate.TripleQubit, 4, true)
       (3, Quantum.Gate.TripleQubit, 5, true)
       (3, Quantum.Gate.TripleQubit, 6, true)
-      (3, Quantum.Gate.TripleQubit, 7, true)
       
       (3, Quantum.Gate.SingleQubit, 3, false)
       (3, Quantum.Gate.DoubleQubit, 3, false)
@@ -53,7 +52,8 @@ let levels: Level list =
       (3, Quantum.Gate.TripleQubit, 4, false)
       (3, Quantum.Gate.TripleQubit, 5, false)
       (3, Quantum.Gate.TripleQubit, 6, false)
-      (3, Quantum.Gate.TripleQubit, 7, false) ]
+      (3, Quantum.Gate.TripleQubit, 7, false)
+      (3, Quantum.Gate.TripleQubit, 8, false) ]
     |> List.indexed
     |> List.map (fun (i, (numOfQubits, maxGateType, numOfGates, isAbsoluteInitQState)) ->
         level i numOfQubits maxGateType numOfGates isAbsoluteInitQState)
