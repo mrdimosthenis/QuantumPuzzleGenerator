@@ -66,10 +66,7 @@ let regenerateBtn (model: Model.Model) (dispatch: Model.Msg -> unit): ViewElemen
 let backBtn (dispatch: Model.Msg -> unit): ViewElement =
     let imageNameOpt = Some "icons.library"
 
-    fun () ->
-        Model.Page.LessonCategoriesPage
-        |> Model.SelectPage
-        |> dispatch
+    fun () -> dispatch Model.BackClick
     |> UIComponents.button "Back" imageNameOpt
 
 let colorCircle (model: Model.Model) (dispatch: Model.Msg -> unit): ViewElement list =

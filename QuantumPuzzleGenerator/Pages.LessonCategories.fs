@@ -12,10 +12,7 @@ let lessonButtons (dispatch: Model.Msg -> unit): ViewElement list =
 let backBtn (dispatch: Model.Msg -> unit): ViewElement =
     let imageNameOpt = Some "icons.home"
 
-    fun () ->
-        Model.Page.HomePage
-        |> Model.SelectPage
-        |> dispatch
+    fun () -> dispatch Model.BackClick
     |> UIComponents.button "Back" imageNameOpt
 
 let stackLayout (model: Model.Model) (dispatch: Model.Msg -> unit): ViewElement =

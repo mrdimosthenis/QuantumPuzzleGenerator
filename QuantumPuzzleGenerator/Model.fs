@@ -18,6 +18,7 @@ type Model =
       Settings: Settings.Settings }
 
 type Msg =
+    | BackClick
     | SelectPage of Page
     | SelectLesson of int
     | LessonGateClick of int
@@ -30,11 +31,21 @@ type Msg =
 
 // constructor
 
-let initModel (levelIndex: int) (solvedPuzzlesInLevel: int): Model =
-    let lesson = Lesson.initLesson 0
+let initModel (): Model =
+    let initLevelIndex =
+        Preferences.levelIndexKey
+        |> Preferences.tryGetInt
+        |> Option.defaultValue 0
+
+    let solvedPuzzlesInLevel =
+        Preferences.solvedPuzzlesInLevelKey
+        |> Preferences.tryGetInt
+        |> Option.defaultValue 0
+
+    let lesson = Lesson.initLesson initLevelIndex
 
     let puzzle =
-        Puzzle.initPuzzle levelIndex solvedPuzzlesInLevel
+        Puzzle.initPuzzle initLevelIndex solvedPuzzlesInLevel
 
     let settings = Settings.initSettings ()
 
@@ -47,6 +58,25 @@ let initModel (levelIndex: int) (solvedPuzzlesInLevel: int): Model =
 
 let update (msg: Msg) (model: Model) =
     match msg with
+    | BackClick ->
+        let cmd =
+            match model.SelectedPage with
+            | HomePage ->
+                System
+                    .Diagnostics
+                    .Process
+                    .GetCurrentProcess()
+                    .CloseMainWindow()
+                |> ignore
+
+                HomePage
+            | LearnPage -> LessonCategoriesPage
+            | _ -> HomePage
+            |> SelectPage
+            |> Cmd.ofMsg
+
+        model, cmd
+
     | SelectPage page ->
 
         { model with SelectedPage = page }, Cmd.none

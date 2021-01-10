@@ -1,27 +1,11 @@
 ﻿// Copyright Fabulous contributors. See LICENSE.md for license.
 namespace QuantumPuzzleGenerator
 
-open System.Diagnostics
 open Fabulous
 open Fabulous.XamarinForms
-open Fabulous.XamarinForms.LiveUpdate
-open Xamarin.Essentials
-open Xamarin.Essentials
 open Xamarin.Forms
 
 module App =
-    let initLevelIndex =
-        Preferences.levelIndexKey
-        |> Preferences.tryGetInt
-        |> Option.defaultValue 0
-
-    let solvedPuzzlesInLevel =
-        Preferences.solvedPuzzlesInLevelKey
-        |> Preferences.tryGetInt
-        |> Option.defaultValue 0
-
-    let init () =
-        Model.initModel initLevelIndex solvedPuzzlesInLevel, Cmd.none
 
     let view (model: Model.Model) (dispatch: Model.Msg -> unit) =
         let page =
@@ -31,14 +15,11 @@ module App =
             | Model.Page.LearnPage -> Pages.Learn.stackLayout model dispatch
             | Model.Page.PlayPage -> Pages.Play.stackLayout model dispatch
 
-        View.ContentPage
-            (content =
-                View.ScrollView
-                    (backgroundColor = Constants.backgroundColor, content = page))
+        View.ContentPage(content = View.ScrollView(backgroundColor = Constants.backgroundColor, content = page))
 
-    // Note, this declaration is needed if you enable LiveUpdate
     let program =
-        XamarinFormsProgram.mkProgram init Model.update view
+        let initModelAndCmd () = Model.initModel (), Cmd.none
+        XamarinFormsProgram.mkProgram initModelAndCmd Model.update view
 #if DEBUG
         |> Program.withConsoleTrace
 #endif
@@ -50,13 +31,13 @@ type App() as app =
         App.program |> XamarinFormsProgram.run app
 
 #if DEBUG
-// Uncomment this line to enable live update in debug mode.
+    // Uncomment this line to enable live update in debug mode.
 // See https://fsprojects.github.io/Fabulous/Fabulous.XamarinForms/tools.html#live-update for further  instructions.
 //
 //do runner.EnableLiveUpdate()
 #endif
 
-// Uncomment this code to save the application state to app.Properties using Newtonsoft.Json
+    // Uncomment this code to save the application state to app.Properties using Newtonsoft.Json
 // See https://fsprojects.github.io/Fabulous/Fabulous.XamarinForms/models.html#saving-application-state for further  instructions.
 #if APPSAVE
     let modelId = "model"
@@ -91,3 +72,5 @@ type App() as app =
         Console.WriteLine "OnStart: using same logic as OnResume()"
         this.OnResume()
 #endif
+
+    member __.Program = runner
