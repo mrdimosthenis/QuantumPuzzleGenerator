@@ -16,6 +16,8 @@
     <AssemblyName>QuantumPuzzleGenerator.iOS</AssemblyName>
     <MtouchHttpClientHandler>NSUrlSessionHandler</MtouchHttpClientHandler>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <SelectedDevice>iPhone 12 mini iOS 14.3</SelectedDevice>
+    <DefaultDevice>iPhone 12 mini iOS 14.3</DefaultDevice>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|iPhoneSimulator' ">
     <DebugSymbols>true</DebugSymbols>
