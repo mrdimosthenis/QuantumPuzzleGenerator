@@ -1,9 +1,14 @@
 ﻿module QuantumPuzzleGenerator.Constants
 
 open System
+open Xamarin.Essentials
 open Xamarin.Forms
 
 open QuantumPuzzleMechanics
+
+VersionTracking.Track()
+
+let version: string = VersionTracking.CurrentVersion
 
 let random: Random = Random()
 
@@ -16,7 +21,4 @@ let deviceWidth: float =
     |> min Device.info.PixelScreenSize.Height
     |> (*) 0.5
     
-let backgroundColor = Color.White
-   
-let version = "1.0.0"
-    
+let backgroundColor: Color = Color.White
