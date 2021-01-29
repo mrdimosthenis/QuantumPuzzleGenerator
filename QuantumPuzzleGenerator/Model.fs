@@ -55,9 +55,18 @@ let initModel (): Model =
       Puzzle = puzzle
       Settings = settings }
 
+// workaround for problematic initial rendering in web-views
+let rerenderWebViews: Cmd<Msg> =
+    [ IncreaseScale Settings.Plot
+      DecreaseScale Settings.Plot
+      IncreaseScale Settings.ColorCircle
+      DecreaseScale Settings.ColorCircle ]
+    |> List.map Cmd.ofMsg
+    |> Cmd.batch
+
 // update function
 
-let update (msg: Msg) (model: Model) =
+let update (msg: Msg) (model: Model): Model * Cmd<Msg> =
     match msg with
     | BackClick ->
         let cmd =
@@ -80,7 +89,7 @@ let update (msg: Msg) (model: Model) =
 
     | SelectPage page ->
 
-        { model with SelectedPage = page }, Cmd.none
+        { model with SelectedPage = page }, rerenderWebViews
 
     | SelectLesson index ->
         let lesson = Lesson.initLesson index
@@ -90,7 +99,7 @@ let update (msg: Msg) (model: Model) =
                   Lesson = lesson
                   SelectedPage = LearnPage }
 
-        newModel, Cmd.none
+        newModel, rerenderWebViews
 
     | LessonGateClick index ->
         let gateSelection =
