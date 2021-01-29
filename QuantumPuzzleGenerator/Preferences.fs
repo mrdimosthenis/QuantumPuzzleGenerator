@@ -9,6 +9,9 @@ let solvedPuzzlesInLevelKey: string = "solvedPuzzlesInLevel"
 let plotScaleKey: string = "plotScale"
 let circuitScaleKey: string = "circuitScale"
 let colorCircleScaleKey: string = "colorCircleScale"
+let didVisitAppStoreKey: string = "didVisitAppStore"
+let areAnalyticsEnabledKey: string = "areAnalyticsEnabled"
+let areAdsEnabledKey: string = "areAdsEnabled"
 
 // functions
 

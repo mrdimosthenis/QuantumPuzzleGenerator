@@ -16,7 +16,10 @@ type Model =
     { SelectedPage: Page
       Lesson: Lesson.Lesson
       Puzzle: Puzzle.Puzzle
-      Settings: Settings.Settings }
+      Settings: Settings.Settings
+      DidVisitAppStore: bool
+      AreAnalyticsEnabled: bool
+      AreAdsEnabled: bool }
 
 type Msg =
     | BackClick
@@ -29,6 +32,9 @@ type Msg =
     | NextLevel
     | IncreaseScale of Settings.ScaleElement
     | DecreaseScale of Settings.ScaleElement
+    | VisitAppStore
+    | SwitchAnalytics
+    | SwitchAds
 
 // constructor
 
@@ -50,10 +56,28 @@ let initModel (): Model =
 
     let settings = Settings.initSettings ()
 
+    let didVisitAppStore =
+        Preferences.didVisitAppStoreKey
+        |> Preferences.tryGetBool
+        |> Option.defaultValue false
+
+    let areAnalyticsEnabled =
+        Preferences.areAnalyticsEnabledKey
+        |> Preferences.tryGetBool
+        |> Option.defaultValue false
+
+    let areAdsEnabled =
+        Preferences.areAdsEnabledKey
+        |> Preferences.tryGetBool
+        |> Option.defaultValue false
+
     { SelectedPage = HomePage
       Lesson = lesson
       Puzzle = puzzle
-      Settings = settings }
+      Settings = settings
+      DidVisitAppStore = didVisitAppStore
+      AreAnalyticsEnabled = areAnalyticsEnabled
+      AreAdsEnabled = areAdsEnabled }
 
 // workaround for problematic initial rendering in web-views
 let rerenderWebViews: Cmd<Msg> =
@@ -212,3 +236,21 @@ let update (msg: Msg) (model: Model): Model * Cmd<Msg> =
                       ColorCircleScale = decreasedScaleValue }
 
         { model with Settings = settings }, Cmd.none
+
+    | VisitAppStore ->
+        Preferences.setBool Preferences.didVisitAppStoreKey true
+        { model with DidVisitAppStore = true }, Cmd.none
+    | SwitchAnalytics ->
+        let areAnalyticsEnabled = not model.AreAnalyticsEnabled
+        Preferences.setBool Preferences.areAnalyticsEnabledKey areAnalyticsEnabled
+
+        { model with
+              AreAnalyticsEnabled = areAnalyticsEnabled },
+        Cmd.none
+    | SwitchAds ->
+        let areAdsEnabled = not model.AreAdsEnabled
+        Preferences.setBool Preferences.areAdsEnabledKey areAdsEnabled
+
+        { model with
+              AreAdsEnabled = areAdsEnabled },
+        Cmd.none
