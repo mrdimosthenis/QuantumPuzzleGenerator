@@ -85,7 +85,7 @@ let headerHorizontalLayout (dispatch: Model.Msg -> unit): ViewElement =
             Settings.ColorCircle
             |> Model.DecreaseScale
             |> dispatch
-        |> UIComponents.button "" imageNameOpt
+        |> UIComponents.button "" imageNameOpt false
 
     let increaseScaleBtn =
         let imageNameOpt = Some "icons.zoom_in"
@@ -94,7 +94,7 @@ let headerHorizontalLayout (dispatch: Model.Msg -> unit): ViewElement =
             Settings.ColorCircle
             |> Model.IncreaseScale
             |> dispatch
-        |> UIComponents.button "" imageNameOpt
+        |> UIComponents.button "" imageNameOpt false
 
     UIComponents.horizontalStackLayout [ decreaseScaleBtn
                                          title

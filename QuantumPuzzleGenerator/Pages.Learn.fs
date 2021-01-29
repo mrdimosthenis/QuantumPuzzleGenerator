@@ -39,7 +39,7 @@ let prevLessonBtn (model: Model.Model) (dispatch: Model.Msg -> unit): ViewElemen
             model.Lesson.LessonCategory.Index - 1
             |> Model.SelectLesson
             |> dispatch
-    |> UIComponents.button "" imageNameOpt
+    |> UIComponents.button "" imageNameOpt false
 
 let nextLessonBtn (model: Model.Model) (dispatch: Model.Msg -> unit): ViewElement =
     let imageNameOpt = Some "icons.right"
@@ -52,7 +52,7 @@ let nextLessonBtn (model: Model.Model) (dispatch: Model.Msg -> unit): ViewElemen
             model.Lesson.LessonCategory.Index + 1
             |> Model.SelectLesson
             |> dispatch
-    |> UIComponents.button "" imageNameOpt
+    |> UIComponents.button "" imageNameOpt false
 
 let regenerateBtn (model: Model.Model) (dispatch: Model.Msg -> unit): ViewElement =
     let imageNameOpt = Some "icons.refresh"
@@ -61,18 +61,19 @@ let regenerateBtn (model: Model.Model) (dispatch: Model.Msg -> unit): ViewElemen
         model.Lesson.LessonCategory.Index
         |> Model.SelectLesson
         |> dispatch
-    |> UIComponents.button "Regenerate" imageNameOpt
+    |> UIComponents.button "Regenerate" imageNameOpt false
 
 let backBtn (dispatch: Model.Msg -> unit): ViewElement =
     let imageNameOpt = Some "icons.library"
 
     fun () -> dispatch Model.BackClick
-    |> UIComponents.button "Back" imageNameOpt
+    |> UIComponents.button "Back" imageNameOpt false
 
 let colorCircle (model: Model.Model) (dispatch: Model.Msg -> unit): ViewElement list =
     match model.Lesson.LessonCategory.IsHueDisplayedOpt with
     | Some true ->
         let qStateOpt = model |> quantumState |> Some
+
         [ UIComponents.emptySpaceElem ()
           ColorCircle.webView model.Settings.ColorCircleScale qStateOpt dispatch ]
     | Some false ->

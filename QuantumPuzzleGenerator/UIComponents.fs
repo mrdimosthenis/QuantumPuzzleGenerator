@@ -10,10 +10,10 @@ type LabelType =
     | Title
     | SimpleLabel
     | Paragraph
-    
+
 // functions
 
-let emptySpaceElem(): ViewElement =
+let emptySpaceElem (): ViewElement =
     View.BoxView(color = Color.Transparent, height = 5.0)
 
 let label (labelType: LabelType) (text: string): ViewElement =
@@ -40,11 +40,12 @@ let label (labelType: LabelType) (text: string): ViewElement =
              horizontalOptions = LayoutOptions.Center,
              verticalOptions = LayoutOptions.Center)
 
-let button (text: string) (imageNameOpt: string option) (command: unit -> unit): ViewElement =
+let button (text: string) (imageNameOpt: string option) (isHighlighted: bool) (command: unit -> unit): ViewElement =
+    let backgroundColor = if isHighlighted then Constants.colorA else Color.Transparent
     match (text, imageNameOpt) with
     | ("", Some imageName) ->
         View.ImageButton
-            (backgroundColor = Color.Transparent,
+            (backgroundColor = backgroundColor,
              width = 30.0,
              height = 30.0,
              command = command,
@@ -53,7 +54,7 @@ let button (text: string) (imageNameOpt: string option) (command: unit -> unit):
         View.Button
             (text = text,
              textTransform = TextTransform.None,
-             backgroundColor = Color.Transparent,
+             backgroundColor = backgroundColor,
              borderWidth = 1.0,
              borderColor = Color.Black,
              command = command,
@@ -62,14 +63,13 @@ let button (text: string) (imageNameOpt: string option) (command: unit -> unit):
         View.Button
             (text = text,
              textTransform = TextTransform.None,
-             backgroundColor = Color.Transparent,
+             backgroundColor = backgroundColor,
              borderColor = Color.Black,
              borderWidth = 1.0,
              command = command)
 
 let stackLayout (children: ViewElement list): ViewElement =
-    View.StackLayout
-        (horizontalOptions = LayoutOptions.Center, children = children)
+    View.StackLayout(horizontalOptions = LayoutOptions.Center, children = children)
 
 let horizontalStackLayout (children: ViewElement list): ViewElement =
     View.StackLayout
