@@ -33,7 +33,7 @@ type Msg =
 // constructor
 
 let initModel (): Model =
-    let initLevelIndex =
+    let levelIndex =
         Preferences.levelIndexKey
         |> Preferences.tryGetInt
         |> Option.defaultValue 0
@@ -46,7 +46,7 @@ let initModel (): Model =
     let lesson = Lesson.initLesson 0
 
     let puzzle =
-        Puzzle.initPuzzle initLevelIndex solvedPuzzlesInLevel
+        Puzzle.initPuzzle levelIndex solvedPuzzlesInLevel
 
     let settings = Settings.initSettings ()
 
@@ -148,14 +148,29 @@ let update (msg: Msg) (model: Model) =
         let settings =
             match scaleElement with
             | Settings.Plot ->
+                let increasedScaleValue =
+                    Settings.increasedScaleValue model.Settings.PlotScale
+
+                Preferences.setFloat Preferences.plotScaleKey increasedScaleValue
+
                 { model.Settings with
-                      PlotScale = Settings.increasedScaleValue model.Settings.PlotScale }
+                      PlotScale = increasedScaleValue }
             | Settings.Circuit ->
+                let increasedScaleValue =
+                    Settings.increasedScaleValue model.Settings.CircuitScale
+
+                Preferences.setFloat Preferences.circuitScaleKey increasedScaleValue
+
                 { model.Settings with
-                      CircuitScale = Settings.increasedScaleValue model.Settings.CircuitScale }
+                      CircuitScale = increasedScaleValue }
             | Settings.ColorCircle ->
+                let increasedScaleValue =
+                    Settings.increasedScaleValue model.Settings.ColorCircleScale
+
+                Preferences.setFloat Preferences.colorCircleScaleKey increasedScaleValue
+
                 { model.Settings with
-                      ColorCircleScale = Settings.increasedScaleValue model.Settings.ColorCircleScale }
+                      ColorCircleScale = increasedScaleValue }
 
         { model with Settings = settings }, Cmd.none
 
@@ -163,13 +178,28 @@ let update (msg: Msg) (model: Model) =
         let settings =
             match scaleElement with
             | Settings.Plot ->
+                let decreasedScaleValue =
+                    Settings.decreasedScaleValue model.Settings.PlotScale
+
+                Preferences.setFloat Preferences.plotScaleKey decreasedScaleValue
+
                 { model.Settings with
-                      PlotScale = Settings.decreasedScaleValue model.Settings.PlotScale }
+                      PlotScale = decreasedScaleValue }
             | Settings.Circuit ->
+                let decreasedScaleValue =
+                    Settings.decreasedScaleValue model.Settings.CircuitScale
+
+                Preferences.setFloat Preferences.circuitScaleKey decreasedScaleValue
+
                 { model.Settings with
-                      CircuitScale = Settings.decreasedScaleValue model.Settings.CircuitScale }
+                      CircuitScale = decreasedScaleValue }
             | Settings.ColorCircle ->
+                let decreasedScaleValue =
+                    Settings.decreasedScaleValue model.Settings.ColorCircleScale
+
+                Preferences.setFloat Preferences.colorCircleScaleKey decreasedScaleValue
+
                 { model.Settings with
-                      ColorCircleScale = Settings.decreasedScaleValue model.Settings.ColorCircleScale }
+                      ColorCircleScale = decreasedScaleValue }
 
         { model with Settings = settings }, Cmd.none

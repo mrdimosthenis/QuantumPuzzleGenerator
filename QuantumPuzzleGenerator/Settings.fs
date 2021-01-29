@@ -23,9 +23,24 @@ let maxScaleValue: float = 6.0
 // constructor
 
 let initSettings (): Settings =
-    { PlotScale = 1.0
-      CircuitScale = 1.0
-      ColorCircleScale = 1.0 }
+    let plotScale =
+        Preferences.plotScaleKey
+        |> Preferences.tryGetFloat
+        |> Option.defaultValue 1.0
+
+    let circuitScale =
+        Preferences.circuitScaleKey
+        |> Preferences.tryGetFloat
+        |> Option.defaultValue 1.0
+
+    let colorCircleScale =
+        Preferences.colorCircleScaleKey
+        |> Preferences.tryGetFloat
+        |> Option.defaultValue 1.0
+
+    { PlotScale = plotScale
+      CircuitScale = circuitScale
+      ColorCircleScale = colorCircleScale }
 
 // functions
 
