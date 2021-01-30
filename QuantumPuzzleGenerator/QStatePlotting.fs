@@ -171,9 +171,11 @@ let headerHorizontalLayout (title: string) (dispatch: Model.Msg -> unit): ViewEl
         fun () -> Settings.Plot |> Model.IncreaseScale |> dispatch
         |> UIComponents.button "" imageNameOpt false
 
-    UIComponents.horizontalStackLayout [ decreaseScaleBtn
-                                         title
-                                         increaseScaleBtn ]
+    UIComponents.horizontalStackLayout
+        false
+        [ decreaseScaleBtn
+          title
+          increaseScaleBtn ]
 
 let webView (title: string)
             (plotScale: float)

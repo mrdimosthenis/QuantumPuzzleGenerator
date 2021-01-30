@@ -107,6 +107,8 @@ let stackLayout (model: Model.Model) (dispatch: Model.Msg -> unit): ViewElement 
       circuit
       UIComponents.emptySpaceElem ()
       currentQStatePlot
-      UIComponents.horizontalStackLayout [ backBtn dispatch
-                                           regeneratePuzzleOrLevel ] ]
+      UIComponents.horizontalStackLayout
+          false
+          [ backBtn dispatch
+            regeneratePuzzleOrLevel ] ]
     |> UIComponents.stackLayout

@@ -82,16 +82,20 @@ let colorCircle (model: Model.Model) (dispatch: Model.Msg -> unit): ViewElement 
     | None -> []
 
 let stackLayout (model: Model.Model) (dispatch: Model.Msg -> unit): ViewElement =
-    [ [ UIComponents.horizontalStackLayout [ prevLessonBtn model dispatch
-                                             UIComponents.label UIComponents.Title model.Lesson.LessonCategory.Title
-                                             nextLessonBtn model dispatch ] ]
+    [ [ UIComponents.horizontalStackLayout
+            false
+            [ prevLessonBtn model dispatch
+              UIComponents.label UIComponents.Title model.Lesson.LessonCategory.Title
+              nextLessonBtn model dispatch ] ]
       [ UIComponents.label UIComponents.Paragraph model.Lesson.LessonCategory.Description ]
       [ qStatePlot model dispatch ]
       if model.Lesson.LessonCategory.Gates.IsEmpty
       then []
       else [ circuit model dispatch ]
       colorCircle model dispatch
-      [ UIComponents.horizontalStackLayout [ backBtn dispatch
-                                             regenerateBtn model dispatch ] ] ]
+      [ UIComponents.horizontalStackLayout
+          false
+            [ backBtn dispatch
+              regenerateBtn model dispatch ] ] ]
     |> List.concat
     |> UIComponents.stackLayout

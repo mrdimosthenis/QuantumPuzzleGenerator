@@ -53,9 +53,11 @@ let headerHorizontalLayout (dispatch: Model.Msg -> unit): ViewElement =
             |> dispatch
         |> UIComponents.button "" imageNameOpt false
 
-    UIComponents.horizontalStackLayout [ decreaseScaleBtn
-                                         title
-                                         increaseScaleBtn ]
+    UIComponents.horizontalStackLayout
+        false
+        [ decreaseScaleBtn
+          title
+          increaseScaleBtn ]
 
 let stackLayout (numOfQubits: int)
                 (gates: Quantum.Gate.Gate list)

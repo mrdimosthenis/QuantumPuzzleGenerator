@@ -1,6 +1,7 @@
 ﻿module QuantumPuzzleGenerator.Pages.Credits
 
 open System
+
 open Fabulous
 open Xamarin.Essentials
 
@@ -64,6 +65,28 @@ let appleAppStoreBtn (model: Model.Model) (dispatch: Model.Msg -> unit): ViewEle
 
     UIComponents.button "App on Apple Store" imageNameOpt isHighlighted command
 
+let analyticsHorizontalLayout (model: Model.Model) (dispatch: Model.Msg -> unit): ViewElement =
+    let shortDescriptionLbl =
+        "Send anonymous usage statistics"
+        |> UIComponents.label UIComponents.Paragraph
+
+    let checkBox =
+        fun _ -> dispatch Model.SwitchAnalytics
+        |> UIComponents.checkBox model.AreAnalyticsEnabled
+
+    UIComponents.horizontalStackLayout (not model.AreAnalyticsEnabled) [ shortDescriptionLbl; checkBox ]
+
+let adsHorizontalLayout (model: Model.Model) (dispatch: Model.Msg -> unit): ViewElement =
+    let shortDescriptionLbl =
+        "Display an ad when the app starts"
+        |> UIComponents.label UIComponents.Paragraph
+
+    let checkBox =
+        fun _ -> dispatch Model.SwitchAds
+        |> UIComponents.checkBox model.AreAdsEnabled
+
+    UIComponents.horizontalStackLayout (not model.AreAdsEnabled) [ shortDescriptionLbl; checkBox ]
+
 let versionLbl (): ViewElement =
     Constants.version
     |> sprintf "Version: %s"
@@ -76,14 +99,19 @@ let backBtn (dispatch: Model.Msg -> unit): ViewElement =
     |> UIComponents.button "Back" imageNameOpt false
 
 let stackLayout (model: Model.Model) (dispatch: Model.Msg -> unit): ViewElement =
-    UIComponents.stackLayout [ UIComponents.label UIComponents.Title "Credits"
-                               authorDescriptionLbl ()
-                               codeBtn ()
-                               devBtn ()
-                               UIComponents.emptySpaceElem ()
-                               appStoreDescriptionLbl ()
-                               googleAppStoreBtn model dispatch
-                               appleAppStoreBtn model dispatch
-                               UIComponents.emptySpaceElem ()
-                               versionLbl ()
-                               backBtn dispatch ]
+    [ UIComponents.label UIComponents.Title "Credits"
+      authorDescriptionLbl ()
+      codeBtn ()
+      devBtn ()
+      UIComponents.emptySpaceElem ()
+      appStoreDescriptionLbl ()
+      googleAppStoreBtn model dispatch
+      appleAppStoreBtn model dispatch
+      UIComponents.emptySpaceElem ()
+      analyticsHorizontalLayout model dispatch
+      UIComponents.emptySpaceElem ()
+      adsHorizontalLayout model dispatch
+      UIComponents.emptySpaceElem ()
+      versionLbl ()
+      backBtn dispatch ]
+    |> UIComponents.stackLayout

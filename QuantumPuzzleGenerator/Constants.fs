@@ -30,4 +30,4 @@ let deviceWidth: float =
 let backgroundColor: Color = Color.White
 let colorA: Color = Color.FromHex "#ffc46d" // selected gate
 let colorB: Color = Color.FromHex "#fffbf6" // unselected gate
-let colorC: Color = Color.FromHex "#d6d8d7" // highlighted button
+let colorC: Color = Color.LightGray // highlighted button

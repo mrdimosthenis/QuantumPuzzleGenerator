@@ -96,9 +96,11 @@ let headerHorizontalLayout (dispatch: Model.Msg -> unit): ViewElement =
             |> dispatch
         |> UIComponents.button "" imageNameOpt false
 
-    UIComponents.horizontalStackLayout [ decreaseScaleBtn
-                                         title
-                                         increaseScaleBtn ]
+    UIComponents.horizontalStackLayout
+        false
+        [ decreaseScaleBtn
+          title
+          increaseScaleBtn ]
 
 let webView (colorCircleScale: float) (qStateOpt: Matrix.Matrix option) (dispatch: Model.Msg -> unit): ViewElement =
     let headerLayout = headerHorizontalLayout dispatch

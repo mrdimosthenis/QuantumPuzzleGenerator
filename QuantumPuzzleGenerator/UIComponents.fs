@@ -67,13 +67,22 @@ let button (text: string) (imageNameOpt: string option) (isHighlighted: bool) (c
              borderColor = Color.Black,
              borderWidth = 1.0,
              command = command)
+            
+let checkBox (isChecked: bool) (checkedChanged: unit -> unit) =
+    View.CheckBox(
+        color = Color.Black,
+        isChecked = isChecked,
+        checkedChanged = (fun _ -> checkedChanged ())
+    )
 
 let stackLayout (children: ViewElement list): ViewElement =
     View.StackLayout(horizontalOptions = LayoutOptions.Center, children = children)
 
-let horizontalStackLayout (children: ViewElement list): ViewElement =
+let horizontalStackLayout (isHighlighted: bool) (children: ViewElement list): ViewElement =
+    let backgroundColor = if isHighlighted then Constants.colorC else Color.Transparent
     View.StackLayout
-        (orientation = StackOrientation.Horizontal,
+        (backgroundColor = backgroundColor,
+         orientation = StackOrientation.Horizontal,
          horizontalOptions = LayoutOptions.Center,
          verticalOptions = LayoutOptions.Center,
          children = children)
