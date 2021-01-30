@@ -41,7 +41,7 @@ let label (labelType: LabelType) (text: string): ViewElement =
              verticalOptions = LayoutOptions.Center)
 
 let button (text: string) (imageNameOpt: string option) (isHighlighted: bool) (command: unit -> unit): ViewElement =
-    let backgroundColor = if isHighlighted then Constants.colorA else Color.Transparent
+    let backgroundColor = if isHighlighted then Constants.colorC else Color.Transparent
     match (text, imageNameOpt) with
     | ("", Some imageName) ->
         View.ImageButton
