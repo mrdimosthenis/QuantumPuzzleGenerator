@@ -86,8 +86,8 @@
     <EmbeddedResource Include="resources\images\icons\info.png" />
     <EmbeddedResource Include="resources\images\icons\share.png" />
     <EmbeddedResource Include="resources\images\logo.png" />
-    <Compile Include="Constants.fs" />
     <Compile Include="Secrets.fs" />
+    <Compile Include="Constants.fs" />
     <Compile Include="Resources.fs" />
     <Compile Include="UIComponents.fs" />
     <Compile Include="Preferences.fs" />
