@@ -42,11 +42,15 @@ type App() as app =
             |> Option.defaultValue false
 
         if areAnalyticsEnabled then
+            let keysStr =
+                sprintf
+                    "ios=%s;android=%s"
+                    Secrets.secrets.["AppCenterIOSSecret"]
+                    Secrets.secrets.["AppCenterAndroidSecret"]
+
             try
-                AppCenter.Start
-                    ("ios=XXXXX;android=XXXXXX",
-                     typeof<Analytics>,
-                     typeof<Crashes>)
+                AppCenter.Start(keysStr, typeof<Analytics>, typeof<Crashes>)
+                Analytics.TrackEvent("SessionStart")
             with _ -> ()
         else
             ()
