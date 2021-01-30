@@ -84,6 +84,7 @@
     <EmbeddedResource Include="resources\images\icons\profile.png" />
     <EmbeddedResource Include="resources\images\icons\code.png" />
     <EmbeddedResource Include="resources\images\icons\info.png" />
+    <EmbeddedResource Include="resources\images\icons\share.png" />
     <EmbeddedResource Include="resources\images\logo.png" />
     <Compile Include="Constants.fs" />
     <Compile Include="Resources.fs" />

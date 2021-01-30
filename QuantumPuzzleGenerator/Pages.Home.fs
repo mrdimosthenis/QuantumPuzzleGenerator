@@ -27,8 +27,7 @@ let creditsBtn (model: Model.Model) (dispatch: Model.Msg -> unit): ViewElement =
     let imageNameOpt = Some "icons.identity"
 
     let isHighlighted =
-        not model.DidVisitAppStore
-        || not model.AreAnalyticsEnabled
+        not model.AreAnalyticsEnabled
         || not model.AreAdsEnabled
 
     fun () ->

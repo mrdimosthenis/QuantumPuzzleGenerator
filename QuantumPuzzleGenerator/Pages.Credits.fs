@@ -14,6 +14,12 @@ let openUrl (url: string): unit =
     |> Async.AwaitTask
     |> Async.StartImmediate
 
+let shareUrl (url: string): unit =
+    ShareTextRequest(Uri = url)
+    |> Share.RequestAsync
+    |> Async.AwaitTask
+    |> Async.StartImmediate
+
 let authorDescriptionLbl (): ViewElement =
     "Quantum Puzzle Generator was created by Dimosthenis Michailidis"
     |> UIComponents.label UIComponents.Paragraph
@@ -34,36 +40,41 @@ let devBtn (): ViewElement =
 
     UIComponents.button "Developer on LinkedIn" imageNameOpt false command
 
-let appStoreDescriptionLbl (): ViewElement =
-    "Please rate this app"
-    |> UIComponents.label UIComponents.Paragraph
+let googleAppStoreHorizontalLayout (model: Model.Model) (dispatch: Model.Msg -> unit): ViewElement =
+    let url =
+        "https://play.google.com/store/apps/details?id=com.github.mrdimosthenis.quantumpuzzlegenerator"
 
-let googleAppStoreBtn (model: Model.Model) (dispatch: Model.Msg -> unit): ViewElement =
-    let imageNameOpt = Some "icons.play_dark"
+    let storeBtnImageNameOpt = Some "icons.play_dark"
+    let shareBtnImageNameOpt = Some "icons.share"
 
-    let isHighlighted =
-        not model.DidVisitAppStore && not Constants.isIOS
+    let storeBtn =
+        fun () -> openUrl url
+        |> UIComponents.button "App on Google Play" storeBtnImageNameOpt false
 
-    let command =
-        fun () ->
-            openUrl "https://play.google.com/store/apps/details?id=com.github.mrdimosthenis.quantumpuzzlegenerator"
-            if not Constants.isIOS then dispatch Model.VisitAppStore else ()
+    let shareBtn =
+        fun () -> shareUrl url
+        |> UIComponents.button "" shareBtnImageNameOpt false
 
-    UIComponents.button "App on Google Play" imageNameOpt isHighlighted command
+    UIComponents.horizontalStackLayout false [ storeBtn; shareBtn ]
 
-let appleAppStoreBtn (model: Model.Model) (dispatch: Model.Msg -> unit): ViewElement =
-    let imageNameOpt = Some "icons.info"
 
-    let isHighlighted =
-        not model.DidVisitAppStore && Constants.isIOS
+let appleAppStoreHorizontalLayout (model: Model.Model) (dispatch: Model.Msg -> unit): ViewElement =
+    //TODO replace the zeros with the actual app id
+    let url =
+        "https://apps.apple.com/us/app/apple-store/id000000000"
 
-    let command =
-        fun () ->
-            //TODO replace the zeros with the actual app id
-            openUrl "https://apps.apple.com/us/app/apple-store/id000000000"
-            if Constants.isIOS then dispatch Model.VisitAppStore else ()
+    let storeBtnImageNameOpt = Some "icons.info"
+    let shareBtnImageNameOpt = Some "icons.share"
 
-    UIComponents.button "App on Apple Store" imageNameOpt isHighlighted command
+    let storeBtn =
+        fun () -> openUrl url
+        |> UIComponents.button "App on Apple Store" storeBtnImageNameOpt false
+
+    let shareBtn =
+        fun () -> shareUrl url
+        |> UIComponents.button "" shareBtnImageNameOpt false
+
+    UIComponents.horizontalStackLayout false [ storeBtn; shareBtn ]
 
 let analyticsHorizontalLayout (model: Model.Model) (dispatch: Model.Msg -> unit): ViewElement =
     let shortDescriptionLbl =
@@ -104,9 +115,8 @@ let stackLayout (model: Model.Model) (dispatch: Model.Msg -> unit): ViewElement 
       codeBtn ()
       devBtn ()
       UIComponents.emptySpaceElem ()
-      appStoreDescriptionLbl ()
-      googleAppStoreBtn model dispatch
-      appleAppStoreBtn model dispatch
+      googleAppStoreHorizontalLayout model dispatch
+      appleAppStoreHorizontalLayout model dispatch
       UIComponents.emptySpaceElem ()
       analyticsHorizontalLayout model dispatch
       UIComponents.emptySpaceElem ()

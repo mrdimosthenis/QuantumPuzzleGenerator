@@ -17,7 +17,6 @@ type Model =
       Lesson: Lesson.Lesson
       Puzzle: Puzzle.Puzzle
       Settings: Settings.Settings
-      DidVisitAppStore: bool
       AreAnalyticsEnabled: bool
       AreAdsEnabled: bool }
 
@@ -32,7 +31,6 @@ type Msg =
     | NextLevel
     | IncreaseScale of Settings.ScaleElement
     | DecreaseScale of Settings.ScaleElement
-    | VisitAppStore
     | SwitchAnalytics
     | SwitchAds
 
@@ -56,11 +54,6 @@ let initModel (): Model =
 
     let settings = Settings.initSettings ()
 
-    let didVisitAppStore =
-        Preferences.didVisitAppStoreKey
-        |> Preferences.tryGetBool
-        |> Option.defaultValue false
-
     let areAnalyticsEnabled =
         Preferences.areAnalyticsEnabledKey
         |> Preferences.tryGetBool
@@ -75,7 +68,6 @@ let initModel (): Model =
       Lesson = lesson
       Puzzle = puzzle
       Settings = settings
-      DidVisitAppStore = didVisitAppStore
       AreAnalyticsEnabled = areAnalyticsEnabled
       AreAdsEnabled = areAdsEnabled }
 
@@ -237,9 +229,6 @@ let update (msg: Msg) (model: Model): Model * Cmd<Msg> =
 
         { model with Settings = settings }, Cmd.none
 
-    | VisitAppStore ->
-        Preferences.setBool Preferences.didVisitAppStoreKey true
-        { model with DidVisitAppStore = true }, Cmd.none
     | SwitchAnalytics ->
         let areAnalyticsEnabled = not model.AreAnalyticsEnabled
         Preferences.setBool Preferences.areAnalyticsEnabledKey areAnalyticsEnabled
