@@ -5,6 +5,10 @@ open Fabulous
 open Fabulous.XamarinForms
 open Xamarin.Forms
 
+open Microsoft.AppCenter
+open Microsoft.AppCenter.Analytics
+open Microsoft.AppCenter.Crashes
+
 module App =
 
     let view (model: Model.Model) (dispatch: Model.Msg -> unit) =
@@ -30,6 +34,22 @@ type App() as app =
 
     let runner =
         App.program |> XamarinFormsProgram.run app
+
+    override this.OnStart() =
+        let areAnalyticsEnabled =
+            Preferences.areAnalyticsEnabledKey
+            |> Preferences.tryGetBool
+            |> Option.defaultValue false
+
+        if areAnalyticsEnabled then
+            try
+                AppCenter.Start
+                    ("ios=XXXXX;android=XXXXXX",
+                     typeof<Analytics>,
+                     typeof<Crashes>)
+            with _ -> ()
+        else
+            ()
 
 #if DEBUG
     // Uncomment this line to enable live update in debug mode.
