@@ -10,7 +10,6 @@ let plotScaleKey: string = "plotScale"
 let circuitScaleKey: string = "circuitScale"
 let colorCircleScaleKey: string = "colorCircleScale"
 let areAnalyticsEnabledKey: string = "areAnalyticsEnabled"
-let areAdsEnabledKey: string = "areAdsEnabled"
 
 // functions
 

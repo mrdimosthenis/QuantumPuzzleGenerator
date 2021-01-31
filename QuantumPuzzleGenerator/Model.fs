@@ -1,7 +1,8 @@
 ﻿module QuantumPuzzleGenerator.Model
 
-open Fabulous
 open FSharpx.Collections
+
+open Fabulous
 
 // types
 
@@ -17,8 +18,7 @@ type Model =
       Lesson: Lesson.Lesson
       Puzzle: Puzzle.Puzzle
       Settings: Settings.Settings
-      AreAnalyticsEnabled: bool
-      AreAdsEnabled: bool }
+      AreAnalyticsEnabled: bool }
 
 type Msg =
     | BackClick
@@ -32,7 +32,6 @@ type Msg =
     | IncreaseScale of Settings.ScaleElement
     | DecreaseScale of Settings.ScaleElement
     | SwitchAnalytics
-    | SwitchAds
 
 // constructor
 
@@ -59,17 +58,11 @@ let initModel (): Model =
         |> Preferences.tryGetBool
         |> Option.defaultValue false
 
-    let areAdsEnabled =
-        Preferences.areAdsEnabledKey
-        |> Preferences.tryGetBool
-        |> Option.defaultValue false
-
     { SelectedPage = HomePage
       Lesson = lesson
       Puzzle = puzzle
       Settings = settings
-      AreAnalyticsEnabled = areAnalyticsEnabled
-      AreAdsEnabled = areAdsEnabled }
+      AreAnalyticsEnabled = areAnalyticsEnabled }
 
 // workaround for problematic initial rendering in web-views
 let rerenderWebViews: Cmd<Msg> =
@@ -235,11 +228,4 @@ let update (msg: Msg) (model: Model): Model * Cmd<Msg> =
 
         { model with
               AreAnalyticsEnabled = areAnalyticsEnabled },
-        Cmd.none
-    | SwitchAds ->
-        let areAdsEnabled = not model.AreAdsEnabled
-        Preferences.setBool Preferences.areAdsEnabledKey areAdsEnabled
-
-        { model with
-              AreAdsEnabled = areAdsEnabled },
         Cmd.none

@@ -26,9 +26,7 @@ let playBtn (dispatch: Model.Msg -> unit): ViewElement =
 let creditsBtn (model: Model.Model) (dispatch: Model.Msg -> unit): ViewElement =
     let imageNameOpt = Some "icons.identity"
 
-    let isHighlighted =
-        not model.AreAnalyticsEnabled
-        || not model.AreAdsEnabled
+    let isHighlighted = not model.AreAnalyticsEnabled
 
     fun () ->
         Model.Page.CreditsPage

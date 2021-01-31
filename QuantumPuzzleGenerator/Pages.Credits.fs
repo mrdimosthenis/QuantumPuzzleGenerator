@@ -87,17 +87,6 @@ let analyticsHorizontalLayout (model: Model.Model) (dispatch: Model.Msg -> unit)
 
     UIComponents.horizontalStackLayout (not model.AreAnalyticsEnabled) [ shortDescriptionLbl; checkBox ]
 
-let adsHorizontalLayout (model: Model.Model) (dispatch: Model.Msg -> unit): ViewElement =
-    let shortDescriptionLbl =
-        "Display an ad when the app starts"
-        |> UIComponents.label UIComponents.Paragraph
-
-    let checkBox =
-        fun _ -> dispatch Model.SwitchAds
-        |> UIComponents.checkBox model.AreAdsEnabled
-
-    UIComponents.horizontalStackLayout (not model.AreAdsEnabled) [ shortDescriptionLbl; checkBox ]
-
 let versionLbl (): ViewElement =
     Constants.version
     |> sprintf "Version: %s"
@@ -119,8 +108,6 @@ let stackLayout (model: Model.Model) (dispatch: Model.Msg -> unit): ViewElement 
       appleAppStoreHorizontalLayout model dispatch
       UIComponents.emptySpaceElem ()
       analyticsHorizontalLayout model dispatch
-      UIComponents.emptySpaceElem ()
-      adsHorizontalLayout model dispatch
       UIComponents.emptySpaceElem ()
       versionLbl ()
       backBtn dispatch ]
