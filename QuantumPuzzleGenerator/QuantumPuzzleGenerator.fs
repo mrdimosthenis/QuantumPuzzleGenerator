@@ -5,10 +5,6 @@ open Fabulous
 open Fabulous.XamarinForms
 open Xamarin.Forms
 
-open Microsoft.AppCenter
-open Microsoft.AppCenter.Analytics
-open Microsoft.AppCenter.Crashes
-
 module App =
 
     let view (model: Model.Model) (dispatch: Model.Msg -> unit) =
@@ -36,24 +32,7 @@ type App() as app =
         App.program |> XamarinFormsProgram.run app
 
     override this.OnStart() =
-        let areAnalyticsEnabled =
-            Preferences.areAnalyticsEnabledKey
-            |> Preferences.tryGetBool
-            |> Option.defaultValue false
-
-        if areAnalyticsEnabled then
-            let keysStr =
-                sprintf
-                    "ios=%s;android=%s"
-                    Secrets.secrets.["AppCenterIOSSecret"]
-                    Secrets.secrets.["AppCenterAndroidSecret"]
-
-            try
-                AppCenter.Start(keysStr, typeof<Analytics>, typeof<Crashes>)
-                Analytics.TrackEvent("SessionStart")
-            with _ -> ()
-        else
-            ()
+        Tracking.initialize ()
 
 #if DEBUG
     // Uncomment this line to enable live update in debug mode.

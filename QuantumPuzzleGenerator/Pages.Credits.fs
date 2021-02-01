@@ -28,7 +28,9 @@ let codeBtn (): ViewElement =
     let imageNameOpt = Some "icons.code"
 
     let command =
-        fun () -> openUrl "https://github.com/mrdimosthenis/QuantumPuzzleGenerator"
+        fun () ->
+            Tracking.codeOnGitHubClicked ()
+            openUrl "https://github.com/mrdimosthenis/QuantumPuzzleGenerator"
 
     UIComponents.button "Code on GitHub" imageNameOpt command
 
@@ -36,7 +38,9 @@ let devBtn (): ViewElement =
     let imageNameOpt = Some "icons.profile"
 
     let command =
-        fun () -> openUrl "https://www.linkedin.com/in/mrdimosthenis/"
+        fun () ->
+            Tracking.developerOnLinkedInClicked ()
+            openUrl "https://www.linkedin.com/in/mrdimosthenis/"
 
     UIComponents.button "Developer on LinkedIn" imageNameOpt command
 
@@ -48,11 +52,15 @@ let googleAppStoreHorizontalLayout (): ViewElement =
     let shareBtnImageNameOpt = Some "icons.share"
 
     let storeBtn =
-        fun () -> openUrl url
+        fun () ->
+            Tracking.appOnGooglePlayVisited ()
+            openUrl url
         |> UIComponents.button "App on Google Play" storeBtnImageNameOpt
 
     let shareBtn =
-        fun () -> shareUrl url
+        fun () ->
+            Tracking.appOnGooglePlayShared ()
+            shareUrl url
         |> UIComponents.button "" shareBtnImageNameOpt
 
     UIComponents.horizontalStackLayout [ storeBtn
@@ -68,21 +76,27 @@ let appleAppStoreHorizontalLayout (): ViewElement =
     let shareBtnImageNameOpt = Some "icons.share"
 
     let storeBtn =
-        fun () -> openUrl url
+        fun () ->
+            Tracking.appOnAppleStoreVisited ()
+            openUrl url
         |> UIComponents.button "App on Apple Store" storeBtnImageNameOpt
 
     let shareBtn =
-        fun () -> shareUrl url
+        fun () ->
+            Tracking.appOnAppleStoreShared ()
+            shareUrl url
         |> UIComponents.button "" shareBtnImageNameOpt
 
     UIComponents.horizontalStackLayout [ storeBtn
                                          shareBtn ]
-    
+
 let privacyPolicyBtn (): ViewElement =
     let imageNameOpt = Some "icons.text_document"
 
     let command =
-        fun () -> openUrl "https://github.com/mrdimosthenis/QuantumPuzzleGenerator/blob/master/privacy_policy.md"
+        fun () ->
+            Tracking.privacyPolicyClicked ()
+            openUrl "https://github.com/mrdimosthenis/QuantumPuzzleGenerator/blob/master/privacy_policy.md"
 
     UIComponents.button "Privacy Policy" imageNameOpt command
 

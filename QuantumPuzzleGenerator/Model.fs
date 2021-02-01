@@ -98,6 +98,14 @@ let update (msg: Msg) (model: Model): Model * Cmd<Msg> =
 
     | SelectPage page ->
 
+        match page with
+        | HomePage -> "home"
+        | LessonCategoriesPage -> "lesson_categories"
+        | LearnPage -> "learn"
+        | PlayPage -> "play"
+        | CreditsPage -> "credits"
+        |> Tracking.pageViewed
+
         { model with SelectedPage = page }, rerenderWebViews
 
     | SelectLesson index ->
@@ -225,6 +233,8 @@ let update (msg: Msg) (model: Model): Model * Cmd<Msg> =
     | SwitchAnalytics ->
         let areAnalyticsEnabled = not model.AreAnalyticsEnabled
         Preferences.setBool Preferences.areAnalyticsEnabledKey areAnalyticsEnabled
+
+        if areAnalyticsEnabled then Tracking.initialize () else Tracking.stop ()
 
         { model with
               AreAnalyticsEnabled = areAnalyticsEnabled },

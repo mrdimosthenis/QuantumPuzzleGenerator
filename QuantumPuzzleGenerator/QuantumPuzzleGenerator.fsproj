@@ -92,6 +92,7 @@
     <Compile Include="Resources.fs" />
     <Compile Include="UIComponents.fs" />
     <Compile Include="Preferences.fs" />
+    <Compile Include="Tracking.fs" />
     <Compile Include="Selection.fs" />
     <Compile Include="LessonCategory.fs" />
     <Compile Include="Lesson.fs" />
