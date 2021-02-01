@@ -32,7 +32,7 @@ let creditsBtn (dispatch: Model.Msg -> unit): ViewElement =
         |> dispatch
     |> UIComponents.button "Credits" imageNameOpt
 
-let stackLayout (model: Model.Model) (dispatch: Model.Msg -> unit): ViewElement =
+let stackLayout (_: Model.Model) (dispatch: Model.Msg -> unit): ViewElement =
     UIComponents.stackLayout [ UIComponents.label UIComponents.Title "Quantum Puzzle Generator"
                                View.Image(source = Resources.image "logo")
                                learnBtn dispatch

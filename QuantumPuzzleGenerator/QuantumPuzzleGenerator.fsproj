@@ -85,6 +85,7 @@
     <EmbeddedResource Include="resources\images\icons\code.png" />
     <EmbeddedResource Include="resources\images\icons\info.png" />
     <EmbeddedResource Include="resources\images\icons\share.png" />
+    <EmbeddedResource Include="resources\images\icons\text_document.png" />
     <EmbeddedResource Include="resources\images\logo.png" />
     <Compile Include="Secrets.fs" />
     <Compile Include="Constants.fs" />

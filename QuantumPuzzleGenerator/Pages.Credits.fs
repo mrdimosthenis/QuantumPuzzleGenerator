@@ -77,6 +77,14 @@ let appleAppStoreHorizontalLayout (): ViewElement =
 
     UIComponents.horizontalStackLayout [ storeBtn
                                          shareBtn ]
+    
+let privacyPolicyBtn (): ViewElement =
+    let imageNameOpt = Some "icons.text_document"
+
+    let command =
+        fun () -> openUrl "https://github.com/mrdimosthenis/QuantumPuzzleGenerator/blob/master/privacy_policy.md"
+
+    UIComponents.button "Privacy Policy" imageNameOpt command
 
 let analyticsHorizontalLayout (model: Model.Model) (dispatch: Model.Msg -> unit): ViewElement =
     let shortDescriptionLbl =
@@ -110,6 +118,7 @@ let stackLayout (model: Model.Model) (dispatch: Model.Msg -> unit): ViewElement 
       googleAppStoreHorizontalLayout ()
       appleAppStoreHorizontalLayout ()
       UIComponents.emptySpaceElem ()
+      privacyPolicyBtn ()
       analyticsHorizontalLayout model dispatch
       UIComponents.emptySpaceElem ()
       versionLbl ()
