@@ -42,7 +42,7 @@ let headerHorizontalLayout (dispatch: Model.Msg -> unit): ViewElement =
             Settings.Circuit
             |> Model.DecreaseScale
             |> dispatch
-        |> UIComponents.button "" imageNameOpt false
+        |> UIComponents.button "" imageNameOpt
 
     let increaseScaleBtn =
         let imageNameOpt = Some "icons.zoom_in"
@@ -51,13 +51,11 @@ let headerHorizontalLayout (dispatch: Model.Msg -> unit): ViewElement =
             Settings.Circuit
             |> Model.IncreaseScale
             |> dispatch
-        |> UIComponents.button "" imageNameOpt false
+        |> UIComponents.button "" imageNameOpt
 
-    UIComponents.horizontalStackLayout
-        false
-        [ decreaseScaleBtn
-          title
-          increaseScaleBtn ]
+    UIComponents.horizontalStackLayout [ decreaseScaleBtn
+                                         title
+                                         increaseScaleBtn ]
 
 let stackLayout (numOfQubits: int)
                 (gates: Quantum.Gate.Gate list)

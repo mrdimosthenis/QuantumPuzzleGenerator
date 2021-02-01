@@ -85,7 +85,7 @@ let headerHorizontalLayout (dispatch: Model.Msg -> unit): ViewElement =
             Settings.ColorCircle
             |> Model.DecreaseScale
             |> dispatch
-        |> UIComponents.button "" imageNameOpt false
+        |> UIComponents.button "" imageNameOpt
 
     let increaseScaleBtn =
         let imageNameOpt = Some "icons.zoom_in"
@@ -94,13 +94,11 @@ let headerHorizontalLayout (dispatch: Model.Msg -> unit): ViewElement =
             Settings.ColorCircle
             |> Model.IncreaseScale
             |> dispatch
-        |> UIComponents.button "" imageNameOpt false
+        |> UIComponents.button "" imageNameOpt
 
-    UIComponents.horizontalStackLayout
-        false
-        [ decreaseScaleBtn
-          title
-          increaseScaleBtn ]
+    UIComponents.horizontalStackLayout [ decreaseScaleBtn
+                                         title
+                                         increaseScaleBtn ]
 
 let webView (colorCircleScale: float) (qStateOpt: Matrix.Matrix option) (dispatch: Model.Msg -> unit): ViewElement =
     let headerLayout = headerHorizontalLayout dispatch

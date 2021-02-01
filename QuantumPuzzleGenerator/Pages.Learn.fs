@@ -39,7 +39,7 @@ let prevLessonBtn (model: Model.Model) (dispatch: Model.Msg -> unit): ViewElemen
             model.Lesson.LessonCategory.Index - 1
             |> Model.SelectLesson
             |> dispatch
-    |> UIComponents.button "" imageNameOpt false
+    |> UIComponents.button "" imageNameOpt
 
 let nextLessonBtn (model: Model.Model) (dispatch: Model.Msg -> unit): ViewElement =
     let imageNameOpt = Some "icons.right"
@@ -52,7 +52,7 @@ let nextLessonBtn (model: Model.Model) (dispatch: Model.Msg -> unit): ViewElemen
             model.Lesson.LessonCategory.Index + 1
             |> Model.SelectLesson
             |> dispatch
-    |> UIComponents.button "" imageNameOpt false
+    |> UIComponents.button "" imageNameOpt
 
 let regenerateBtn (model: Model.Model) (dispatch: Model.Msg -> unit): ViewElement =
     let imageNameOpt = Some "icons.refresh"
@@ -61,13 +61,13 @@ let regenerateBtn (model: Model.Model) (dispatch: Model.Msg -> unit): ViewElemen
         model.Lesson.LessonCategory.Index
         |> Model.SelectLesson
         |> dispatch
-    |> UIComponents.button "Regenerate" imageNameOpt false
+    |> UIComponents.button "Regenerate" imageNameOpt
 
 let backBtn (dispatch: Model.Msg -> unit): ViewElement =
     let imageNameOpt = Some "icons.library"
 
     fun () -> dispatch Model.BackClick
-    |> UIComponents.button "Back" imageNameOpt false
+    |> UIComponents.button "Back" imageNameOpt
 
 let colorCircle (model: Model.Model) (dispatch: Model.Msg -> unit): ViewElement list =
     match model.Lesson.LessonCategory.IsHueDisplayedOpt with
@@ -82,20 +82,16 @@ let colorCircle (model: Model.Model) (dispatch: Model.Msg -> unit): ViewElement 
     | None -> []
 
 let stackLayout (model: Model.Model) (dispatch: Model.Msg -> unit): ViewElement =
-    [ [ UIComponents.horizontalStackLayout
-            false
-            [ prevLessonBtn model dispatch
-              UIComponents.label UIComponents.Title model.Lesson.LessonCategory.Title
-              nextLessonBtn model dispatch ] ]
+    [ [ UIComponents.horizontalStackLayout [ prevLessonBtn model dispatch
+                                             UIComponents.label UIComponents.Title model.Lesson.LessonCategory.Title
+                                             nextLessonBtn model dispatch ] ]
       [ UIComponents.label UIComponents.Paragraph model.Lesson.LessonCategory.Description ]
       [ qStatePlot model dispatch ]
       if model.Lesson.LessonCategory.Gates.IsEmpty
       then []
       else [ circuit model dispatch ]
       colorCircle model dispatch
-      [ UIComponents.horizontalStackLayout
-          false
-            [ backBtn dispatch
-              regenerateBtn model dispatch ] ] ]
+      [ UIComponents.horizontalStackLayout [ backBtn dispatch
+                                             regenerateBtn model dispatch ] ] ]
     |> List.concat
     |> UIComponents.stackLayout

@@ -163,19 +163,17 @@ let headerHorizontalLayout (title: string) (dispatch: Model.Msg -> unit): ViewEl
         let imageNameOpt = Some "icons.zoom_out"
 
         fun () -> Settings.Plot |> Model.DecreaseScale |> dispatch
-        |> UIComponents.button "" imageNameOpt false
+        |> UIComponents.button "" imageNameOpt
 
     let increaseScaleBtn =
         let imageNameOpt = Some "icons.zoom_in"
 
         fun () -> Settings.Plot |> Model.IncreaseScale |> dispatch
-        |> UIComponents.button "" imageNameOpt false
+        |> UIComponents.button "" imageNameOpt
 
-    UIComponents.horizontalStackLayout
-        false
-        [ decreaseScaleBtn
-          title
-          increaseScaleBtn ]
+    UIComponents.horizontalStackLayout [ decreaseScaleBtn
+                                         title
+                                         increaseScaleBtn ]
 
 let webView (title: string)
             (plotScale: float)

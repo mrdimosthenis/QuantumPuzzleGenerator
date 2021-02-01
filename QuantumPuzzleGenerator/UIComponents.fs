@@ -40,12 +40,11 @@ let label (labelType: LabelType) (text: string): ViewElement =
              horizontalOptions = LayoutOptions.Center,
              verticalOptions = LayoutOptions.Center)
 
-let button (text: string) (imageNameOpt: string option) (isHighlighted: bool) (command: unit -> unit): ViewElement =
-    let backgroundColor = if isHighlighted then Constants.colorC else Color.Transparent
+let button (text: string) (imageNameOpt: string option) (command: unit -> unit): ViewElement =
     match (text, imageNameOpt) with
     | ("", Some imageName) ->
         View.ImageButton
-            (backgroundColor = backgroundColor,
+            (backgroundColor = Color.Transparent,
              width = 30.0,
              height = 30.0,
              command = command,
@@ -54,7 +53,7 @@ let button (text: string) (imageNameOpt: string option) (isHighlighted: bool) (c
         View.Button
             (text = text,
              textTransform = TextTransform.None,
-             backgroundColor = backgroundColor,
+             backgroundColor = Color.Transparent,
              borderWidth = 1.0,
              borderColor = Color.Black,
              command = command,
@@ -63,26 +62,20 @@ let button (text: string) (imageNameOpt: string option) (isHighlighted: bool) (c
         View.Button
             (text = text,
              textTransform = TextTransform.None,
-             backgroundColor = backgroundColor,
+             backgroundColor = Color.Transparent,
              borderColor = Color.Black,
              borderWidth = 1.0,
              command = command)
-            
+
 let checkBox (isChecked: bool) (checkedChanged: unit -> unit) =
-    View.CheckBox(
-        color = Color.Black,
-        isChecked = isChecked,
-        checkedChanged = (fun _ -> checkedChanged ())
-    )
+    View.CheckBox(color = Color.Black, isChecked = isChecked, checkedChanged = (fun _ -> checkedChanged ()))
 
 let stackLayout (children: ViewElement list): ViewElement =
     View.StackLayout(horizontalOptions = LayoutOptions.Center, children = children)
 
-let horizontalStackLayout (isHighlighted: bool) (children: ViewElement list): ViewElement =
-    let backgroundColor = if isHighlighted then Constants.colorC else Color.Transparent
+let horizontalStackLayout (children: ViewElement list): ViewElement =
     View.StackLayout
-        (backgroundColor = backgroundColor,
-         orientation = StackOrientation.Horizontal,
+        (orientation = StackOrientation.Horizontal,
          horizontalOptions = LayoutOptions.Center,
          verticalOptions = LayoutOptions.Center,
          children = children)

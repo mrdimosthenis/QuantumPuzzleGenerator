@@ -12,7 +12,7 @@ let learnBtn (dispatch: Model.Msg -> unit): ViewElement =
         Model.Page.LessonCategoriesPage
         |> Model.SelectPage
         |> dispatch
-    |> UIComponents.button "Interactive Learning" imageNameOpt false
+    |> UIComponents.button "Interactive Learning" imageNameOpt
 
 let playBtn (dispatch: Model.Msg -> unit): ViewElement =
     let imageNameOpt = Some "icons.puzzle"
@@ -21,22 +21,20 @@ let playBtn (dispatch: Model.Msg -> unit): ViewElement =
         Model.Page.PlayPage
         |> Model.SelectPage
         |> dispatch
-    |> UIComponents.button "Puzzle Solving" imageNameOpt false
+    |> UIComponents.button "Puzzle Solving" imageNameOpt
 
-let creditsBtn (model: Model.Model) (dispatch: Model.Msg -> unit): ViewElement =
+let creditsBtn (dispatch: Model.Msg -> unit): ViewElement =
     let imageNameOpt = Some "icons.identity"
-
-    let isHighlighted = not model.AreAnalyticsEnabled
 
     fun () ->
         Model.Page.CreditsPage
         |> Model.SelectPage
         |> dispatch
-    |> UIComponents.button "Credits" imageNameOpt isHighlighted
+    |> UIComponents.button "Credits" imageNameOpt
 
 let stackLayout (model: Model.Model) (dispatch: Model.Msg -> unit): ViewElement =
     UIComponents.stackLayout [ UIComponents.label UIComponents.Title "Quantum Puzzle Generator"
                                View.Image(source = Resources.image "logo")
                                learnBtn dispatch
                                playBtn dispatch
-                               creditsBtn model dispatch ]
+                               creditsBtn dispatch ]

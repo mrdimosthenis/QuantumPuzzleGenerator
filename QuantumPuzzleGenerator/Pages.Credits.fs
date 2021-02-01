@@ -30,7 +30,7 @@ let codeBtn (): ViewElement =
     let command =
         fun () -> openUrl "https://github.com/mrdimosthenis/QuantumPuzzleGenerator"
 
-    UIComponents.button "Code on GitHub" imageNameOpt false command
+    UIComponents.button "Code on GitHub" imageNameOpt command
 
 let devBtn (): ViewElement =
     let imageNameOpt = Some "icons.profile"
@@ -38,9 +38,9 @@ let devBtn (): ViewElement =
     let command =
         fun () -> openUrl "https://www.linkedin.com/in/mrdimosthenis/"
 
-    UIComponents.button "Developer on LinkedIn" imageNameOpt false command
+    UIComponents.button "Developer on LinkedIn" imageNameOpt command
 
-let googleAppStoreHorizontalLayout (model: Model.Model) (dispatch: Model.Msg -> unit): ViewElement =
+let googleAppStoreHorizontalLayout (): ViewElement =
     let url =
         "https://play.google.com/store/apps/details?id=com.github.mrdimosthenis.quantumpuzzlegenerator"
 
@@ -49,16 +49,17 @@ let googleAppStoreHorizontalLayout (model: Model.Model) (dispatch: Model.Msg -> 
 
     let storeBtn =
         fun () -> openUrl url
-        |> UIComponents.button "App on Google Play" storeBtnImageNameOpt false
+        |> UIComponents.button "App on Google Play" storeBtnImageNameOpt
 
     let shareBtn =
         fun () -> shareUrl url
-        |> UIComponents.button "" shareBtnImageNameOpt false
+        |> UIComponents.button "" shareBtnImageNameOpt
 
-    UIComponents.horizontalStackLayout false [ storeBtn; shareBtn ]
+    UIComponents.horizontalStackLayout [ storeBtn
+                                         shareBtn ]
 
 
-let appleAppStoreHorizontalLayout (model: Model.Model) (dispatch: Model.Msg -> unit): ViewElement =
+let appleAppStoreHorizontalLayout (): ViewElement =
     //TODO replace the zeros with the actual app id
     let url =
         "https://apps.apple.com/us/app/apple-store/id000000000"
@@ -68,13 +69,14 @@ let appleAppStoreHorizontalLayout (model: Model.Model) (dispatch: Model.Msg -> u
 
     let storeBtn =
         fun () -> openUrl url
-        |> UIComponents.button "App on Apple Store" storeBtnImageNameOpt false
+        |> UIComponents.button "App on Apple Store" storeBtnImageNameOpt
 
     let shareBtn =
         fun () -> shareUrl url
-        |> UIComponents.button "" shareBtnImageNameOpt false
+        |> UIComponents.button "" shareBtnImageNameOpt
 
-    UIComponents.horizontalStackLayout false [ storeBtn; shareBtn ]
+    UIComponents.horizontalStackLayout [ storeBtn
+                                         shareBtn ]
 
 let analyticsHorizontalLayout (model: Model.Model) (dispatch: Model.Msg -> unit): ViewElement =
     let shortDescriptionLbl =
@@ -85,7 +87,8 @@ let analyticsHorizontalLayout (model: Model.Model) (dispatch: Model.Msg -> unit)
         fun _ -> dispatch Model.SwitchAnalytics
         |> UIComponents.checkBox model.AreAnalyticsEnabled
 
-    UIComponents.horizontalStackLayout (not model.AreAnalyticsEnabled) [ shortDescriptionLbl; checkBox ]
+    UIComponents.horizontalStackLayout [ shortDescriptionLbl
+                                         checkBox ]
 
 let versionLbl (): ViewElement =
     Constants.version
@@ -96,7 +99,7 @@ let backBtn (dispatch: Model.Msg -> unit): ViewElement =
     let imageNameOpt = Some "icons.home"
 
     fun () -> dispatch Model.BackClick
-    |> UIComponents.button "Back" imageNameOpt false
+    |> UIComponents.button "Back" imageNameOpt
 
 let stackLayout (model: Model.Model) (dispatch: Model.Msg -> unit): ViewElement =
     [ UIComponents.label UIComponents.Title "Credits"
@@ -104,8 +107,8 @@ let stackLayout (model: Model.Model) (dispatch: Model.Msg -> unit): ViewElement 
       codeBtn ()
       devBtn ()
       UIComponents.emptySpaceElem ()
-      googleAppStoreHorizontalLayout model dispatch
-      appleAppStoreHorizontalLayout model dispatch
+      googleAppStoreHorizontalLayout ()
+      appleAppStoreHorizontalLayout ()
       UIComponents.emptySpaceElem ()
       analyticsHorizontalLayout model dispatch
       UIComponents.emptySpaceElem ()

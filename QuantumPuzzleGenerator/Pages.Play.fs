@@ -31,19 +31,19 @@ let regeneratePuzzleOrLevelBtn (currentQState: Matrix.Matrix)
         let imageNameOpt = Some "icons.refresh"
 
         fun () -> dispatch Model.RegeneratePuzzle
-        |> UIComponents.button "Regenerate" imageNameOpt false
+        |> UIComponents.button "Regenerate" imageNameOpt
 
     let nextPuzzleBtn =
         let imageNameOpt = Some "icons.play_light"
 
         fun () -> dispatch Model.NextPuzzle
-        |> UIComponents.button "Next Puzzle" imageNameOpt true
+        |> UIComponents.button "Next Puzzle" imageNameOpt
 
     let nextLevelBtn =
         let imageNameOpt = Some "icons.play_dark"
 
         fun () -> dispatch Model.NextLevel
-        |> UIComponents.button "Next Level" imageNameOpt true
+        |> UIComponents.button "Next Level" imageNameOpt
 
     match Matrix.almostEqual Constants.differenceThreshold currentQState targetQState with
     | false -> regenerateBtn
@@ -55,7 +55,7 @@ let backBtn (dispatch: Model.Msg -> unit): ViewElement =
     let imageNameOpt = Some "icons.home"
 
     fun () -> dispatch Model.BackClick
-    |> UIComponents.button "Back" imageNameOpt false
+    |> UIComponents.button "Back" imageNameOpt
 
 let stackLayout (model: Model.Model) (dispatch: Model.Msg -> unit): ViewElement =
     let goalQStatePlot =
@@ -107,8 +107,6 @@ let stackLayout (model: Model.Model) (dispatch: Model.Msg -> unit): ViewElement 
       circuit
       UIComponents.emptySpaceElem ()
       currentQStatePlot
-      UIComponents.horizontalStackLayout
-          false
-          [ backBtn dispatch
-            regeneratePuzzleOrLevel ] ]
+      UIComponents.horizontalStackLayout [ backBtn dispatch
+                                           regeneratePuzzleOrLevel ] ]
     |> UIComponents.stackLayout
