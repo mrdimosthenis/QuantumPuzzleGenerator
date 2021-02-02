@@ -36,6 +36,5 @@ let colorB: Color = Color.FromHex "#fffbf6" // unselected gate
 let gitHubUrl: string = "https://github.com/mrdimosthenis/QuantumPuzzleGenerator"
 let linkedInUrl: string = "https://www.linkedin.com/in/mrdimosthenis/"
 let googlePlayUrl: string = "https://play.google.com/store/apps/details?id=com.github.mrdimosthenis.quantumpuzzlegenerator"
-//TODO replace the zeros with the actual app id
-let appleStoreUrl: string = "https://apps.apple.com/us/app/apple-store/id000000000"
+let appleStoreUrl: string = "https://apps.apple.com/us/app/apple-store/id1551795039"
 let privacyPolicyUrl: string = "https://github.com/mrdimosthenis/QuantumPuzzleGenerator/blob/master/privacy_policy.md"
