@@ -20,7 +20,9 @@ type Model =
       Lesson: Lesson.Lesson
       Puzzle: Puzzle.Puzzle
       Settings: Settings.Settings
-      AreAnalyticsEnabled: bool }
+      AreAnalyticsEnabled: bool
+      UserId: string
+      SessionId: string }
 
 type ExternalUrl =
     | GitHub
@@ -73,11 +75,23 @@ let initModel (): Model =
         |> Preferences.tryGetBool
         |> Option.defaultValue false
 
+    let userId =
+        match Preferences.tryGetString Preferences.userIdKey with
+        | Some str -> str
+        | None ->
+            let newUserId = Tracking.randomAlphanumeric ()
+            Preferences.setString Preferences.userIdKey newUserId
+            newUserId
+
+    let sessionId = Tracking.randomAlphanumeric ()
+
     { SelectedPage = HomePage
       Lesson = lesson
       Puzzle = puzzle
       Settings = settings
-      AreAnalyticsEnabled = areAnalyticsEnabled }
+      AreAnalyticsEnabled = areAnalyticsEnabled
+      UserId = userId
+      SessionId = sessionId }
 
 // analytics
 
@@ -86,7 +100,9 @@ let modelTrackingSubMap (model: Model): Map<string, string> =
       ("lastPuzzleLevelIndex", string model.Puzzle.Level.Index)
       ("plotScaleSetting", string model.Settings.PlotScale)
       ("circuitScaleSetting", string model.Settings.CircuitScale)
-      ("colorCircleScaleSetting", string model.Settings.ColorCircleScale) ]
+      ("colorCircleScaleSetting", string model.Settings.ColorCircleScale)
+      ("userId", model.UserId)
+      ("sessionId", model.SessionId) ]
     |> Map.ofList
 
 let maybeTrackEvent (msg: Msg) (model: Model): unit =

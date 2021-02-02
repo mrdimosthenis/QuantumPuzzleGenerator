@@ -1,5 +1,6 @@
 ﻿module QuantumPuzzleGenerator.Tracking
 
+open System
 open System.Globalization
 open FSharpx.Collections
 
@@ -9,6 +10,17 @@ open Xamarin.Essentials
 open Microsoft.AppCenter
 open Microsoft.AppCenter.Analytics
 open Microsoft.AppCenter.Crashes
+
+let randomAlphanumeric (): string =
+    let chars =
+        "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
+
+    seq {
+        for i in 0 .. 7 do
+            yield chars.[Constants.random.Next(chars.Length)]
+    }
+    |> Seq.toArray
+    |> (fun x -> String(x))
 
 // safe initialization
 
