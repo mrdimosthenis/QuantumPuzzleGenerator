@@ -1,5 +1,6 @@
 ﻿module QuantumPuzzleGenerator.Tracking
 
+open System.Globalization
 open FSharpx.Collections
 
 open Xamarin.Forms
@@ -48,26 +49,33 @@ let stop (): unit =
 // dimensions
 
 let properties (): Map<string, string> =
-    [ // Constants
-      ("appVersion", Constants.version)
+    [ // VersionTracking
+      ("appBuild", VersionTracking.CurrentBuild)
+      ("appVersion", VersionTracking.CurrentVersion)
 
       // DeviceInfo
-      ("deviceInfo.Manufacturer", DeviceInfo.Manufacturer)
+      ("deviceManufacturer", DeviceInfo.Manufacturer)
       ("deviceModel", DeviceInfo.Model)
-      ("operatingSystemVersionNumber", DeviceInfo.VersionString)
+      ("devicePlatform", DeviceInfo.Platform.ToString())
+      ("deviceIdiom", DeviceInfo.Idiom.ToString())
+      ("deviceType", DeviceInfo.DeviceType.ToString())
+      ("deviceOSVersion", DeviceInfo.VersionString)
 
       // Device.info
-      ("internalScreenWidthInPixels", string Device.info.PixelScreenSize.Width)
-      ("internalScreenHeightInPixels", string Device.info.PixelScreenSize.Height)
-      ("currentOrientation",
+      ("internalScreenWidth", string Device.info.PixelScreenSize.Width)
+      ("internalScreenHeight", string Device.info.PixelScreenSize.Height)
+      ("internalOrientation",
        match Device.info.CurrentOrientation with
-       | Internals.DeviceOrientation.Landscape -> "landscape"
-       | Internals.DeviceOrientation.Portrait -> "portrait"
-       | Internals.DeviceOrientation.LandscapeLeft -> "landscapeLeft"
-       | Internals.DeviceOrientation.LandscapeRight -> "landscapeRight"
-       | Internals.DeviceOrientation.PortraitDown -> "portraitDown"
-       | Internals.DeviceOrientation.PortraitUp -> "portraitUp"
-       | _ -> "other") ]
+       | Internals.DeviceOrientation.Landscape -> "Landscape"
+       | Internals.DeviceOrientation.Portrait -> "Portrait"
+       | Internals.DeviceOrientation.LandscapeLeft -> "LandscapeLeft"
+       | Internals.DeviceOrientation.LandscapeRight -> "LandscapeRight"
+       | Internals.DeviceOrientation.PortraitDown -> "PortraitDown"
+       | Internals.DeviceOrientation.PortraitUp -> "PortraitUp"
+       | _ -> "Other")
+
+      ("region", RegionInfo.CurrentRegion.TwoLetterISORegionName)
+      ("language", CultureInfo.CurrentCulture.TwoLetterISOLanguageName) ]
     |> Map.ofList
 
 // tracking
@@ -76,33 +84,24 @@ let track (event: string): unit =
     try
         Analytics.TrackEvent(event, properties ())
     with _ -> ()
-    
+
 // page events
 
 let pageViewed (pageName: string): unit =
-    pageName
-    |> sprintf "viewed_page_%s"
-    |> track
+    pageName |> sprintf "viewed_page_%s" |> track
 
 // credits events
 
-let codeOnGitHubClicked (): unit =
-    track "code_on_github_clicked"
+let codeOnGitHubClicked (): unit = track "code_on_github_clicked"
 
-let developerOnLinkedInClicked (): unit =
-    track "developer_on_linkedin_clicked"
+let developerOnLinkedInClicked (): unit = track "developer_on_linkedin_clicked"
 
-let appOnGooglePlayVisited (): unit =
-    track "app_on_google_play_visited"
-    
-let appOnGooglePlayShared (): unit =
-    track "app_on_google_play_shared"
-    
-let appOnAppleStoreVisited (): unit =
-    track "app_on_apple_store_visited"
-    
-let appOnAppleStoreShared (): unit =
-    track "app_on_apple_store_shared"
-    
-let privacyPolicyClicked (): unit =
-    track "privacy_policy_clicked"
+let appOnGooglePlayVisited (): unit = track "app_on_google_play_visited"
+
+let appOnGooglePlayShared (): unit = track "app_on_google_play_shared"
+
+let appOnAppleStoreVisited (): unit = track "app_on_apple_store_visited"
+
+let appOnAppleStoreShared (): unit = track "app_on_apple_store_shared"
+
+let privacyPolicyClicked (): unit = track "privacy_policy_clicked"
