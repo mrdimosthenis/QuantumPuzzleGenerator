@@ -79,6 +79,34 @@ let initModel (): Model =
       Settings = settings
       AreAnalyticsEnabled = areAnalyticsEnabled }
 
+// analytics
+
+let modelTrackingSubMap (model: Model): Map<string, string> =
+    [ ("lastLessonCategoryIndex", string model.Lesson.LessonCategory.Index)
+      ("lastPuzzleLevelIndex", string model.Puzzle.Level.Index)
+      ("plotScaleSetting", string model.Settings.PlotScale)
+      ("circuitScaleSetting", string model.Settings.CircuitScale)
+      ("colorCircleScaleSetting", string model.Settings.ColorCircleScale) ]
+    |> Map.ofList
+
+let maybeTrackEvent (msg: Msg) (model: Model): unit =
+    match msg with
+    | SelectPage _
+    | SelectLesson _
+    | RegeneratePuzzle
+    | NextPuzzle
+    | NextLevel
+    | UrlClick _
+    | UrlShare _
+    | SwitchAnalytics ->
+        let modelSubMap = modelTrackingSubMap model
+
+        let eventJsonString =
+            Newtonsoft.Json.JsonConvert.SerializeObject msg
+
+        Tracking.track modelSubMap eventJsonString
+    | _ -> ()
+
 // workaround for problematic initial rendering in web-views
 let rerenderWebViews: Cmd<Msg> =
     [ IncreaseScale Settings.Plot
@@ -91,6 +119,8 @@ let rerenderWebViews: Cmd<Msg> =
 // update function
 
 let update (msg: Msg) (model: Model): Model * Cmd<Msg> =
+    maybeTrackEvent msg model
+
     match msg with
     | BackClick ->
         let cmd =
@@ -112,14 +142,6 @@ let update (msg: Msg) (model: Model): Model * Cmd<Msg> =
         model, cmd
 
     | SelectPage page ->
-
-        match page with
-        | HomePage -> "home"
-        | LessonCategoriesPage -> "lesson_categories"
-        | LearnPage -> "learn"
-        | PlayPage -> "play"
-        | CreditsPage -> "credits"
-        |> Tracking.pageViewed
 
         { model with SelectedPage = page }, rerenderWebViews
 

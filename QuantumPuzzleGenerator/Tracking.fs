@@ -80,12 +80,9 @@ let properties (): Map<string, string> =
 
 // tracking
 
-let track (event: string): unit =
+let track (modelSubMap: Map<string, string>) (eventJsonString: string): unit =
+    let props = properties () |> Map.union modelSubMap
+
     try
-        Analytics.TrackEvent(event, properties ())
+        Analytics.TrackEvent(eventJsonString, props)
     with _ -> ()
-
-// page events
-
-let pageViewed (pageName: string): unit =
-    pageName |> sprintf "viewed_page_%s" |> track
