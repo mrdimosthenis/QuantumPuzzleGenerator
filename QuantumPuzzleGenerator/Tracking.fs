@@ -89,19 +89,3 @@ let track (event: string): unit =
 
 let pageViewed (pageName: string): unit =
     pageName |> sprintf "viewed_page_%s" |> track
-
-// credits events
-
-let codeOnGitHubClicked (): unit = track "code_on_github_clicked"
-
-let developerOnLinkedInClicked (): unit = track "developer_on_linkedin_clicked"
-
-let appOnGooglePlayVisited (): unit = track "app_on_google_play_visited"
-
-let appOnGooglePlayShared (): unit = track "app_on_google_play_shared"
-
-let appOnAppleStoreVisited (): unit = track "app_on_apple_store_visited"
-
-let appOnAppleStoreShared (): unit = track "app_on_apple_store_shared"
-
-let privacyPolicyClicked (): unit = track "privacy_policy_clicked"

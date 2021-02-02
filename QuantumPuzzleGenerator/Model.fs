@@ -1,8 +1,10 @@
 ﻿module QuantumPuzzleGenerator.Model
 
+open System
 open FSharpx.Collections
 
 open Fabulous
+open Xamarin.Essentials
 
 // types
 
@@ -20,6 +22,17 @@ type Model =
       Settings: Settings.Settings
       AreAnalyticsEnabled: bool }
 
+type ExternalUrl =
+    | GitHub
+    | LinkedIn
+    | GooglePlay
+    | AppleStore
+    | PrivacyPolicy
+
+type SharableUrl =
+    | AppOnGooglePlay
+    | AppOnAppleStore
+
 type Msg =
     | BackClick
     | SelectPage of Page
@@ -31,6 +44,8 @@ type Msg =
     | NextLevel
     | IncreaseScale of Settings.ScaleElement
     | DecreaseScale of Settings.ScaleElement
+    | UrlClick of ExternalUrl
+    | UrlShare of SharableUrl
     | SwitchAnalytics
 
 // constructor
@@ -229,6 +244,30 @@ let update (msg: Msg) (model: Model): Model * Cmd<Msg> =
                       ColorCircleScale = decreasedScaleValue }
 
         { model with Settings = settings }, Cmd.none
+
+    | UrlClick externalUrl ->
+        match externalUrl with
+        | GitHub -> Constants.gitHubUrl
+        | LinkedIn -> Constants.linkedInUrl
+        | GooglePlay -> Constants.googlePlayUrl
+        | AppleStore -> Constants.appleStoreUrl
+        | PrivacyPolicy -> Constants.privacyPolicyUrl
+        |> Uri
+        |> Launcher.OpenAsync
+        |> Async.AwaitTask
+        |> Async.StartImmediate
+
+        model, Cmd.none
+
+    | UrlShare sharableUrl ->
+        match sharableUrl with
+        | AppOnGooglePlay -> Constants.googlePlayUrl
+        | AppOnAppleStore -> Constants.appleStoreUrl
+        |> Share.RequestAsync
+        |> Async.AwaitTask
+        |> Async.StartImmediate
+
+        model, Cmd.none
 
     | SwitchAnalytics ->
         let areAnalyticsEnabled = not model.AreAnalyticsEnabled
