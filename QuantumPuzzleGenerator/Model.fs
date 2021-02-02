@@ -106,22 +106,25 @@ let modelTrackingSubMap (model: Model): Map<string, string> =
     |> Map.ofList
 
 let maybeTrackEvent (msg: Msg) (model: Model): unit =
-    match msg with
-    | SelectPage _
-    | SelectLesson _
-    | RegeneratePuzzle
-    | NextPuzzle
-    | NextLevel
-    | UrlClick _
-    | UrlShare _
-    | SwitchAnalytics ->
-        let modelSubMap = modelTrackingSubMap model
+    if model.AreAnalyticsEnabled then
+        match msg with
+        | SelectPage _
+        | SelectLesson _
+        | RegeneratePuzzle
+        | NextPuzzle
+        | NextLevel
+        | UrlClick _
+        | UrlShare _
+        | SwitchAnalytics ->
+            let modelSubMap = modelTrackingSubMap model
 
-        let eventJsonString =
-            Newtonsoft.Json.JsonConvert.SerializeObject msg
+            let eventJsonString =
+                Newtonsoft.Json.JsonConvert.SerializeObject msg
 
-        Tracking.track modelSubMap eventJsonString
-    | _ -> ()
+            Tracking.track modelSubMap eventJsonString
+        | _ -> ()
+    else
+        ()
 
 // workaround for problematic initial rendering in web-views
 let rerenderWebViews: Cmd<Msg> =
