@@ -105,7 +105,7 @@
     <AndroidResource Include="Resources\values\styles.xml" />
     <Compile Include="AssemblyInfo.fs" />
     <Compile Include="MainActivity.fs" />
-    <Content Include="packages.config" />
+    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\QuantumPuzzleGenerator\QuantumPuzzleGenerator.fsproj">
