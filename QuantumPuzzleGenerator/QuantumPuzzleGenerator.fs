@@ -31,6 +31,9 @@ type App() as app =
     let runner =
         App.program |> XamarinFormsProgram.run app
 
+    override this.OnStart() =
+        Tracking.initialize ()
+
 #if DEBUG
     // Uncomment this line to enable live update in debug mode.
 // See https://fsprojects.github.io/Fabulous/Fabulous.XamarinForms/tools.html#live-update for further  instructions.

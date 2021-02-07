@@ -1,36 +1,83 @@
 ﻿module QuantumPuzzleGenerator.Pages.Credits
 
-open System
 open Fabulous
-open Xamarin.Essentials
 
 open QuantumPuzzleGenerator
 
-let openGitHub () =
-    Uri("https://github.com/mrdimosthenis/QuantumPuzzleGenerator")
-    |> Launcher.OpenAsync
-    |> Async.AwaitTask
-    |> Async.StartImmediate
-
-let openLinkedIn () =
-    Uri("https://www.linkedin.com/in/mrdimosthenis/")
-    |> Launcher.OpenAsync
-    |> Async.AwaitTask
-    |> Async.StartImmediate
-
-let descriptionLbl (): ViewElement =
+let authorDescriptionLbl (): ViewElement =
     "Quantum Puzzle Generator was created by Dimosthenis Michailidis"
     |> UIComponents.label UIComponents.Paragraph
 
-let codeBtn (): ViewElement =
+let codeBtn (dispatch: Model.Msg -> unit): ViewElement =
     let imageNameOpt = Some "icons.code"
 
-    UIComponents.button "Source Code" imageNameOpt openGitHub
+    let command =
+        fun () -> Model.GitHub |> Model.UrlClick |> dispatch
 
-let devBtn (): ViewElement =
+    UIComponents.button "Code on GitHub" imageNameOpt command
+
+let devBtn (dispatch: Model.Msg -> unit): ViewElement =
     let imageNameOpt = Some "icons.profile"
 
-    UIComponents.button "Developer" imageNameOpt openLinkedIn
+    let command =
+        fun () -> Model.LinkedIn |> Model.UrlClick |> dispatch
+
+    UIComponents.button "Developer on LinkedIn" imageNameOpt command
+
+let googleAppStoreHorizontalLayout (dispatch: Model.Msg -> unit): ViewElement =
+    let storeBtnImageNameOpt = Some "icons.play_dark"
+    let shareBtnImageNameOpt = Some "icons.share"
+
+    let storeBtn =
+        fun () -> Model.GooglePlay |> Model.UrlClick |> dispatch
+        |> UIComponents.button "App on Google Play" storeBtnImageNameOpt
+
+    let shareBtn =
+        fun () ->
+            Model.AppOnGooglePlay
+            |> Model.UrlShare
+            |> dispatch
+        |> UIComponents.button "" shareBtnImageNameOpt
+
+    UIComponents.horizontalStackLayout [ storeBtn
+                                         shareBtn ]
+
+
+//let appleAppStoreHorizontalLayout (dispatch: Model.Msg -> unit): ViewElement =
+//    let storeBtnImageNameOpt = Some "icons.info"
+//    let shareBtnImageNameOpt = Some "icons.share"
+//
+//    let storeBtn =
+//        fun () -> Model.AppleStore |> Model.UrlClick |> dispatch
+//        |> UIComponents.button "App on Apple Store" storeBtnImageNameOpt
+//
+//    let shareBtn =
+//        fun () ->
+//            Model.AppOnAppleStore
+//            |> Model.UrlShare
+//            |> dispatch
+//        |> UIComponents.button "" shareBtnImageNameOpt
+//
+//    UIComponents.horizontalStackLayout [ storeBtn
+//                                         shareBtn ]
+
+let privacyPolicyBtn (dispatch: Model.Msg -> unit): ViewElement =
+    let imageNameOpt = Some "icons.text_document"
+
+    fun () -> Model.PrivacyPolicy |> Model.UrlClick |> dispatch
+    |> UIComponents.button "Privacy Policy" imageNameOpt
+
+let analyticsHorizontalLayout (model: Model.Model) (dispatch: Model.Msg -> unit): ViewElement =
+    let shortDescriptionLbl =
+        "Send anonymous usage statistics"
+        |> UIComponents.label UIComponents.Paragraph
+
+    let checkBox =
+        fun _ -> dispatch Model.SwitchAnalytics
+        |> UIComponents.checkBox model.AreAnalyticsEnabled
+
+    UIComponents.horizontalStackLayout [ shortDescriptionLbl
+                                         checkBox ]
 
 let versionLbl (): ViewElement =
     Constants.version
@@ -43,10 +90,18 @@ let backBtn (dispatch: Model.Msg -> unit): ViewElement =
     fun () -> dispatch Model.BackClick
     |> UIComponents.button "Back" imageNameOpt
 
-let stackLayout (_: Model.Model) (dispatch: Model.Msg -> unit): ViewElement =
-    UIComponents.stackLayout [ UIComponents.label UIComponents.Title "Credits"
-                               descriptionLbl ()
-                               codeBtn ()
-                               devBtn ()
-                               versionLbl ()
-                               backBtn dispatch ]
+let stackLayout (model: Model.Model) (dispatch: Model.Msg -> unit): ViewElement =
+    [ UIComponents.label UIComponents.Title "Credits"
+      authorDescriptionLbl ()
+      codeBtn dispatch
+      devBtn dispatch
+      UIComponents.emptySpaceElem ()
+      googleAppStoreHorizontalLayout dispatch
+      //appleAppStoreHorizontalLayout dispatch
+      UIComponents.emptySpaceElem ()
+      privacyPolicyBtn dispatch
+      analyticsHorizontalLayout model dispatch
+      UIComponents.emptySpaceElem ()
+      versionLbl ()
+      backBtn dispatch ]
+    |> UIComponents.stackLayout

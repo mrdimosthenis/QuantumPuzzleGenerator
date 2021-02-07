@@ -22,7 +22,7 @@ let playBtn (dispatch: Model.Msg -> unit): ViewElement =
         |> Model.SelectPage
         |> dispatch
     |> UIComponents.button "Puzzle Solving" imageNameOpt
-    
+
 let creditsBtn (dispatch: Model.Msg -> unit): ViewElement =
     let imageNameOpt = Some "icons.identity"
 

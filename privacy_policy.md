@@ -10,7 +10,7 @@ The terms used in this Privacy Policy have the same meanings as in our Terms and
 
 **Information Collection and Use**
 
-For a better experience, while using our Service, you may choose to provide us with certain personally identifiable information, including but not limited to Country, Device Info, In-App Behavior.
+For a better experience, while using our Service, you may choose to provide us with certain personally identifiable information, including but not limited to Region Info, Device Info, In-App Behavior.
 
 **Log Data**
 

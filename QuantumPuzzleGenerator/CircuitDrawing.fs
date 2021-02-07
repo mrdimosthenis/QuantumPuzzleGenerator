@@ -65,7 +65,7 @@ let stackLayout (numOfQubits: int)
                 (dispatch: Model.Msg -> unit)
                 : ViewElement =
     let headerLayout = headerHorizontalLayout dispatch
-    
+
     let gateWidth =
         gates.Length
         |> float
@@ -73,8 +73,7 @@ let stackLayout (numOfQubits: int)
         |> (*) 0.5
         |> (*) circuitScaleSetting
 
-    let gateHeight =
-        numOfQubits |> float |> (*) gateWidth
+    let gateHeight = numOfQubits |> float |> (*) gateWidth
 
     let children =
         List.zip gates gateSelection
@@ -84,7 +83,7 @@ let stackLayout (numOfQubits: int)
                 (source = gateImage numOfQubits g,
                  width = gateWidth,
                  height = gateHeight,
-                 backgroundColor = (if b then Color.FromHex "#ffc46d" else Color.FromHex "#fffbf6"),
+                 backgroundColor = (if b then Constants.colorA else Constants.colorB),
                  command = fun () -> i |> gateClickCommand |> dispatch))
 
     let circuitStack =

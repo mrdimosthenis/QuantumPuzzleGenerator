@@ -1,7 +1,10 @@
 ﻿module QuantumPuzzleGenerator.Model
 
-open Fabulous
+open System
 open FSharpx.Collections
+
+open Fabulous
+open Xamarin.Essentials
 
 // types
 
@@ -16,7 +19,21 @@ type Model =
     { SelectedPage: Page
       Lesson: Lesson.Lesson
       Puzzle: Puzzle.Puzzle
-      Settings: Settings.Settings }
+      Settings: Settings.Settings
+      AreAnalyticsEnabled: bool
+      UserId: string
+      SessionId: string }
+
+type ExternalUrl =
+    | GitHub
+    | LinkedIn
+    | GooglePlay
+    | AppleStore
+    | PrivacyPolicy
+
+type SharableUrl =
+    | AppOnGooglePlay
+    | AppOnAppleStore
 
 type Msg =
     | BackClick
@@ -29,11 +46,14 @@ type Msg =
     | NextLevel
     | IncreaseScale of Settings.ScaleElement
     | DecreaseScale of Settings.ScaleElement
+    | UrlClick of ExternalUrl
+    | UrlShare of SharableUrl
+    | SwitchAnalytics
 
 // constructor
 
 let initModel (): Model =
-    let initLevelIndex =
+    let levelIndex =
         Preferences.levelIndexKey
         |> Preferences.tryGetInt
         |> Option.defaultValue 0
@@ -46,18 +66,80 @@ let initModel (): Model =
     let lesson = Lesson.initLesson 0
 
     let puzzle =
-        Puzzle.initPuzzle initLevelIndex solvedPuzzlesInLevel
+        Puzzle.initPuzzle levelIndex solvedPuzzlesInLevel
 
     let settings = Settings.initSettings ()
+
+    let areAnalyticsEnabled =
+        Preferences.areAnalyticsEnabledKey
+        |> Preferences.tryGetBool
+        |> Option.defaultValue false
+
+    let userId =
+        match Preferences.tryGetString Preferences.userIdKey with
+        | Some str -> str
+        | None ->
+            let newUserId = Tracking.randomAlphanumeric ()
+            Preferences.setString Preferences.userIdKey newUserId
+            newUserId
+
+    let sessionId = Tracking.randomAlphanumeric ()
 
     { SelectedPage = HomePage
       Lesson = lesson
       Puzzle = puzzle
-      Settings = settings }
+      Settings = settings
+      AreAnalyticsEnabled = areAnalyticsEnabled
+      UserId = userId
+      SessionId = sessionId }
+
+// analytics
+
+let modelTrackingSubMap (model: Model): Map<string, string> =
+    [ ("lastLessonCategoryIndex", string model.Lesson.LessonCategory.Index)
+      ("lastPuzzleLevelIndex", string model.Puzzle.Level.Index)
+      ("plotScaleSetting", string model.Settings.PlotScale)
+      ("circuitScaleSetting", string model.Settings.CircuitScale)
+      ("colorCircleScaleSetting", string model.Settings.ColorCircleScale)
+      ("userId", model.UserId)
+      ("sessionId", model.SessionId) ]
+    |> Map.ofList
+
+let maybeTrackEvent (msg: Msg) (model: Model): unit =
+    if model.AreAnalyticsEnabled then
+        match msg with
+        | SelectPage _
+        | SelectLesson _
+        | RegeneratePuzzle
+        | NextPuzzle
+        | NextLevel
+        | UrlClick _
+        | UrlShare _
+        | SwitchAnalytics ->
+            let modelSubMap = modelTrackingSubMap model
+
+            let eventJsonString =
+                Newtonsoft.Json.JsonConvert.SerializeObject msg
+
+            Tracking.track modelSubMap eventJsonString
+        | _ -> ()
+    else
+        ()
+
+// workaround for problematic initial rendering in web-views
+let rerenderWebViews: Cmd<Msg> =
+    [ IncreaseScale Settings.Plot
+      DecreaseScale Settings.Plot
+      IncreaseScale Settings.ColorCircle
+      DecreaseScale Settings.ColorCircle ]
+    |> List.map Cmd.ofMsg
+    |> Cmd.batch
 
 // update function
 
-let update (msg: Msg) (model: Model) =
+let update (msg: Msg) (model: Model): Model * Cmd<Msg> =
+    maybeTrackEvent msg model
+
     match msg with
     | BackClick ->
         let cmd =
@@ -80,7 +162,7 @@ let update (msg: Msg) (model: Model) =
 
     | SelectPage page ->
 
-        { model with SelectedPage = page }, Cmd.none
+        { model with SelectedPage = page }, rerenderWebViews
 
     | SelectLesson index ->
         let lesson = Lesson.initLesson index
@@ -90,7 +172,7 @@ let update (msg: Msg) (model: Model) =
                   Lesson = lesson
                   SelectedPage = LearnPage }
 
-        newModel, Cmd.none
+        newModel, rerenderWebViews
 
     | LessonGateClick index ->
         let gateSelection =
@@ -148,14 +230,29 @@ let update (msg: Msg) (model: Model) =
         let settings =
             match scaleElement with
             | Settings.Plot ->
+                let increasedScaleValue =
+                    Settings.increasedScaleValue model.Settings.PlotScale
+
+                Preferences.setFloat Preferences.plotScaleKey increasedScaleValue
+
                 { model.Settings with
-                      PlotScale = Settings.increasedScaleValue model.Settings.PlotScale }
+                      PlotScale = increasedScaleValue }
             | Settings.Circuit ->
+                let increasedScaleValue =
+                    Settings.increasedScaleValue model.Settings.CircuitScale
+
+                Preferences.setFloat Preferences.circuitScaleKey increasedScaleValue
+
                 { model.Settings with
-                      CircuitScale = Settings.increasedScaleValue model.Settings.CircuitScale }
+                      CircuitScale = increasedScaleValue }
             | Settings.ColorCircle ->
+                let increasedScaleValue =
+                    Settings.increasedScaleValue model.Settings.ColorCircleScale
+
+                Preferences.setFloat Preferences.colorCircleScaleKey increasedScaleValue
+
                 { model.Settings with
-                      ColorCircleScale = Settings.increasedScaleValue model.Settings.ColorCircleScale }
+                      ColorCircleScale = increasedScaleValue }
 
         { model with Settings = settings }, Cmd.none
 
@@ -163,13 +260,62 @@ let update (msg: Msg) (model: Model) =
         let settings =
             match scaleElement with
             | Settings.Plot ->
+                let decreasedScaleValue =
+                    Settings.decreasedScaleValue model.Settings.PlotScale
+
+                Preferences.setFloat Preferences.plotScaleKey decreasedScaleValue
+
                 { model.Settings with
-                      PlotScale = Settings.decreasedScaleValue model.Settings.PlotScale }
+                      PlotScale = decreasedScaleValue }
             | Settings.Circuit ->
+                let decreasedScaleValue =
+                    Settings.decreasedScaleValue model.Settings.CircuitScale
+
+                Preferences.setFloat Preferences.circuitScaleKey decreasedScaleValue
+
                 { model.Settings with
-                      CircuitScale = Settings.decreasedScaleValue model.Settings.CircuitScale }
+                      CircuitScale = decreasedScaleValue }
             | Settings.ColorCircle ->
+                let decreasedScaleValue =
+                    Settings.decreasedScaleValue model.Settings.ColorCircleScale
+
+                Preferences.setFloat Preferences.colorCircleScaleKey decreasedScaleValue
+
                 { model.Settings with
-                      ColorCircleScale = Settings.decreasedScaleValue model.Settings.ColorCircleScale }
+                      ColorCircleScale = decreasedScaleValue }
 
         { model with Settings = settings }, Cmd.none
+
+    | UrlClick externalUrl ->
+        match externalUrl with
+        | GitHub -> Constants.gitHubUrl
+        | LinkedIn -> Constants.linkedInUrl
+        | GooglePlay -> Constants.googlePlayUrl
+        | AppleStore -> Constants.appleStoreUrl
+        | PrivacyPolicy -> Constants.privacyPolicyUrl
+        |> Uri
+        |> Launcher.OpenAsync
+        |> Async.AwaitTask
+        |> Async.StartImmediate
+
+        model, Cmd.none
+
+    | UrlShare sharableUrl ->
+        match sharableUrl with
+        | AppOnGooglePlay -> Constants.googlePlayUrl
+        | AppOnAppleStore -> Constants.appleStoreUrl
+        |> Share.RequestAsync
+        |> Async.AwaitTask
+        |> Async.StartImmediate
+
+        model, Cmd.none
+
+    | SwitchAnalytics ->
+        let areAnalyticsEnabled = not model.AreAnalyticsEnabled
+        Preferences.setBool Preferences.areAnalyticsEnabledKey areAnalyticsEnabled
+
+        if areAnalyticsEnabled then Tracking.initialize () else Tracking.stop ()
+
+        { model with
+              AreAnalyticsEnabled = areAnalyticsEnabled },
+        Cmd.none

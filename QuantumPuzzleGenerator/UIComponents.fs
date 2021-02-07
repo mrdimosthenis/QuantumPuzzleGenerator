@@ -10,10 +10,10 @@ type LabelType =
     | Title
     | SimpleLabel
     | Paragraph
-    
+
 // functions
 
-let emptySpaceElem(): ViewElement =
+let emptySpaceElem (): ViewElement =
     View.BoxView(color = Color.Transparent, height = 5.0)
 
 let label (labelType: LabelType) (text: string): ViewElement =
@@ -67,9 +67,11 @@ let button (text: string) (imageNameOpt: string option) (command: unit -> unit):
              borderWidth = 1.0,
              command = command)
 
+let checkBox (isChecked: bool) (checkedChanged: unit -> unit) =
+    View.CheckBox(color = Color.Black, isChecked = isChecked, checkedChanged = (fun _ -> checkedChanged ()))
+
 let stackLayout (children: ViewElement list): ViewElement =
-    View.StackLayout
-        (horizontalOptions = LayoutOptions.Center, children = children)
+    View.StackLayout(horizontalOptions = LayoutOptions.Center, children = children)
 
 let horizontalStackLayout (children: ViewElement list): ViewElement =
     View.StackLayout

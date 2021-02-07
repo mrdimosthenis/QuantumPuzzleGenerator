@@ -73,8 +73,12 @@ let colorCircle (model: Model.Model) (dispatch: Model.Msg -> unit): ViewElement 
     match model.Lesson.LessonCategory.IsHueDisplayedOpt with
     | Some true ->
         let qStateOpt = model |> quantumState |> Some
-        [ ColorCircle.webView model.Settings.ColorCircleScale qStateOpt dispatch ]
-    | Some false -> [ ColorCircle.webView model.Settings.ColorCircleScale None dispatch ]
+
+        [ UIComponents.emptySpaceElem ()
+          ColorCircle.webView model.Settings.ColorCircleScale qStateOpt dispatch ]
+    | Some false ->
+        [ UIComponents.emptySpaceElem ()
+          ColorCircle.webView model.Settings.ColorCircleScale None dispatch ]
     | None -> []
 
 let stackLayout (model: Model.Model) (dispatch: Model.Msg -> unit): ViewElement =
