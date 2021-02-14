@@ -86,6 +86,9 @@
     <EmbeddedResource Include="resources\images\icons\info.png" />
     <EmbeddedResource Include="resources\images\icons\share.png" />
     <EmbeddedResource Include="resources\images\icons\text_document.png" />
+    <EmbeddedResource Include="resources\images\icons\inverted_play_dark.png" />
+    <EmbeddedResource Include="resources\images\icons\list.png" />
+    <EmbeddedResource Include="resources\images\icons\exit.png" />
     <EmbeddedResource Include="resources\images\logo.png" />
     <Compile Include="Secrets.fs" />
     <Compile Include="Constants.fs" />

@@ -29,6 +29,10 @@ let circuit (model: Model.Model) (dispatch: Model.Msg -> unit): ViewElement =
         Model.Msg.LessonGateClick
         dispatch
 
+let header (dispatch: Model.Msg -> unit): ViewElement =
+    fun () -> dispatch Model.BackClick
+    |> UIComponents.header "Interactive Learning" "icons.library" "icons.inverted_play_dark"
+
 let prevLessonBtn (model: Model.Model) (dispatch: Model.Msg -> unit): ViewElement =
     let imageNameOpt = Some "icons.left"
 
@@ -63,12 +67,6 @@ let regenerateBtn (model: Model.Model) (dispatch: Model.Msg -> unit): ViewElemen
         |> dispatch
     |> UIComponents.button "Regenerate" imageNameOpt
 
-let backBtn (dispatch: Model.Msg -> unit): ViewElement =
-    let imageNameOpt = Some "icons.library"
-
-    fun () -> dispatch Model.BackClick
-    |> UIComponents.button "Back" imageNameOpt
-
 let colorCircle (model: Model.Model) (dispatch: Model.Msg -> unit): ViewElement list =
     match model.Lesson.LessonCategory.IsHueDisplayedOpt with
     | Some true ->
@@ -82,16 +80,19 @@ let colorCircle (model: Model.Model) (dispatch: Model.Msg -> unit): ViewElement 
     | None -> []
 
 let stackLayout (model: Model.Model) (dispatch: Model.Msg -> unit): ViewElement =
-    [ [ UIComponents.horizontalStackLayout [ prevLessonBtn model dispatch
+    [ [ header dispatch
+        UIComponents.emptySpaceElem () ]
+      [ UIComponents.horizontalStackLayout [ prevLessonBtn model dispatch
                                              UIComponents.label UIComponents.Title model.Lesson.LessonCategory.Title
                                              nextLessonBtn model dispatch ] ]
-      [ UIComponents.label UIComponents.Paragraph model.Lesson.LessonCategory.Description ]
-      [ qStatePlot model dispatch ]
+      [ UIComponents.label UIComponents.Paragraph model.Lesson.LessonCategory.Description
+        UIComponents.emptySpaceElem ()
+        qStatePlot model dispatch ]
       if model.Lesson.LessonCategory.Gates.IsEmpty
       then []
       else [ circuit model dispatch ]
       colorCircle model dispatch
-      [ UIComponents.horizontalStackLayout [ backBtn dispatch
-                                             regenerateBtn model dispatch ] ] ]
+      [ UIComponents.emptySpaceElem ()
+        regenerateBtn model dispatch ] ]
     |> List.concat
     |> UIComponents.stackLayout

@@ -31,6 +31,10 @@ let backgroundColor: Color = Color.White
 let colorA: Color = Color.FromHex "#ffc46d" // selected gate
 let colorB: Color = Color.FromHex "#fffbf6" // unselected gate
 
+// default UI sizes
+
+let imageSize: float = 30.0
+
 // urls
 
 let gitHubUrl: string = "https://github.com/mrdimosthenis/QuantumPuzzleGenerator"

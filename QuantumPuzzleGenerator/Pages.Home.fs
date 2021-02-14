@@ -33,7 +33,10 @@ let creditsBtn (dispatch: Model.Msg -> unit): ViewElement =
     |> UIComponents.button "Credits" imageNameOpt
 
 let stackLayout (_: Model.Model) (dispatch: Model.Msg -> unit): ViewElement =
-    UIComponents.stackLayout [ UIComponents.label UIComponents.Title "Quantum Puzzle Generator"
+    let header =
+        fun () -> dispatch Model.BackClick
+        |> UIComponents.header "Quantum Puzzle Generator" "icons.home" "icons.exit"
+    UIComponents.stackLayout [ header
                                View.Image(source = Resources.image "logo")
                                learnBtn dispatch
                                playBtn dispatch

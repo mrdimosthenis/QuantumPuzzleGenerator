@@ -4,6 +4,10 @@ open Fabulous
 
 open QuantumPuzzleGenerator
 
+let header (dispatch: Model.Msg -> unit): ViewElement =
+    fun () -> dispatch Model.BackClick
+    |> UIComponents.header "Credits" "icons.identity" "icons.inverted_play_dark"
+
 let authorDescriptionLbl (): ViewElement =
     "Quantum Puzzle Generator was created by Dimosthenis Michailidis"
     |> UIComponents.label UIComponents.Paragraph
@@ -91,7 +95,8 @@ let backBtn (dispatch: Model.Msg -> unit): ViewElement =
     |> UIComponents.button "Back" imageNameOpt
 
 let stackLayout (model: Model.Model) (dispatch: Model.Msg -> unit): ViewElement =
-    [ UIComponents.label UIComponents.Title "Credits"
+    [ header dispatch
+      UIComponents.emptySpaceElem ()
       authorDescriptionLbl ()
       codeBtn dispatch
       devBtn dispatch
@@ -102,6 +107,5 @@ let stackLayout (model: Model.Model) (dispatch: Model.Msg -> unit): ViewElement 
       privacyPolicyBtn dispatch
       analyticsHorizontalLayout model dispatch
       UIComponents.emptySpaceElem ()
-      versionLbl ()
-      backBtn dispatch ]
+      versionLbl () ]
     |> UIComponents.stackLayout
