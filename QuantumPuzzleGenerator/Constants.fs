@@ -16,6 +16,8 @@ let differenceThreshold: Number.Number = 0.2
 
 let numOfPuzzlesPerLevel: int = 20
 
+let introWaitMillis: int = 3000
+
 // device info
 
 let isIOS: bool = DeviceInfo.Platform = DevicePlatform.iOS

@@ -9,6 +9,7 @@ open Xamarin.Essentials
 // types
 
 type Page =
+    | IntroPage
     | HomePage
     | LessonCategoriesPage
     | LearnPage
@@ -85,7 +86,7 @@ let initModel (): Model =
 
     let sessionId = Tracking.randomAlphanumeric ()
 
-    { SelectedPage = HomePage
+    { SelectedPage = IntroPage
       Lesson = lesson
       Puzzle = puzzle
       Settings = settings

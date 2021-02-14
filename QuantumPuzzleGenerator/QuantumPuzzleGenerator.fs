@@ -10,6 +10,7 @@ module App =
     let view (model: Model.Model) (dispatch: Model.Msg -> unit) =
         let page =
             match model.SelectedPage with
+            | Model.Page.IntroPage -> Pages.Intro.stackLayout model dispatch
             | Model.Page.HomePage -> Pages.Home.stackLayout model dispatch
             | Model.Page.LessonCategoriesPage -> Pages.LessonCategories.stackLayout model dispatch
             | Model.Page.LearnPage -> Pages.Learn.stackLayout model dispatch
@@ -19,7 +20,15 @@ module App =
         View.ContentPage(content = View.ScrollView(backgroundColor = Constants.backgroundColor, content = page))
 
     let program =
-        let initModelAndCmd () = Model.initModel (), Cmd.none
+        let initCmd () =
+            async {
+                do! Async.Sleep Constants.introWaitMillis
+                return Model.SelectPage Model.HomePage
+            }
+            |> Cmd.ofAsyncMsg
+
+        let initModelAndCmd () = Model.initModel (), initCmd ()
+
         XamarinFormsProgram.mkProgram initModelAndCmd Model.update view
 #if DEBUG
         |> Program.withConsoleTrace
@@ -31,8 +40,7 @@ type App() as app =
     let runner =
         App.program |> XamarinFormsProgram.run app
 
-    override this.OnStart() =
-        Tracking.initialize ()
+    override this.OnStart() = Tracking.initialize ()
 
 #if DEBUG
     // Uncomment this line to enable live update in debug mode.

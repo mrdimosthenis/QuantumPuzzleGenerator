@@ -106,6 +106,7 @@
     <Compile Include="QStatePlotting.fs" />
     <Compile Include="CircuitDrawing.fs" />
     <Compile Include="ColorCircle.fs" />
+    <Compile Include="Pages.Intro.fs" />
     <Compile Include="Pages.Home.fs" />
     <Compile Include="Pages.LessonCategories.fs" />
     <Compile Include="Pages.Learn.fs" />
