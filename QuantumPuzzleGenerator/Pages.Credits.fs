@@ -46,24 +46,26 @@ let googleAppStoreHorizontalLayout (dispatch: Model.Msg -> unit): ViewElement =
     UIComponents.horizontalStackLayout [ storeBtn
                                          shareBtn ]
 
+let appleAppStoreHorizontalLayout (dispatch: Model.Msg -> unit): ViewElement =
+    let storeBtnImageNameOpt = Some "icons.info"
+    let shareBtnImageNameOpt = Some "icons.share"
 
-//let appleAppStoreHorizontalLayout (dispatch: Model.Msg -> unit): ViewElement =
-//    let storeBtnImageNameOpt = Some "icons.info"
-//    let shareBtnImageNameOpt = Some "icons.share"
-//
-//    let storeBtn =
-//        fun () -> Model.AppleStore |> Model.UrlClick |> dispatch
-//        |> UIComponents.button "App on Apple Store" storeBtnImageNameOpt
-//
-//    let shareBtn =
-//        fun () ->
-//            Model.AppOnAppleStore
-//            |> Model.UrlShare
-//            |> dispatch
-//        |> UIComponents.button "" shareBtnImageNameOpt
-//
-//    UIComponents.horizontalStackLayout [ storeBtn
-//                                         shareBtn ]
+    let storeBtn =
+        fun () -> Model.AppleStore |> Model.UrlClick |> dispatch
+        |> UIComponents.button "App on Apple Store" storeBtnImageNameOpt
+
+    let shareBtn =
+        fun () ->
+            Model.AppOnAppleStore
+            |> Model.UrlShare
+            |> dispatch
+        |> UIComponents.button "" shareBtnImageNameOpt
+
+    UIComponents.horizontalStackLayout [ storeBtn
+                                         shareBtn ]
+
+let appStoreHorizontalLayout (dispatch: Model.Msg -> unit): ViewElement =
+    if Constants.isIOS then appleAppStoreHorizontalLayout dispatch else googleAppStoreHorizontalLayout dispatch
 
 let privacyPolicyBtn (dispatch: Model.Msg -> unit): ViewElement =
     let imageNameOpt = Some "icons.text_document"
@@ -100,12 +102,8 @@ let stackLayout (model: Model.Model) (dispatch: Model.Msg -> unit): ViewElement 
       authorDescriptionLbl ()
       codeBtn dispatch
       devBtn dispatch
-      UIComponents.emptySpaceElem ()
-      googleAppStoreHorizontalLayout dispatch
-      //appleAppStoreHorizontalLayout dispatch
-      UIComponents.emptySpaceElem ()
+      appStoreHorizontalLayout dispatch
       privacyPolicyBtn dispatch
       analyticsHorizontalLayout model dispatch
-      UIComponents.emptySpaceElem ()
       versionLbl () ]
     |> UIComponents.stackLayout
