@@ -5,9 +5,8 @@ open System.IO
 open Xunit
 open FsUnit.Xunit
 
-open Fable
-open Fable.React
-open Fable.React.Props
+open Giraffe
+open GiraffeViewEngine
 open Xamarin.Forms
 
 open QuantumPuzzleMechanics
@@ -25,14 +24,15 @@ let svgContent (numOfQubits: int) (gate: Quantum.Gate.Gate): string =
     let height =
         numOfQubits |> float |> (*) size |> int |> string
 
-    svg [ Version "1.1"
-          SVGAttr.Custom("baseProfile", "full")
-          SVGAttr.Custom("width", width)
-          SVGAttr.Custom("height", height)
-          SVGAttr.Custom("xmlns", "http://www.w3.org/2000/svg") ] [
-        Graphics.Gates.gateGraphics numOfQubits gate strokeColor size
-    ]
-    |> ReactServer.renderToString
+    tag
+        "svg"
+        [ attr "version" "1.1"
+          attr "baseProfile" "full"
+          attr "width" width
+          attr "height" height
+          attr "xmlns" "http://www.w3.org/2000/svg" ]
+        [ Graphics.Gates.gateGraphics numOfQubits gate strokeColor size ]
+    |> renderXmlNode
 
 let gateName (numOfQubits: int) (gate: Quantum.Gate.Gate): string =
     match gate with

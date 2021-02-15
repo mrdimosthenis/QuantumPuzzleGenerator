@@ -17,4 +17,4 @@ let ``Single plot html string`` () =
     |> Some
     |> singlePlotHtmlString 600.0
     |> String.length
-    |> should equal 1675
+    |> should equal 1655

@@ -2,8 +2,8 @@
 
 open Xamarin.Forms
 
-open Fable.React
-open Fable.React.Props
+open Giraffe
+open GiraffeViewEngine
 
 open QuantumPuzzleMechanics
 
@@ -25,7 +25,7 @@ type Symbol =
 
 // functions
 
-let part (place: Place) (symbol: Symbol) (strokeColor: Color) (size: float): ReactElement =
+let part (place: Place) (symbol: Symbol) (strokeColor: Color) (size: float): XmlNode =
     let horizWire = Elems.horizWire Color.Black size
 
     let vertWires =
@@ -50,7 +50,7 @@ let part (place: Place) (symbol: Symbol) (strokeColor: Color) (size: float): Rea
       vertWires
       [ symbolElem ] ]
     |> List.concat
-    |> g []
+    |> tag "g" []
 
 let transform (i: int) (size: float): string =
     i
@@ -59,12 +59,12 @@ let transform (i: int) (size: float): string =
     |> string
     |> sprintf "translate(0,%s)"
 
-let gate1Graphics (numOfQubits: int) (index: int) (symbol: Symbol) (strokeColor: Color) (size: float): ReactElement =
+let gate1Graphics (numOfQubits: int) (index: int) (symbol: Symbol) (strokeColor: Color) (size: float): XmlNode =
     fun i ->
         if i = index then [ part Single symbol strokeColor size ] else [ Elems.horizWire Color.Black size ]
-        |> g [ transform i size |> SVGAttr.Transform ]
+        |> tag "g" [ transform i size |> attr "transform" ]
     |> List.init numOfQubits
-    |> g []
+    |> tag "g" []
 
 let gate2Graphics (numOfQubits: int)
                   (indexA: int)
@@ -73,7 +73,7 @@ let gate2Graphics (numOfQubits: int)
                   (symbolB: Symbol)
                   (strokeColor: Color)
                   (size: float)
-                  : ReactElement =
+                  : XmlNode =
     let minIndex = min indexA indexB
     let maxIndex = max indexA indexB
 
@@ -88,9 +88,9 @@ let gate2Graphics (numOfQubits: int)
         | _ ->
             [ Elems.horizWire Color.Black size
               Elems.vertWire strokeColor size ]
-        |> g [ transform i size |> SVGAttr.Transform ]
+        |> tag "g" [ transform i size |> attr "transform" ]
     |> List.init numOfQubits
-    |> g []
+    |> tag "g" []
 
 let gate3Graphics (numOfQubits: int)
                   (indexA: int)
@@ -101,7 +101,7 @@ let gate3Graphics (numOfQubits: int)
                   (symbolZ: Symbol)
                   (strokeColor: Color)
                   (size: float)
-                  : ReactElement =
+                  : XmlNode =
     let sortedIndexWithSymbols =
         [ symbolA; symbolB; symbolZ ]
         |> List.zip [ indexA; indexB; indexC ]
@@ -118,12 +118,12 @@ let gate3Graphics (numOfQubits: int)
             | _ ->
                 [ Elems.horizWire Color.Black size
                   Elems.vertWire strokeColor size ]
-            |> g [ transform i size |> SVGAttr.Transform ]
+            |> tag "g" [ transform i size |> attr "transform" ]
         |> List.init numOfQubits
-        |> g []
+        |> tag "g" []
     | _ -> raise Quantum.Gate3.InvalidIndexOrder
 
-let gateGraphics (numOfQubits: int) (gate: Quantum.Gate.Gate) (strokeColor: Color) (size: float): ReactElement =
+let gateGraphics (numOfQubits: int) (gate: Quantum.Gate.Gate) (strokeColor: Color) (size: float): XmlNode =
     match gate with
     | Quantum.Gate.XGate index -> gate1Graphics numOfQubits index NotSymbol strokeColor size
     | Quantum.Gate.YGate index -> gate1Graphics numOfQubits index YSymbol strokeColor size

@@ -1,13 +1,13 @@
 ﻿module QuantumPuzzleGenerator.QStatePlotting
 
 open System
-open Fable
-open Fable.React
-open Fable.React.Props
+
+open FSharpx.Collections
+open Giraffe
+open GiraffeViewEngine
 open Fabulous
 open Fabulous.XamarinForms
 open Xamarin
-open FSharpx.Collections
 open Newtonsoft.Json
 open Newtonsoft.Json.Serialization
 
@@ -134,26 +134,26 @@ let singlePlotHtmlString (numOfQubits: int) (qState: Matrix.Matrix): string =
 
     html [] [
         head [] [
-            meta [ Name "viewport"
-                   HTMLAttr.Custom("content", "width=device-width, initial-scale=1") ]
-            Standard.style [] [
-                RawText "* { margin: 0; }"
+            meta [ attr "name" "viewport"
+                   attr "content" "width=device-width, initial-scale=1" ]
+            GiraffeViewEngine.style [] [
+                rawText "* { margin: 0; }"
             ]
-            script [ Type "text/javascript" ] [
-                RawText visJs
+            script [ attr "type" "text/javascript" ] [
+                rawText visJs
             ]
-            script [ Type "text/javascript" ] [
-                RawText dataJs
+            script [ attr "type" "text/javascript" ] [
+                rawText dataJs
             ]
-            script [ Type "text/javascript" ] [
-                RawText drawJs
+            script [ attr "type" "text/javascript" ] [
+                rawText drawJs
             ]
         ]
-        body [ HTMLAttr.Custom("onload", "drawVisualization();") ] [
-            div [ Id "mygraph" ] []
+        body [ attr "onload" "drawVisualization();" ] [
+            div [ _id "mygraph" ] []
         ]
     ]
-    |> ReactServer.renderToString
+    |> renderHtmlNode
 
 let headerHorizontalLayout (title: string) (dispatch: Model.Msg -> unit): ViewElement =
     let title =

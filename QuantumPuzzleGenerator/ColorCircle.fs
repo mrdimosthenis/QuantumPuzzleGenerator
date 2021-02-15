@@ -2,9 +2,8 @@
 
 
 open System
-open Fable
-open Fable.React
-open Fable.React.Props
+open Giraffe
+open GiraffeViewEngine
 open Fabulous
 open Fabulous.XamarinForms
 open Xamarin
@@ -50,29 +49,29 @@ let singlePlotHtmlString (size: float) (qStateOpt: Matrix.Matrix option): string
               Resources.text "color_circle_lines.js" ]
         | None -> [ Resources.text "color_circle_main.js" ]
         |> List.map (fun jsString ->
-            script [ Type "text/javascript" ] [
-                RawText jsString
+            script [ attr "type" "text/javascript" ] [
+                rawText jsString
             ])
 
     let htmlBody =
         List.append
-            [ canvas [ Id "myCanvas"
-                       HTMLAttr.Width canvasSize
-                       HTMLAttr.Height canvasSize ] [] ]
+            [ canvas [ _id "myCanvas"
+                       canvasSize |> string |> attr "width"
+                       canvasSize |> string |> attr "height" ] [] ]
             jsScripts
 
 
     html [] [
         head [] [
-            meta [ Name "viewport"
-                   HTMLAttr.Custom("content", "width=device-width, initial-scale=1") ]
-            Standard.style [] [
-                RawText "* { margin: 0; }"
+            meta [ attr "name" "viewport"
+                   attr "content" "width=device-width, initial-scale=1" ]
+            GiraffeViewEngine.style [] [
+                rawText "* { margin: 0; }"
             ]
         ]
         body [] htmlBody
     ]
-    |> ReactServer.renderToString
+    |> renderHtmlNode
 
 let headerHorizontalLayout (dispatch: Model.Msg -> unit): ViewElement =
     let title =
