@@ -4,6 +4,10 @@ open Fabulous
 
 open QuantumPuzzleGenerator
 
+let header (dispatch: Model.Msg -> unit): ViewElement =
+    fun () -> dispatch Model.BackClick
+    |> UIComponents.header "Credits" "icons.identity" "icons.inverted_play_dark"
+
 let authorDescriptionLbl (): ViewElement =
     "Quantum Puzzle Generator was created by Dimosthenis Michailidis"
     |> UIComponents.label UIComponents.Paragraph
@@ -42,24 +46,26 @@ let googleAppStoreHorizontalLayout (dispatch: Model.Msg -> unit): ViewElement =
     UIComponents.horizontalStackLayout [ storeBtn
                                          shareBtn ]
 
+let appleAppStoreHorizontalLayout (dispatch: Model.Msg -> unit): ViewElement =
+    let storeBtnImageNameOpt = Some "icons.info"
+    let shareBtnImageNameOpt = Some "icons.share"
 
-//let appleAppStoreHorizontalLayout (dispatch: Model.Msg -> unit): ViewElement =
-//    let storeBtnImageNameOpt = Some "icons.info"
-//    let shareBtnImageNameOpt = Some "icons.share"
-//
-//    let storeBtn =
-//        fun () -> Model.AppleStore |> Model.UrlClick |> dispatch
-//        |> UIComponents.button "App on Apple Store" storeBtnImageNameOpt
-//
-//    let shareBtn =
-//        fun () ->
-//            Model.AppOnAppleStore
-//            |> Model.UrlShare
-//            |> dispatch
-//        |> UIComponents.button "" shareBtnImageNameOpt
-//
-//    UIComponents.horizontalStackLayout [ storeBtn
-//                                         shareBtn ]
+    let storeBtn =
+        fun () -> Model.AppleStore |> Model.UrlClick |> dispatch
+        |> UIComponents.button "App on Apple Store" storeBtnImageNameOpt
+
+    let shareBtn =
+        fun () ->
+            Model.AppOnAppleStore
+            |> Model.UrlShare
+            |> dispatch
+        |> UIComponents.button "" shareBtnImageNameOpt
+
+    UIComponents.horizontalStackLayout [ storeBtn
+                                         shareBtn ]
+
+let appStoreHorizontalLayout (dispatch: Model.Msg -> unit): ViewElement =
+    if Constants.isIOS then appleAppStoreHorizontalLayout dispatch else googleAppStoreHorizontalLayout dispatch
 
 let privacyPolicyBtn (dispatch: Model.Msg -> unit): ViewElement =
     let imageNameOpt = Some "icons.text_document"
@@ -91,17 +97,13 @@ let backBtn (dispatch: Model.Msg -> unit): ViewElement =
     |> UIComponents.button "Back" imageNameOpt
 
 let stackLayout (model: Model.Model) (dispatch: Model.Msg -> unit): ViewElement =
-    [ UIComponents.label UIComponents.Title "Credits"
+    [ header dispatch
+      UIComponents.emptySpaceElem ()
       authorDescriptionLbl ()
       codeBtn dispatch
       devBtn dispatch
-      UIComponents.emptySpaceElem ()
-      googleAppStoreHorizontalLayout dispatch
-      //appleAppStoreHorizontalLayout dispatch
-      UIComponents.emptySpaceElem ()
+      appStoreHorizontalLayout dispatch
       privacyPolicyBtn dispatch
       analyticsHorizontalLayout model dispatch
-      UIComponents.emptySpaceElem ()
-      versionLbl ()
-      backBtn dispatch ]
+      versionLbl () ]
     |> UIComponents.stackLayout

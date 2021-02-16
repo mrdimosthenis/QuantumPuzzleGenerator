@@ -45,8 +45,10 @@ let button (text: string) (imageNameOpt: string option) (command: unit -> unit):
     | ("", Some imageName) ->
         View.ImageButton
             (backgroundColor = Color.Transparent,
-             width = 30.0,
-             height = 30.0,
+             borderColor = Color.Black,
+             borderWidth = 1.0,
+             width = Constants.imageSize,
+             height = Constants.imageSize,
              command = command,
              source = Resources.image imageName)
     | (_, Some imageName) ->
@@ -54,8 +56,8 @@ let button (text: string) (imageNameOpt: string option) (command: unit -> unit):
             (text = text,
              textTransform = TextTransform.None,
              backgroundColor = Color.Transparent,
-             borderWidth = 1.0,
              borderColor = Color.Black,
+             borderWidth = 1.0,
              command = command,
              image = Resources.image imageName)
     | (_, None) ->
@@ -67,11 +69,8 @@ let button (text: string) (imageNameOpt: string option) (command: unit -> unit):
              borderWidth = 1.0,
              command = command)
 
-let checkBox (isChecked: bool) (checkedChanged: unit -> unit) =
+let checkBox (isChecked: bool) (checkedChanged: unit -> unit): ViewElement =
     View.CheckBox(color = Color.Black, isChecked = isChecked, checkedChanged = (fun _ -> checkedChanged ()))
-
-let stackLayout (children: ViewElement list): ViewElement =
-    View.StackLayout(horizontalOptions = LayoutOptions.Center, children = children)
 
 let horizontalStackLayout (children: ViewElement list): ViewElement =
     View.StackLayout
@@ -79,3 +78,22 @@ let horizontalStackLayout (children: ViewElement list): ViewElement =
          horizontalOptions = LayoutOptions.Center,
          verticalOptions = LayoutOptions.Center,
          children = children)
+
+let header (text: string) (pageImageName: string) (backImageName: string) (backCommand: unit -> unit): ViewElement =
+    let backBtn =
+        let imageNameOpt = Some backImageName
+        button "" imageNameOpt backCommand
+
+    let lbl = label Title text
+
+    let pageImg =
+        View.ImageButton
+            (backgroundColor = Color.Transparent,
+             width = Constants.imageSize,
+             height = Constants.imageSize,
+             source = Resources.image pageImageName)
+
+    [ backBtn; lbl; pageImg ] |> horizontalStackLayout
+
+let stackLayout (children: ViewElement list): ViewElement =
+    View.StackLayout(horizontalOptions = LayoutOptions.Center, children = children)

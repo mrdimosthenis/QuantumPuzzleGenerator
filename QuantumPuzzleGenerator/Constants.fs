@@ -16,6 +16,8 @@ let differenceThreshold: Number.Number = 0.2
 
 let numOfPuzzlesPerLevel: int = 20
 
+let introWaitMillis: int = 3000
+
 // device info
 
 let isIOS: bool = DeviceInfo.Platform = DevicePlatform.iOS
@@ -30,6 +32,10 @@ let deviceWidth: float =
 let backgroundColor: Color = Color.White
 let colorA: Color = Color.FromHex "#ffc46d" // selected gate
 let colorB: Color = Color.FromHex "#fffbf6" // unselected gate
+
+// default UI sizes
+
+let imageSize: float = 30.0
 
 // urls
 

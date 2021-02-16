@@ -5,6 +5,10 @@ open Fabulous
 open QuantumPuzzleMechanics
 open QuantumPuzzleGenerator
 
+let header (dispatch: Model.Msg -> unit): ViewElement =
+    fun () -> dispatch Model.BackClick
+    |> UIComponents.header "Puzzle Solving" "icons.puzzle" "icons.inverted_play_dark"
+
 let levelLbl (model: Model.Model): ViewElement =
     model.Puzzle.Level.Index
     |> (+) 1
@@ -51,12 +55,6 @@ let regeneratePuzzleOrLevelBtn (currentQState: Matrix.Matrix)
                 && levelIndex < Level.levels.Length - 1 -> nextLevelBtn
     | true -> nextPuzzleBtn
 
-let backBtn (dispatch: Model.Msg -> unit): ViewElement =
-    let imageNameOpt = Some "icons.home"
-
-    fun () -> dispatch Model.BackClick
-    |> UIComponents.button "Back" imageNameOpt
-
 let stackLayout (model: Model.Model) (dispatch: Model.Msg -> unit): ViewElement =
     let goalQStatePlot =
         QStatePlotting.webView
@@ -101,12 +99,14 @@ let stackLayout (model: Model.Model) (dispatch: Model.Msg -> unit): ViewElement 
             model.Puzzle.SolvedPuzzlesInLevel
             dispatch
 
-    [ levelLbl model
+    [ header dispatch
+      UIComponents.emptySpaceElem ()
+      levelLbl model
       puzzleLbl model
+      UIComponents.emptySpaceElem ()
       goalQStatePlot
       circuit
       UIComponents.emptySpaceElem ()
       currentQStatePlot
-      UIComponents.horizontalStackLayout [ backBtn dispatch
-                                           regeneratePuzzleOrLevel ] ]
+      regeneratePuzzleOrLevel ]
     |> UIComponents.stackLayout
